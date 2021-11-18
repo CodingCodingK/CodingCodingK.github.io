@@ -1,0 +1,205 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CLR Via C#个人笔记4 - 类型和成员基础 | CodingCodingK Blog</title><meta name="keywords" content="技术,C#"><meta name="author" content="CodingCodingK"><meta name="copyright" content="CodingCodingK"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="大章6：类型和成员基础类型的各种成员 常量（大章7）  数据值恒定不变的符号。public const bool isBoy &#x3D; true; 字段（大章7）   实例构造器（大章8） 类型构造器（大章8）  是将类型的静态字段初始化为良好初始状态的特殊方法。static ClassName() &amp;#123;&amp;#125; 方法（大章8）  更改或查询类型或对象状态的函数。分静态方法和实例方法。 操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CLR Via C#个人笔记4 - 类型和成员基础">
+<meta property="og:url" content="https://codingcodingk.github.io/2021/11/18/Tech/CSharp/CLR-Via-CSharp/cp4/index.html">
+<meta property="og:site_name" content="CodingCodingK Blog">
+<meta property="og:description" content="大章6：类型和成员基础类型的各种成员 常量（大章7）  数据值恒定不变的符号。public const bool isBoy &#x3D; true; 字段（大章7）   实例构造器（大章8） 类型构造器（大章8）  是将类型的静态字段初始化为良好初始状态的特殊方法。static ClassName() &amp;#123;&amp;#125; 方法（大章8）  更改或查询类型或对象状态的函数。分静态方法和实例方法。 操作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png">
+<meta property="article:published_time" content="2021-11-18T11:34:09.320Z">
+<meta property="article:modified_time" content="2021-11-18T11:34:09.320Z">
+<meta property="article:author" content="CodingCodingK">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="C#">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png"><link rel="canonical" href="https://codingcodingk.github.io/2021/11/18/Tech/CSharp/CLR-Via-CSharp/cp4/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CLR Via C#个人笔记4 - 类型和成员基础',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-11-18 19:34:09'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/css/mine.css"><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="CodingCodingK Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">CodingCodingK Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CLR Via C#个人笔记4 - 类型和成员基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-11-18T11:34:09.320Z" title="发表于 2021-11-18 19:34:09">2021-11-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-11-18T11:34:09.320Z" title="更新于 2021-11-18 19:34:09">2021-11-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/">CSharp</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/CLR-via-C/">CLR via C#</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/CLR-via-C/%E7%AC%AC%E4%BA%8C%E7%AB%A0-C-%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1/">第二章 C#类的设计</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CLR Via C#个人笔记4 - 类型和成员基础"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="大章6：类型和成员基础"><a href="#大章6：类型和成员基础" class="headerlink" title="大章6：类型和成员基础"></a><center>大章6：类型和成员基础</center></h1><h3 id="类型的各种成员"><a href="#类型的各种成员" class="headerlink" title="类型的各种成员"></a>类型的各种成员</h3><ul>
+<li>常量（大章7）  数据值恒定不变的符号。<code>public const bool isBoy = true;</code></li>
+<li>字段（大章7）  </li>
+<li>实例构造器（大章8）</li>
+<li>类型构造器（大章8）  是将类型的静态字段初始化为良好初始状态的特殊方法。<code>static ClassName() &#123;&#125;</code></li>
+<li>方法（大章8）  更改或查询类型或对象状态的函数。分静态方法和实例方法。</li>
+<li>操作符重载（大章8）  实际是方法，由于不是所有编程语言都支持操作符重载，所以它不是CLS(公共语言规范) 的一部分。</li>
+<li>转换操作符（大章8）  是定义如何隐式或显式将对象从一种类型转型为另一种类型的方法。同操作符重载，由于不是所有编程语言都支持，所以它不是CLS(公共语言规范) 的一部分。</li>
+<li>属性（大章10）  可以无参，也可以多参。<code>public Int32 this[String s]&#123;get;set;&#125; // 实例有参属性(索引器)</code></li>
+<li>事件（大章11）  <code>public event EventHandler SomeEvent; // 实例事件</code></li>
+<li>类型  可以定义其他嵌套类型。通常用这个办法将大的类型分解成更小的构建单元（building block）以实现简化。</li>
+</ul>
+<h3 id="元数据"><a href="#元数据" class="headerlink" title="元数据"></a>元数据</h3><p>无论什么编程语言，编译器都必须能处理源代码，为上述成员生成元数据和IL代码，所有编程语言的生成的元数据格式完全一致。<font color="#dd0000">元数据</font>是所有语言都生成和使用的公共信息，是它使不同基于CLR的语言的代码无缝访问。</p>
+<p>下面看一下元数据到底是怎么定义的：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">SomeType</span>&#123;	<span class="comment">// 1</span></span><br><span class="line">	<span class="comment">// 嵌套类</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">class</span> <span class="title">SomeNestedType</span>&#123;&#125;	<span class="comment">// 2</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 常量、只读和静态可读/可写字段</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">const</span> Int32 c_SomeConstant = <span class="number">1</span>;	<span class="comment">// 3</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">readonly</span> String m_SomeReadOnlyField = <span class="string">&quot;2&quot;</span>;	<span class="comment">// 4</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> Int32 s_SomeReadWriteField = <span class="number">3</span>;	<span class="comment">// 5</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 类型构造器</span></span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="title">SomeType</span>(<span class="params"></span>)</span> &#123;&#125;	<span class="comment">// 6</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实例构造器</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SomeType</span>(<span class="params">Int32 x</span>)</span> &#123;&#125;  <span class="comment">// 7</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SomeType</span>(<span class="params"></span>)</span> &#123;&#125;	<span class="comment">// 8</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实例方法和静态方法</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> String <span class="title">InstanceMethod</span>(<span class="params"></span>)</span> &#123; <span class="keyword">return</span> <span class="literal">null</span>; &#125;	<span class="comment">// 9</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span> &#123;&#125;	<span class="comment">// 10</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实例属性</span></span><br><span class="line">	<span class="keyword">public</span> Int32 SomeProp&#123;	<span class="comment">// 11</span></span><br><span class="line">		<span class="keyword">get</span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;	<span class="comment">// 12</span></span><br><span class="line">		<span class="keyword">set</span>&#123;&#125;	<span class="comment">// 13</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实例有参属性（索引器）</span></span><br><span class="line">	<span class="keyword">public</span> Int32 <span class="keyword">this</span>[String s]&#123;	<span class="comment">// 14</span></span><br><span class="line">		<span class="keyword">get</span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;	<span class="comment">// 15</span></span><br><span class="line">		<span class="keyword">set</span>&#123;&#125;	<span class="comment">// 16</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实例事件</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">event</span> EventHandler SomeEvent;	<span class="comment">// 17</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>希望能回头看看这个例子，体会成员是如何定义的，他们对编译器生成的元数据有何影响。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20211118184048.png"></p>
+<h3 id="类型的可见性"><a href="#类型的可见性" class="headerlink" title="类型的可见性"></a>类型的可见性</h3><ul>
+<li><p>public class  全部可见</p>
+</li>
+<li><p>internal class  程序集内可见，如果不定义可见性，默认就是internal</p>
+</li>
+</ul>
+<p><strong>友元程序集(friend assembly)</strong><br>是为了让两个不同程序集之间能相互公开，而对外不公开的一种技术支持。利用<code>InternalsVisibleTo</code>特性。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Runtime.CompilerServices;	<span class="comment">// 为了InternalsVisibleTo特性</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 公钥为“12345678...90abcdef”的友元程序集“AssemblyMySchool”</span></span><br><span class="line">[<span class="meta">assembly:InternalsVisibleTo(<span class="meta-string">&quot;AssemblyMySchool,PublicKey=12345678...90abcdef&quot;</span>)</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 友元集访问下类时，会如同访问public一样</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">Student</span> &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="成员的可访问性"><a href="#成员的可访问性" class="headerlink" title="成员的可访问性"></a>成员的可访问性</h3></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">CodingCodingK</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://codingcodingk.github.io/2021/11/18/Tech/CSharp/CLR-Via-CSharp/cp4/">https://codingcodingk.github.io/2021/11/18/Tech/CSharp/CLR-Via-CSharp/cp4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://CodingCodingK.github.io" target="_blank">CodingCodingK Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF/">技术</a><a class="post-meta__tags" href="/tags/C/">C#</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/11/18/Project/Unity/Moba/HOK/netSyn/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/hok.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">王者荣耀复刻项目 网络同步篇</div></div></a></div><div class="next-post pull-right"><a href="/2021/11/14/Tech/CSharp/CLR-Via-CSharp/cp3/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">CLR Via C#个人笔记3 - 基元类型、引用类型和值类型</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/10/29/Tech/CSharp/CLR-Via-CSharp/cp1/" title="CLR Via C#个人笔记1 - CLR基础"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-29</div><div class="title">CLR Via C#个人笔记1 - CLR基础</div></div></a></div><div><a href="/2021/11/04/Tech/CSharp/CLR-Via-CSharp/cp2/" title="CLR Via C#个人笔记2 - 类与分配"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-04</div><div class="title">CLR Via C#个人笔记2 - 类与分配</div></div></a></div><div><a href="/2021/11/14/Tech/CSharp/CLR-Via-CSharp/cp3/" title="CLR Via C#个人笔记3 - 基元类型、引用类型和值类型"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-14</div><div class="title">CLR Via C#个人笔记3 - 基元类型、引用类型和值类型</div></div></a></div><div><a href="/2021/11/08/Tech/CSharp/Mine/tongbuyibu/" title="同步异步、多线程探究"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-08</div><div class="title">同步异步、多线程探究</div></div></a></div><div><a href="/2021/10/29/Tech/Hexo/htUseHexo/" title="如何使用Hexo?"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-29</div><div class="title">如何使用Hexo?</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CodingCodingK</div><div class="author-info__description">一个正在成为游戏开发者的人</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CodingCodingK"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CodingCodingK" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">本站主要用途为存储个人笔记，请勿用于商业用途，转载请注明出处！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A06%EF%BC%9A%E7%B1%BB%E5%9E%8B%E5%92%8C%E6%88%90%E5%91%98%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">大章6：类型和成员基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%90%84%E7%A7%8D%E6%88%90%E5%91%98"><span class="toc-number">1.0.1.</span> <span class="toc-text">类型的各种成员</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE"><span class="toc-number">1.0.2.</span> <span class="toc-text">元数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-number">1.0.3.</span> <span class="toc-text">类型的可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%90%E5%91%98%E7%9A%84%E5%8F%AF%E8%AE%BF%E9%97%AE%E6%80%A7"><span class="toc-number">1.0.4.</span> <span class="toc-text">成员的可访问性</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/11/18/Project/Unity/Moba/HOK/fight/" title="王者荣耀复刻项目 战斗篇"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/hok.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="王者荣耀复刻项目 战斗篇"/></a><div class="content"><a class="title" href="/2021/11/18/Project/Unity/Moba/HOK/fight/" title="王者荣耀复刻项目 战斗篇">王者荣耀复刻项目 战斗篇</a><time datetime="2021-11-18T15:53:24.057Z" title="发表于 2021-11-18 23:53:24">2021-11-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/18/Project/Unity/Moba/HOK/netSyn/" title="王者荣耀复刻项目 网络同步篇"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/hok.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="王者荣耀复刻项目 网络同步篇"/></a><div class="content"><a class="title" href="/2021/11/18/Project/Unity/Moba/HOK/netSyn/" title="王者荣耀复刻项目 网络同步篇">王者荣耀复刻项目 网络同步篇</a><time datetime="2021-11-18T11:34:43.039Z" title="发表于 2021-11-18 19:34:43">2021-11-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/18/Tech/CSharp/CLR-Via-CSharp/cp4/" title="CLR Via C#个人笔记4 - 类型和成员基础"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CLR Via C#个人笔记4 - 类型和成员基础"/></a><div class="content"><a class="title" href="/2021/11/18/Tech/CSharp/CLR-Via-CSharp/cp4/" title="CLR Via C#个人笔记4 - 类型和成员基础">CLR Via C#个人笔记4 - 类型和成员基础</a><time datetime="2021-11-18T11:34:09.320Z" title="发表于 2021-11-18 19:34:09">2021-11-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/14/Tech/CSharp/CLR-Via-CSharp/cp3/" title="CLR Via C#个人笔记3 - 基元类型、引用类型和值类型"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CLR Via C#个人笔记3 - 基元类型、引用类型和值类型"/></a><div class="content"><a class="title" href="/2021/11/14/Tech/CSharp/CLR-Via-CSharp/cp3/" title="CLR Via C#个人笔记3 - 基元类型、引用类型和值类型">CLR Via C#个人笔记3 - 基元类型、引用类型和值类型</a><time datetime="2021-11-14T12:32:15.888Z" title="发表于 2021-11-14 20:32:15">2021-11-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/14/Project/Unity/Moba/HOK/sys_match/" title="王者荣耀复刻项目 匹配篇"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/hok.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="王者荣耀复刻项目 匹配篇"/></a><div class="content"><a class="title" href="/2021/11/14/Project/Unity/Moba/HOK/sys_match/" title="王者荣耀复刻项目 匹配篇">王者荣耀复刻项目 匹配篇</a><time datetime="2021-11-14T12:32:15.875Z" title="发表于 2021-11-14 20:32:15">2021-11-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021  <i id="heartbeat" class="fa fas fa-heartbeat"></i> CodingCodingK</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/chocolate.js"></script><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/cursor.js"></script><script src="/live2d-widget/autoload.js"></script><script src="/js/mine.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?CodingCodingK";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="CodingCodingK";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><!-- hexo injector body_end end --></body></html>
