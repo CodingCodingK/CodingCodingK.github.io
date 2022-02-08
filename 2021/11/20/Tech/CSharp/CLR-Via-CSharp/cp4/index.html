@@ -1,0 +1,860 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CLR Via C#个人笔记4 - 类型和成员基础 | CodingCodingK Blog</title><meta name="keywords" content="C#,技术,虚方法,可访问性,元数据"><meta name="author" content="CodingCodingK"><meta name="copyright" content="CodingCodingK"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="大章6：类型和成员基础类型的各种成员 常量（大章7）  数据值恒定不变的符号。public const bool isBoy &#x3D; true; 字段（大章7）   实例构造器（大章8） 类型构造器（大章8）  是将类型的静态字段初始化为良好初始状态的特殊方法。static ClassName() &amp;#123;&amp;#125; 方法（大章8）  更改或查询类型或对象状态的函数。分静态方法和实例方法。 操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CLR Via C#个人笔记4 - 类型和成员基础">
+<meta property="og:url" content="https://codingcodingk.github.io/2021/11/20/Tech/CSharp/CLR-Via-CSharp/cp4/index.html">
+<meta property="og:site_name" content="CodingCodingK Blog">
+<meta property="og:description" content="大章6：类型和成员基础类型的各种成员 常量（大章7）  数据值恒定不变的符号。public const bool isBoy &#x3D; true; 字段（大章7）   实例构造器（大章8） 类型构造器（大章8）  是将类型的静态字段初始化为良好初始状态的特殊方法。static ClassName() &amp;#123;&amp;#125; 方法（大章8）  更改或查询类型或对象状态的函数。分静态方法和实例方法。 操作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png">
+<meta property="article:published_time" content="2021-11-20T06:48:38.897Z">
+<meta property="article:modified_time" content="2021-12-18T06:56:08.412Z">
+<meta property="article:author" content="CodingCodingK">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="虚方法">
+<meta property="article:tag" content="可访问性">
+<meta property="article:tag" content="元数据">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png"><link rel="canonical" href="https://codingcodingk.github.io/2021/11/20/Tech/CSharp/CLR-Via-CSharp/cp4/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CLR Via C#个人笔记4 - 类型和成员基础',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-18 14:56:08'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/css/mine.css"><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="CodingCodingK Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">31</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">CodingCodingK Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CLR Via C#个人笔记4 - 类型和成员基础</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-11-20T06:48:38.897Z" title="发表于 2021-11-20 14:48:38">2021-11-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-18T06:56:08.412Z" title="更新于 2021-12-18 14:56:08">2021-12-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/">CSharp</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/CLR-via-C/">CLR via C#</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/CLR-via-C/%E7%AC%AC%E4%BA%8C%E7%AB%A0-C-%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1/">第二章 C#类的设计</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CLR Via C#个人笔记4 - 类型和成员基础"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="大章6：类型和成员基础"><a href="#大章6：类型和成员基础" class="headerlink" title="大章6：类型和成员基础"></a><center>大章6：类型和成员基础</center></h1><h3 id="类型的各种成员"><a href="#类型的各种成员" class="headerlink" title="类型的各种成员"></a>类型的各种成员</h3><ul>
+<li>常量（大章7）  数据值恒定不变的符号。<code>public const bool isBoy = true;</code></li>
+<li>字段（大章7）  </li>
+<li>实例构造器（大章8）</li>
+<li>类型构造器（大章8）  是将类型的静态字段初始化为良好初始状态的特殊方法。<code>static ClassName() &#123;&#125;</code></li>
+<li>方法（大章8）  更改或查询类型或对象状态的函数。分静态方法和实例方法。</li>
+<li>操作符重载（大章8）  实际是方法，由于不是所有编程语言都支持操作符重载，所以它不是CLS(公共语言规范) 的一部分。</li>
+<li>转换操作符（大章8）  是定义如何隐式或显式将对象从一种类型转型为另一种类型的方法。同操作符重载，由于不是所有编程语言都支持，所以它不是CLS(公共语言规范) 的一部分。</li>
+<li>属性（大章10）  可以无参，也可以多参。<code>public Int32 this[String s]&#123;get;set;&#125; // 实例有参属性(索引器)</code></li>
+<li>事件（大章11）  <code>public event EventHandler SomeEvent; // 实例事件</code></li>
+<li>类型  可以定义其他嵌套类型。通常用这个办法将大的类型分解成更小的构建单元（building block）以实现简化。</li>
+</ul>
+<h3 id="元数据"><a href="#元数据" class="headerlink" title="元数据"></a>元数据</h3><p>无论什么编程语言，编译器都必须能处理源代码，为上述成员生成元数据和IL代码，所有编程语言的生成的元数据格式完全一致。<font color="#dd0000">元数据</font>是所有语言都生成和使用的公共信息，是它使不同基于CLR的语言的代码无缝访问。</p>
+<p>下面看一下元数据到底是怎么定义的：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">SomeType</span>&#123;	<span class="comment">// 1</span></span><br><span class="line">	<span class="comment">// 嵌套类</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">class</span> <span class="title">SomeNestedType</span>&#123;&#125;	<span class="comment">// 2</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 常量、只读和静态可读/可写字段</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">const</span> Int32 c_SomeConstant = <span class="number">1</span>;	<span class="comment">// 3</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">readonly</span> String m_SomeReadOnlyField = <span class="string">&quot;2&quot;</span>;	<span class="comment">// 4</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> Int32 s_SomeReadWriteField = <span class="number">3</span>;	<span class="comment">// 5</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 类型构造器</span></span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="title">SomeType</span>(<span class="params"></span>)</span> &#123;&#125;	<span class="comment">// 6</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实例构造器</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SomeType</span>(<span class="params">Int32 x</span>)</span> &#123;&#125;  <span class="comment">// 7</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SomeType</span>(<span class="params"></span>)</span> &#123;&#125;	<span class="comment">// 8</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实例方法和静态方法</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> String <span class="title">InstanceMethod</span>(<span class="params"></span>)</span> &#123; <span class="keyword">return</span> <span class="literal">null</span>; &#125;	<span class="comment">// 9</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span> &#123;&#125;	<span class="comment">// 10</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实例属性</span></span><br><span class="line">	<span class="keyword">public</span> Int32 SomeProp&#123;	<span class="comment">// 11</span></span><br><span class="line">		<span class="keyword">get</span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;	<span class="comment">// 12</span></span><br><span class="line">		<span class="keyword">set</span>&#123;&#125;	<span class="comment">// 13</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实例有参属性（索引器）</span></span><br><span class="line">	<span class="keyword">public</span> Int32 <span class="keyword">this</span>[String s]&#123;	<span class="comment">// 14</span></span><br><span class="line">		<span class="keyword">get</span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;	<span class="comment">// 15</span></span><br><span class="line">		<span class="keyword">set</span>&#123;&#125;	<span class="comment">// 16</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 实例事件</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">event</span> EventHandler SomeEvent;	<span class="comment">// 17</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<blockquote>
+<p>希望能回头看看这个例子，体会成员是如何定义的，他们对编译器生成的元数据有何影响。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20211118184048.png"></p>
+<h3 id="类型的可见性"><a href="#类型的可见性" class="headerlink" title="类型的可见性"></a>类型的可见性</h3><p>可见性，只是针对类说的，而不是字段。</p>
+<ul>
+<li><p>public class  全部可见</p>
+</li>
+<li><p>internal class  程序集内可见，如果不定义可见性，默认就是internal</p>
+</li>
+</ul>
+<p><strong>友元程序集(friend assembly)</strong><br>是为了让两个不同程序集之间能相互公开，而对外不公开的一种技术支持。利用<code>InternalsVisibleTo</code>特性。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Runtime.CompilerServices;	<span class="comment">// 为了InternalsVisibleTo特性</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 公钥为“12345678...90abcdef”的友元程序集“AssemblyMySchool”</span></span><br><span class="line">[<span class="meta">assembly:InternalsVisibleTo(<span class="meta-string">&quot;AssemblyMySchool,PublicKey=12345678...90abcdef&quot;</span>)</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 友元集访问下类时，会如同访问public一样</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">Student</span> &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="成员的可访问性"><a href="#成员的可访问性" class="headerlink" title="成员的可访问性"></a>成员的可访问性</h3><p>可访问性，是针对字段说的，但是如果类不可见，哪怕是可访问的也访问不到。</p>
+<ul>
+<li>private  =&gt;  CLR:Private</li>
+<li>protected  =&gt;  CLR:Family</li>
+<li>不支持  =&gt;  CLR:Family Ana Assembly</li>
+<li>internal  =&gt;  CLR:Assembly</li>
+<li>protected internal  =&gt;  CLR:Family or Assembly</li>
+<li>public  =&gt;  CLR:Public</li>
+</ul>
+<p>派生类重写基类型定义的成员时，<font color="#dd0000">C#要求必须是相同的可访问性</font>。比如父类protected，子类也必须是protected。但是CLR并没有这么严格，它要求重写方法可以放宽限制，比如从protected到public，但不可以缩紧比如从protected到private。之所以这样因为CLR承诺派生类总能转型为基类，并获取对基类方法的访问权。</p>
+<h3 id="静态类-static"><a href="#静态类-static" class="headerlink" title="静态类 static"></a>静态类 static</h3><ul>
+<li>是指永远不需要实例化的类，比如Console、Math。</li>
+<li>静态类只有static成员，且static关键字只能修饰类、不能修饰值类型，因为CLR总是允许值类型实例化。</li>
+<li>静态类必须从基类System.Object派生。</li>
+<li>静态类不能实现任何接口。这是因为只有使用类的实例时，才可调用类的接口方法。</li>
+</ul>
+<p>在IL代码中，会把static类标记为abstract和sealed，且不会为其生成实例构造器方法。</p>
+<h3 id="分布类-partial"><a href="#分布类-partial" class="headerlink" title="分布类 partial"></a>分布类 partial</h3><p><strong>partial关键字</strong></p>
+<p>partial关键字告诉C#编译器，类、结构或接口的定义源代码可能要分散到一个或多个源代码文件中。</p>
+<ul>
+<li>多人协作。可以将类型的代码分散到多个源代码文件中，每个文件都可单独check out 或 merge。</li>
+<li>结构清晰。在同一个文件中将类或结构分解成不同的逻辑单元，比如一部分写需求A一部分写需求B，这样注释修改会更容易。</li>
+<li>代码生成。通过工具新生成的代码，不需要去原有类里写，新起一个文件类名相同新增即可。更符合开放-封闭原则。</li>
+</ul>
+<h3 id="组件化开发和版本控制（虚实调用、virtual、new）"><a href="#组件化开发和版本控制（虚实调用、virtual、new）" class="headerlink" title="组件化开发和版本控制（虚实调用、virtual、new）"></a>组件化开发和版本控制（虚实调用、virtual、new）</h3><p><strong>组件化开发</strong></p>
+<p>组件软件编程（Component Software Programming）正是面向对象编程发展到极致的成果。</p>
+<ul>
+<li>组件（程序集）是独立的，且有自己的标识，比如名称和版本号。</li>
+<li>组件必须指定它需要的安全权限。</li>
+<li>组件要对外公布接口，这些接口不应随着版本迭代而导致外部的用法改变。</li>
+</ul>
+<p>如果无法想象，就直接想象第三方dll。</p>
+<p><strong>CLR调用方法虚方法</strong></p>
+<p>IL提供2种指令去调用方法</p>
+<p>call </p>
+<ul>
+<li>可用于调用实例方法、虚方法和静态方法。</li>
+<li>假定该变量不为null，如果变量的类型没有定义该方法，就检查基类型来查找匹配方法。</li>
+<li>call指令常用于以非虚方式调用虚方法。</li>
+<li>对于代码来说，<code>Object o = new Point()</code>会根据<font color="#dd0000">申明类型</font>Object来确定。</li>
+</ul>
+<p>callvirt</p>
+<ul>
+<li>可用于调用实例方法和虚方法。</li>
+<li>一定会进行null检查，因为会check null，所以callvirt的执行速度会比call慢一些。</li>
+<li>callvirt调用虚实例方法，CLR调查发出调用的对象的实际类型，然后以多态方式调用方法。</li>
+<li>对于代码来说，<code>Object o = new Point()</code>会根据<font color="#dd0000">实际类型</font>Point来确定。</li>
+</ul>
+<p>看一个调用例子</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line">Console.WriteLine();	    <span class="comment">//	IL_1:call void System.Console::WriteLine()</span></span><br><span class="line">Object o = <span class="keyword">new</span> Object();	<span class="comment">//	IL:newobj instance void System.Object::.ctor()</span></span><br><span class="line">o.GetHashCode();	        <span class="comment">//	IL_2:callvirt instance int32 System.Object::GetHashCode()</span></span><br><span class="line">o.GetType();	            <span class="comment">//	IL_3:callvirt class System.Object::GetType()</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>IL_1 是call，很好理解，静态方法调用。<br>IL_2 是callvirt，不难想，因为GetHashCode是虚方法。<br>IL_3 是callvirt，这个比较难，因为定义是<code>public Type GetType()</code>根本不是虚方法。</p>
+<p>但这是可行的，因为对代码进行JIT编译时，CLR知道GetType不是虚方法，所以JIT编译好的代码中，会直接以非虚方式（就是直接找申明类型，不找对象指针了）调用GetType。<br>那么，为什么C#不干脆直接生成call指令呢？<br>C#团队认为，JIT编译器应生成代码来验证发出调用的对象不为null。</p>
+<p>// TODO 为什么必须用callvirt调用 p147</p>
+<p>综上所属，设计类的时候，最好减少虚方法的数量：</p>
+<ul>
+<li>上面说过了，调用虚方法的速度比非虚方法慢</li>
+<li>JIT编译器不能内嵌（inline）虚方法，这进一步影响性能</li>
+<li>虚方法使组件版本控制变得更脆弱</li>
+</ul>
+<p>正确的做法是：</p>
+<blockquote>
+<p>将最复杂的方法作为虚方法，使所有重载的简便方法成为非虚方法。</p>
+</blockquote>
+<p>具体如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Set</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">int</span> length = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 这个简便的重载方法是非虚的</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="built_in">int</span> <span class="title">Find</span>(<span class="params">Object val</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> Find(val,<span class="number">0</span>,length);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 这个简便的重载方法是非虚的</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="built_in">int</span> <span class="title">Find</span>(<span class="params">Object val,<span class="built_in">int</span> startIndex</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> Find(val,<span class="number">0</span>,length - startIndex);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 功能最丰富的方法是虚方法，可被重写</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="built_in">int</span> <span class="title">Find</span>(<span class="params">Object val,<span class="built_in">int</span> startIndex,<span class="built_in">int</span> endIndex</span>)</span>&#123;</span><br><span class="line">		<span class="comment">// 可被重写的实现...</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>利用可见性和可访问性</strong></p>
+<p>一般实际应用的情况来说，开发人员使用第三方程序集的时候是看不到源码的，所以做程序集的时候就需要好好利用 可见性和可访问性 ，避免使用者开发人员出错。</p>
+<ul>
+<li>对于不需要特化或无法确定的新类型，要定义成密封类。1.因为更安全：不存在派生类修改其内部逻辑；2.更易于版本控制：密封类可以保持密封，非密封类无法改为密封，因为用户可能已经继承过这个类了。</li>
+<li>对于确定需要特化、需要派生的类型，定义成public类对外暴露。</li>
+<li>类的内部的数据字段，尽可能定义成private，不让外界中途修改。</li>
+<li>类的内部的方法、属性、事件，定义成private和非虚。</li>
+<li>类的内部的嵌套类型，要用private，不要对外公布而应该只在该类里使用。</li>
+</ul>
+<p><strong>new与override</strong></p>
+<p>如果基类型和其派生类型有同名同参方法，但是想要指明新方法与基类型的同名方法无关，那么需要用到<font color="#dd0000">new关键字</font>。new关键字可以告诉编译器生成元数据，这同样CLR就知道到底调用的是哪个了。</p>
+<p>比如：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">A</span>:<span class="title">B</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">new</span> <span class="keyword">void</span> <span class="title">Talk</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		Console.WriteLine(<span class="string">&quot;A Talk&quot;</span>);</span><br><span class="line">		OpenMouth();</span><br><span class="line">		<span class="keyword">base</span>.Talk();	<span class="comment">// 用了基类的同名方法！基类的Talk方法里调用了基类自己的OpenMouth方法</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">new</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">OpenMouth</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		Console.WriteLine(<span class="string">&quot;A Open the Mouse&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行A.Talk();</span></span><br><span class="line"><span class="comment">// output line 1:	A Talk</span></span><br><span class="line"><span class="comment">// output line 2:	A Open the Mouse</span></span><br><span class="line"><span class="comment">// output line 3:	B Talk</span></span><br><span class="line"><span class="comment">// output line 4:	B Open the Mouse</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>但如果想要替换、影响基类方法，那么就该使用<font color="#dd0000">override关键字</font>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">A</span>:<span class="title">B</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OpenMouth</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		Console.WriteLine(<span class="string">&quot;A Open the Mouse&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行A.Talk();</span></span><br><span class="line"><span class="comment">// output line 1:	B Talk</span></span><br><span class="line"><span class="comment">// output line 2:	A Open the Mouse</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="大章7：常量和字段"><a href="#大章7：常量和字段" class="headerlink" title="大章7：常量和字段"></a><center>大章7：常量和字段</center></h1><h3 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h3><p>常量，是指值从不变化的符号，它的值必须能在编译时确定。<br>确定后，编译器将常量值保存到程序集元数据中，这意味着常量只能定义成编译器识别的基元类型。<br>我们把<font color="#dd0000">const关键字</font>拿来写常量，且它不能和static关键字连用，因为常量总是隐式为static。<br>常量符号会直接嵌入应用程序的IL代码，如下。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">const</span> Int32 MyNumMaxLength = <span class="number">50</span>;</span><br><span class="line"><span class="comment">// 以下为对应调用的IL代码，可以看到直接是50而不是读取变量</span></span><br><span class="line">IL_0006: ldc.i4.s	<span class="number">50</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="字段"><a href="#字段" class="headerlink" title="字段"></a>字段</h3><ul>
+<li><p>字段，是一种数据成员，其中容纳了一个值类型的实例或者对一个引用类型的引用。</p>
+</li>
+<li><p>字段存储于动态内存中，所以他们的值在运行时才能获取。</p>
+</li>
+<li><p>字段的内联（inline）是指 <code>public string x = &quot;A&quot; ;</code> 这种声明后紧跟赋值的用法。内联语法简化的只是语法，仍然是在构造器中赋值的。</p>
+<p>​    </p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>C#术语</th>
+<th>CLR术语</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>默认</td>
+<td>Instance</td>
+<td>该字段只与对象的一个实例关联，而不是与类型本身关联</td>
+</tr>
+<tr>
+<td>static</td>
+<td>Static</td>
+<td>该字段是类型状态的一部分，而不是对象状态的一部分</td>
+</tr>
+<tr>
+<td>readonly</td>
+<td>InitOnly</td>
+<td>该字段只能由一个构造器方法中的代码写入（但是可以通过反射修改）</td>
+</tr>
+<tr>
+<td>volatile</td>
+<td>Volatile</td>
+<td>编译器、CLR和硬件不会对该字段执行“线程不安全”的优化措施</td>
+</tr>
+</tbody></table>
+<p>readonly标记，限制的是让字段的引用不可改变，而其引用的对象是可以修改的。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Test</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="title">List</span>&lt;<span class="title">int</span>&gt; readonlyList</span> = <span class="keyword">new</span> List&lt;<span class="built_in">int</span>&gt;()&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	Test.readonlyList.Add(<span class="number">4</span>);	<span class="comment">// 修改引用的字段</span></span><br><span class="line">	<span class="keyword">foreach</span> (<span class="keyword">var</span> line <span class="keyword">in</span> Test.readonlyList)</span><br><span class="line">	&#123;</span><br><span class="line">		Console.WriteLine(line);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// output: 1 2 3 4</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="大章8：方法"><a href="#大章8：方法" class="headerlink" title="大章8：方法"></a><center>大章8：方法</center></h1><h3 id="实例构造器-引用类型"><a href="#实例构造器-引用类型" class="headerlink" title="实例构造器(引用类型)"></a>实例构造器(引用类型)</h3><ul>
+<li>构造器是将类型的实例初始化为良好状态的特殊方法。</li>
+<li>构造器在“方法定义元数据表”种始终叫做 <code>.ctor</code>。</li>
+<li>未被构造器构造的引用类型对象，其实例字段都是0或null。</li>
+<li>构造器不可被继承，所以不能使用以下修饰符：virtual、new、override、sealed、abstract。</li>
+</ul>
+<p><strong>类自动实现的默认构造器</strong></p>
+<ul>
+<li>如果不写构造器的话，会默认生成：</li>
+</ul>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SomeType</span>&#123; &#125;</span><br><span class="line"><span class="comment">/*--------等价于---------*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SomeType</span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SomeType</span>(<span class="params"></span>) : <span class="title">base</span>(<span class="params"></span>)</span>&#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果派生类没有显式调用基类的构造器，C#编译器会在自动生成对默认的基类构造器的调用。</p>
+<p>自动生成的基类构造器，会在派生类构造器内部执行完所有字段初始化（如果你不给它们赋值，就会赋值default）后，再调用。下面贴的代码进一步理解。</p>
+<p>有两种情况不会调用构造器而创建类型的实例，1是MemberwiseClone方法，2是序列化器反序列化对象。</p>
+<p>以下纪录构造器的特殊写法，这样写可以让IL只自动生成一次代码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">SomeType</span>()&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">int</span> m_x;</span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">double</span> m_d;</span><br><span class="line">	<span class="comment">// 通用构造器</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SomeType</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		m_x = <span class="number">5</span>;</span><br><span class="line">		m_d = <span class="number">3.11</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 继承通用构造器</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SomeType</span>(<span class="params"><span class="built_in">int</span> input</span>) : <span class="title">this</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		m_x = input;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SomeType</span>(<span class="params"><span class="built_in">double</span> input</span>) : <span class="title">this</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		m_d = input;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="实例构造器-值类型"><a href="#实例构造器-值类型" class="headerlink" title="实例构造器(值类型)"></a>实例构造器(值类型)</h3><p>上面说了：<br>自动生成的基类构造器，会在派生类构造器内部执行完所有字段初始化（如果你不给它们赋值，就会赋值default）后，再调用。<br>意思比如你有个int，就会赋值0。</p>
+<p>那么如果像这么改写呢？</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">struct</span> Point &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">int</span> x,y;</span><br><span class="line">	<span class="comment">// 注意，实际上不可能写出构造器Point，因为C#规定不允许struct结构体内部定义 无参构造器 或者给内联赋初始值。</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Point</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">		x = y = <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Rectangle</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> Point topLeft,bottomRight;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然上述代码通过不了C#编译，但是如果执行，Rectangle也不会隐式调用Point的构造器，而是会赋默认值0给Point内的x、y。</p>
+<h3 id="类型构造器"><a href="#类型构造器" class="headerlink" title="类型构造器"></a>类型构造器</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Test</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">static</span> <span class="built_in">int</span> a = <span class="number">2</span>;<span class="comment">//先执行</span></span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="title">Test</span>(<span class="params"></span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		a = <span class="number">1</span>;<span class="comment">//后执行，最后a=1</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面就是类型构造器。</p>
+<ul>
+<li>它不允许有入参。</li>
+<li>它本身静态，也只能操作静态字段。</li>
+<li>它有一个<font color="#dd0000">线程互斥同步锁</font>，C#希望AppDomain中每个类型只执行一次类型构造器，所以线程1拿到该锁后开始构造类型，期间其他线程想调用会被阻塞，知道线程1构造结束放开锁后，其他线程恢复正常发现类已经造好了。</li>
+</ul>
+<p>此外，如果你想在类型销毁时做点什么，虽然CLR不支持静态Finalize方法，但是可以在AppDomain卸载时的DomainUnload事件登记一个回调。</p>
+<h3 id="操作符重载"><a href="#操作符重载" class="headerlink" title="操作符重载"></a>操作符重载</h3><p>对于CLR而言，对操作符一无所知，所谓操作符重载只是方法而已。</p>
+<h3 id="转换操作符方法"><a href="#转换操作符方法" class="headerlink" title="转换操作符方法"></a>转换操作符方法</h3><p>说的是自定义类型之间的 显式转换 和 隐式转换 。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Rational</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">int</span> num;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Rational</span>(<span class="params"><span class="built_in">int</span> num</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">this</span>.num = num;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 定义转换方法 x.ToInt32();</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Int32 <span class="title">ToInt32</span>(<span class="params"></span>)</span> &#123; <span class="keyword">return</span> num; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 隐式转换重写 Rational x = 5;</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">implicit</span> <span class="keyword">operator</span> <span class="title">Rational</span>(<span class="params">Int32 num</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Rational(num);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 显式转换重写 (int)x;</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">explicit</span> <span class="keyword">operator</span> <span class="title">Int32</span>(<span class="params">Rational r</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> r.ToInt32();</span><br><span class="line">	&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 在IL中，对应op_Implicit(Int32 num)</span></span><br><span class="line">    <span class="comment">// 在IL中，对应op_Explicit(Rational r)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="扩展方法"><a href="#扩展方法" class="headerlink" title="扩展方法"></a>扩展方法</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">SomeExtensions</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Int32 <span class="title">IndexOf</span>(<span class="params"><span class="keyword">this</span> SomeType st,<span class="built_in">char</span> val</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> st.Find(val).index;<span class="comment">// 假设有这个方法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>作用</strong></p>
+<p>简化代码用，添加后会在智能感知中提示。</p>
+<p><strong>this关键字</strong></p>
+<p>其核心是<code>this</code>关键字，需要在静态类中声明。</p>
+<p><strong>调用</strong></p>
+<p>编译器遇到这个会先找类内的实例方法，找不到才继续会找静态方法，最终生成IL。</p>
+<p>因为本质是对静态方法的调用，所以CLR不会生成代码对调用方法的值进行null-check。即不保证非空。</p>
+<p><strong>技巧</strong></p>
+<p>诸如 <code>public static void ShowItems&lt;T&gt; (this IEnumerable&lt;T&gt; collection)</code> ，通过泛型+接口实现泛用。</p>
+<p><strong>可被接作委托</strong></p>
+<p>拓展方法可以被当作委托接住，并在后续执行。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Action a = <span class="string">&quot;Jeff&quot;</span>.ShowItems;</span><br><span class="line">a();<span class="comment">// 本质是Invoke委托并传入&quot;Jeff&quot;的引用</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="分部方法"><a href="#分部方法" class="headerlink" title="分部方法"></a>分部方法</h3><p><strong>partial关键字</strong></p>
+<p>分部方法用起来和委托很像，书里没提，我猜是委托+注入委托实现的。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">SomeType</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="function"><span class="keyword">partial</span> <span class="keyword">void</span> <span class="title">OnNameChanged</span>(<span class="params"><span class="built_in">int</span> val</span>)</span>;<span class="comment">// 分部方法写法</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Test</span>(<span class="params"></span>)</span></span><br><span class="line">		&#123;</span><br><span class="line">			OnNameChanged(<span class="number">1</span>);</span><br><span class="line">			<span class="comment">// 如果OnNameChanged没被提供实现，那么这一段调用在IL代码里不会出现</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">partial</span> <span class="keyword">class</span> <span class="title">SomeType</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="function"><span class="keyword">partial</span> <span class="keyword">void</span> <span class="title">OnNameChanged</span>(<span class="params"><span class="built_in">int</span> val</span>)</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// do sth or just not</span></span><br><span class="line">		</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>用法</strong></p>
+<ul>
+<li>分部方法只能在 分部类 或者 分部结构 中声明。</li>
+<li>分部方法可以是 静态 或者 泛型方法 。</li>
+<li>分部方法返回类型必须是 void ，且不能用 out 。</li>
+</ul>
+<p><strong>它更有优势</strong></p>
+<p>比起把基类某方法设置为virtual调用，然后子类继承去重写的方法，它更有以下2点优势：</p>
+<ul>
+<li>类的要求更低，不需要继承且可以密封。</li>
+<li>编译器会对其进行优化，如果没有提供分部方法的实现，IL就不会生成调用这个方法的代码。</li>
+</ul>
+<h1 id="大章9：参数"><a href="#大章9：参数" class="headerlink" title="大章9：参数"></a><center>大章9：参数</center></h1><h3 id="可选参数和命名参数"><a href="#可选参数和命名参数" class="headerlink" title="可选参数和命名参数"></a>可选参数和命名参数</h3><p><strong>可选参数</strong></p>
+<p>就是给参数设定默认值，这样可以不输。</p>
+<p><strong>命名参数</strong></p>
+<p>就是调用的时候给参数显式赋值。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DoSth(name:<span class="string">&quot;Sim&quot;</span>,thing:<span class="string">&quot;talk&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>ref and out</strong></p>
+<ul>
+<li>ref和out不能作为默认参数，因为它们无法传递有意义的默认值。</li>
+<li>ref和out在IL以及CLR看来是一码事，它们都是传参数实例的指针。</li>
+<li>ref和out在方法元数据中的签名是一摸一样的，以为着无法把一个方法的out参数改为ref就作为新方法，编译器会报错。</li>
+</ul>
+<p><strong>IL代码</strong></p>
+<p>C#中分配了默认参数，编译器会在内部向该参数应用定制特性 System.Runtime.InteropServices.OptionalAttribute 和 System.Runtime.InteropServices.DefaultParameterValueAttribute。<br>生成的代码会存在文件的元数据中。然后，会向DefaultParameterValueAttribute的构造器传递在源代码中指定的常量值。</p>
+<h3 id="向参数传引用"><a href="#向参数传引用" class="headerlink" title="向参数传引用"></a>向参数传引用</h3><p><strong>引用和值参数</strong></p>
+<ul>
+<li>如果是引用类型，会传引用，意味着值可以被改变。</li>
+<li>如果是值类型，会传实例的一个副本。</li>
+</ul>
+<p><strong>ref vs out</strong></p>
+<p>C#编译器会区分 <font Color ="red">out和ref</font> ，但CLR不区分，他们的IL代码相同，元数据几乎相同只有一个bit不同用来区分。</p>
+<ul>
+<li>out假设调用者在调用方法之前可能没初始化对象，所以方法体内不能读取参数的值，而且必须在返回前写入这个值。</li>
+<li>ref与之相反，方法体内能读写参数的值，但是必须在调用方法前初始化参数。</li>
+</ul>
+<p><strong>优化点</strong></p>
+<p>为大的参数值类型使用out，可以避免在调用方法时复制值类型实例的字段。</p>
+<p><strong>签名一致</strong></p>
+<p>如果方法使用ref和out，要求参数必须完全吻合签名的类型：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SomeMethod</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	String s1 = <span class="string">&quot;Jeffrey&quot;</span>;</span><br><span class="line">	String s2 = <span class="string">&quot;Richter&quot;</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// Swap(ref s1,ref s2)编译器会直接报错，必须像下面这样写</span></span><br><span class="line">	Swap(<span class="function"><span class="keyword">ref</span> <span class="title">object</span>(<span class="params">s1</span>),<span class="keyword">ref</span> <span class="title">object</span>(<span class="params">s2</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Swap</span>(<span class="params"><span class="keyword">ref</span> <span class="built_in">object</span> a,<span class="keyword">ref</span> <span class="built_in">object</span> b</span>)</span>&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>=&gt; 因此，签名处建议改成泛型：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SomeMethod</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	String s1 = <span class="string">&quot;Jeffrey&quot;</span>;</span><br><span class="line">	String s2 = <span class="string">&quot;Richter&quot;</span>;</span><br><span class="line">    </span><br><span class="line">	Swap(<span class="keyword">ref</span> s1,<span class="keyword">ref</span> s2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Swap</span>&lt;<span class="title">T</span>&gt;(<span class="params"><span class="keyword">ref</span> T a,<span class="keyword">ref</span> T b</span>)</span>&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="让参数的数量可变"><a href="#让参数的数量可变" class="headerlink" title="让参数的数量可变"></a>让参数的数量可变</h3><p><strong>params关键字 怎么用</strong></p>
+<p>使用params关键字可以让方法接受可变数量的参数：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SomeMethod</span>(<span class="params"><span class="keyword">params</span> Int32 values</span>)</span>&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>params关键字 实现</strong></p>
+<p>params关键字告诉编译器向参数应用定制特性System.ParamArrayAttribute的一个实例。</p>
+<p>编译器在方法调用时，会先检查所有参数没有应用ParamArray特性的方法；如果没有找到匹配的方法，再去寻找参数应用了ParamArray特性的方法。</p>
+<p><strong>params关键字 少用</strong></p>
+<p>因为params肯定跟着数组型参数，数组型参数必须在堆上分配且参与垃圾回收，比帧栈上丢参数的方式耗费性能的多。关于这一块改善，可以参考<code>String.Concat</code>方法，对方法进行尽可能地重载而不是用params，params只用在极端情况下。</p>
+<h3 id="参数和返回类型的设计规范-⭐"><a href="#参数和返回类型的设计规范-⭐" class="headerlink" title="参数和返回类型的设计规范 ⭐"></a>参数和返回类型的设计规范 ⭐</h3><p><strong>参数类型尽可能弱</strong></p>
+<p>声明方法的参数，类型越弱越好，宁愿要接口也不要基类。这样适用范围更大。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SomeMethod</span>&lt;<span class="title">T</span>&gt; (<span class="params">IEnumerable&lt;T&gt; collection</span>)</span> &#123;...&#125;</span><br><span class="line"><span class="comment">// is better than</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SomeMethod</span>&lt;<span class="title">T</span>&gt; (<span class="params">List&lt;T&gt; collection</span>)</span> &#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>返回类型尽可能强</strong></p>
+<p>相反，声明方法的返回值类型越强越好，代码就不演示了。这样做返回值能做的事更多，也可以转换成基类。</p>
+<p><strong>适当调整提高灵活性</strong></p>
+<p>上面2点虽然是原则，但是最后要根据实际情况来。比如说返回类型更强，会导致方法内部的变量要求更为严格，导致灵活性下降更难改动方法。</p>
+<h3 id="常量性"><a href="#常量性" class="headerlink" title="常量性"></a>常量性</h3><p>有的语言（比如C++）允许将方法或参数声明为常量，但是CLR并不提供这个功能。</p>
+<h1 id="大章10：属性"><a href="#大章10：属性" class="headerlink" title="大章10：属性"></a><center>大章10：属性</center></h1><h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><p>CLR支持两种属性：无参与有参。它们之间的区分就是get、set访问器接不接受参数。</p>
+<ul>
+<li>无参属性，就是平时说的属性</li>
+<li>有参属性，C#又称它为索引器。</li>
+</ul>
+<h3 id="无参属性"><a href="#无参属性" class="headerlink" title="无参属性"></a>无参属性</h3><p><strong>是什么</strong></p>
+<p>无参属性，就是平时说的属性。</p>
+<p><strong>数据封装</strong></p>
+<p>建议将字段设置为private，为其设置访问器（accessor）方法。属性进行读/写操作的本质是通过访问器，也就是方法。</p>
+<p><strong>数据封装的目的</strong></p>
+<ul>
+<li>为了实现一些side effect，就是在<code>get;set;</code>里写逻辑。比如数据检查。</li>
+<li>可以以线程安全的方式访问字段。</li>
+</ul>
+<p><strong>编译器处理</strong></p>
+<ul>
+<li>  如果对属性写了<code>get;set;</code>访问器方法，那么在编译器会生成对应的方法，类似于<code>get_Name();set_Name();</code>。如果没写就不生成。</li>
+<li>  托管程序集元数据中的属性定义。这一项必然生成。</li>
+</ul>
+<p><strong>用于反射</strong></p>
+<p>上面说了，编译器会为属性生成一个属性定义项，里面有一些flag、属性类型、属性对应的get、set访问器方法的引用。这种元数据可以被<code>System.Reflection.PropertyInfo类</code>获取，但是CLR不用这些元数据，只需要访问器方法。</p>
+<p><strong>属性自动实现</strong></p>
+<p>C#提供的语法糖：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String Name &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>像上述这么实现，C#编译器会自动声明一个私有字段，并自动实现get_Name、set_Name方法。</p>
+<p><strong>属性vs字段</strong></p>
+<ul>
+<li>  属性可以只读只写，而字段总是可读可写（除了readonly）。</li>
+<li>  属性不能作为out或ref参数传给方法，而字段可以。</li>
+<li>  属性方法可能造成副作用，而字段不会。</li>
+<li>  属性方法可能抛出异常，而字段访问永远不会。</li>
+</ul>
+<p><strong>对象初始化器</strong></p>
+<p>C#提供的语法糖：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> man = <span class="keyword">new</span> Man() &#123; Name = <span class="string">&quot;Sam&quot;</span>, Age = <span class="number">25</span>&#125;;</span><br><span class="line"><span class="comment">// 上述语法糖等价于</span></span><br><span class="line"><span class="keyword">var</span> man = <span class="keyword">new</span> Man();</span><br><span class="line">man.Name = <span class="string">&quot;Sam&quot;</span>;</span><br><span class="line">man.Age = <span class="number">25</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>集合初始化器</strong></p>
+<p>如果属性类型实现了<code>IEnumerable</code>或者<code>IEnumerable&lt;T&gt;</code>接口，属性就被认为是集合。</p>
+<p>而编译器面对集合的初始化，会假设类实现了Add方法并为其执行Add方法；如果集合没有实现Add方法却使用集合初始化器，会报错。</p>
+<p>比如，C#提供的语法糖：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设有一个类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Classroom</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">List</span>&lt;<span class="title">String</span>&gt; Students</span> &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; = <span class="keyword">new</span> List&lt;String&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 语法糖</span></span><br><span class="line">Classroom <span class="keyword">class</span> = <span class="keyword">new</span> Classroom&#123;</span><br><span class="line">    Students = &#123;<span class="string">&quot;A&quot;</span>,<span class="string">&quot;B&quot;</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 上述语法糖等价于</span></span><br><span class="line">Classroom <span class="keyword">class</span> = <span class="keyword">new</span> Classroom();</span><br><span class="line"><span class="keyword">class</span>.Students.Add(<span class="string">&quot;A&quot;</span>);</span><br><span class="line"><span class="keyword">class</span>.Students.Add(<span class="string">&quot;B&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>匿名类型</strong></p>
+<p>如下方式定义类型，编译器的操作：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o1 = <span class="keyword">new</span> &#123;Name = <span class="string">&quot;Jeff&quot;</span>, Year = <span class="number">1964</span>&#125;;</span><br><span class="line"><span class="comment">// equal to ， 2种匿名类型定义方式</span></span><br><span class="line">String Name = <span class="string">&quot;Jeff&quot;</span>;Int Year = <span class="number">1964</span>;</span><br><span class="line"><span class="keyword">var</span> o2 = <span class="keyword">new</span> &#123;Name, Year&#125;;</span><br><span class="line"><span class="comment">// 他们属于一个结构的匿名类，C#就只创造一个类</span></span><br><span class="line">o2 = o1;</span><br><span class="line"><span class="comment">// 匿名类结构，编译器生成代码如下</span></span><br><span class="line">[<span class="meta">CompilerGenerated</span>]</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> &lt;&gt;<span class="title">f__AnonymousType0</span>&lt;...&gt; : <span class="title">Object</span> &#123;</span><br><span class="line">    <span class="comment">// 1.属性，会作为只读字段</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">readonly</span> String Name;</span><br><span class="line">    <span class="keyword">public</span> String Name &#123;<span class="keyword">get</span>&#123;<span class="keyword">return</span> Name;&#125;&#125;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 2.构造器，按照声明处顺序来</span></span><br><span class="line">    <span class="keyword">public</span> &lt;&gt;f__AnonymousType0&lt;...&gt;(String a1,Int a2)&#123;</span><br><span class="line">        Name = a1;Year = a2;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 3.重写Object.Equals</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> Boolean <span class="title">Equals</span>(<span class="params">Object val</span>)</span>&#123;</span><br><span class="line">        <span class="comment">// 任何字段不匹配就返回false，否则true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 4.重写Object.GetHashCode</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> Int32 <span class="title">GetHashCode</span>(<span class="params">Object val</span>)</span>&#123;</span><br><span class="line">        <span class="comment">// 返回根据每个字段的哈希码生成的一个哈希码</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 5.重写Object.ToString</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> String <span class="title">ToString</span>(<span class="params">Object val</span>)</span>&#123;</span><br><span class="line">        <span class="comment">// 返回 “属性名=值”对 的逗号分隔列表</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  如代码段描述，生成的匿名类型继承自Object，所有字段readonly且不提供set所以不可修改。</li>
+<li>  如代码段描述，会重写Equals、GetHashCode、ToString三个方法。</li>
+<li>  如代码段描述，完全同样结构的匿名类型，C#编译器会复用同一个类，所以可以<code>o1 = o2</code>甚至<code>o1.Equals(o2)</code>。</li>
+<li>  匿名类型经常与LINQ配合使用，比如<code>var query = from ... select new&#123;Name = ...,Year = ...&#125;; </code></li>
+</ul>
+<p><strong>System.Tuple类型</strong></p>
+<p>Tuple，组元。一组微软定义的泛型组成的类型，目的是简化类的定义，有需求时可以使用。</p>
+<ul>
+<li>  这个类型提供了CompareTo、Equals、GetHashCode、ToString方法 以及 Size属性。</li>
+<li>  这一系列类型都和下面一样结构，只是入参数量不同，最复杂的是8个入参！</li>
+</ul>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Serializable</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Tuple</span>&lt;<span class="title">T1</span>,<span class="title">T2</span>,<span class="title">TRest</span>&gt;&#123;</span><br><span class="line">	<span class="keyword">private</span> T1 m_Item1;</span><br><span class="line">	<span class="keyword">public</span> T1 Item1 &#123; <span class="keyword">get</span>&#123;<span class="keyword">return</span> m_Item1;&#125; &#125;</span><br><span class="line">	...other props...</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Tuple</span>(<span class="params">T1 t1,T2 t2,TRest rest</span>)</span>&#123;</span><br><span class="line">		m_Item1 = t1; m_Item2 = t2; m_Rest = rest;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ------使用------</span></span><br><span class="line"><span class="comment">// 常规用法</span></span><br><span class="line">Tuple&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt; test = Tuple.Create&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt;(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// 拓展用法，创建多于8个元素的Tuple，可为Rest参数传递另一个Tuple</span></span><br><span class="line"><span class="keyword">var</span> t = Tuple.Create(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,Tuple.Create(<span class="number">7</span>,<span class="number">8</span>));</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="有参属性"><a href="#有参属性" class="headerlink" title="有参属性"></a>有参属性</h3><p><strong>是什么</strong></p>
+<p>get、set访问器接受一个或多个参数的属性，C#称为索引器。</p>
+<p><strong>数组风格</strong></p>
+<p>C#使用数组风格的语法来公开有参属性（索引器），其实也就是对<code>[]</code>操作符的重载。</p>
+<p>必须在this里写重载，如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Students</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">string</span>[] name = <span class="keyword">new</span> <span class="built_in">string</span>[<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//索引器必须以this关键字定义，其实这个this就是类实例化之后的对象</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> <span class="keyword">this</span>[<span class="built_in">int</span> index]</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> name[index];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">set</span></span><br><span class="line">        &#123;</span><br><span class="line">            name[index] = <span class="keyword">value</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line">...</span><br><span class="line">Students sts = <span class="keyword">new</span> Students();</span><br><span class="line"><span class="comment">// “=”号右边对索引器赋值，其实就是调用其set方法</span></span><br><span class="line">Students[<span class="number">0</span>] = <span class="string">&quot;Tom&quot;</span>;</span><br><span class="line">Students[<span class="number">1</span>] = <span class="string">&quot;Sam&quot;</span>;</span><br><span class="line"><span class="comment">// 输出索引器的值，其实就是调用其get方法</span></span><br><span class="line">Console.WriteLine(Students[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+
+<p><strong>编译器处理</strong></p>
+<ul>
+<li>  如果对属性写了<code>get;set;</code>访问器方法，那么在编译器会生成对应的方法，类似于<code>get_Item();set_Item();</code>。如果没写就不生成。</li>
+<li>  托管程序集元数据中的属性定义。这一项必然生成。</li>
+</ul>
+<p><strong>IndexerName特性</strong></p>
+<p>上面提到了编译器会默认给有参属性生成<code>get_Item();set_Item();</code>名字默认方法，但是也可以使用 IndexerName特性 修改默认的名字：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System.Runtime.CompilerServices;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">BitArray</span> &#123;</span><br><span class="line">	[<span class="meta">IndexerName(<span class="meta-string">&quot;Bit&quot;</span>)</span>]</span><br><span class="line">	<span class="keyword">public</span> Boolean <span class="keyword">this</span>[Int32 bitPos]&#123;</span><br><span class="line">		<span class="comment">// 这里至少要定义一个访问器方法</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用上述代码后，编译器将生成<code>get_Bit();set_Bit();</code>的方法，而不是默认方法名。</p>
+<p>因为C#编译器的索引器实现，本质是重写<code>[]</code>，所以不支持 命名不同、签名相同的 索引器，但是支持 命名相同、签名不同的 索引器。</p>
+<h3 id="另外，关于属性访问器"><a href="#另外，关于属性访问器" class="headerlink" title="另外，关于属性访问器"></a>另外，关于属性访问器</h3><p><strong>调用属性访问器时的性能</strong></p>
+<ol>
+<li>对于简单的get、set访问器，JIT编译器会将代码内联，这样使用属性就不会有性能上的缺失。</li>
+<li>此处内联（inline）是指将方法的代码直接编译到调用它的方法中。</li>
+<li>这么做，坏处是会使编译好的方法变得更大，好处是避免了在运行时发出调用产生的开销。</li>
+</ol>
+<p><strong>属性访问器的可访问性</strong></p>
+<p>就是set、get访问器分别设置不同的保护级别，实现不同目的。</p>
+<h1 id="大章11：事件"><a href="#大章11：事件" class="headerlink" title="大章11：事件"></a><center>大章11：事件</center></h1><h3 id="事件是什么"><a href="#事件是什么" class="headerlink" title="事件是什么"></a>事件是什么</h3><p><strong>概念</strong></p>
+<p>事件，用于通知其他对象发生了特定的事情。</p>
+<p>CLR事件以 <font color="red">委托</font> 为基础。</p>
+<p><strong>功能</strong></p>
+<ul>
+<li>方法能登记它对事件的关注。</li>
+<li>方法能注销它对事件的关注。</li>
+<li>事件发生时，登记了的方法将收到通知。</li>
+</ul>
+<p><strong>例子</strong></p>
+<ol>
+<li>一个<code>Phone实例</code>和一个<code>Computer实例</code>，两者各有一个方法，在<code>MailManager实例</code>里登记了对<code>NewMail事件</code>的关注。</li>
+<li>一封新邮件到达<code>MailManager实例</code>。</li>
+<li><code>MailManager实例</code>将事件通知发送给所有已登记的方法，他们各自的方法以自己的方式处理邮件。</li>
+</ol>
+<h3 id="设计公开事件"><a href="#设计公开事件" class="headerlink" title="设计公开事件"></a>设计公开事件</h3><p><strong>0.序言</strong></p>
+<p>进行上述模型的完整设计。</p>
+<p><strong>1.定义传递信息：EventArgs</strong></p>
+<p>定义一个类型，来容纳所有应该发送给事件通知接收者的附加信息。</p>
+<p>根据约定，这种类，这种类应该从<code>System.EventArgs</code>派生，类名由EventArgs结束。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">NewMailEventArgs</span> : <span class="title">EventArgs</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> String From &#123;<span class="keyword">get</span>;<span class="keyword">set</span>;&#125; <span class="comment">// 发件人</span></span><br><span class="line">	<span class="keyword">public</span> String To &#123;<span class="keyword">get</span>;<span class="keyword">set</span>;&#125; <span class="comment">// 收件人</span></span><br><span class="line">	<span class="keyword">public</span> String Subject &#123;<span class="keyword">get</span>;<span class="keyword">set</span>;&#125; <span class="comment">// 主题</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">NewMailEventArgs</span>(<span class="params">String <span class="keyword">from</span>,String to,String subject</span>)</span>&#123;</span><br><span class="line">		From = <span class="keyword">from</span>;</span><br><span class="line">		To = to;</span><br><span class="line">		Subject = subject;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.定义事件成员：EventHandler</strong></p>
+<p>事件成员使用关键字event定义。</p>
+<p>根据约定，这种类，这种类应该从<code>System.EventArgs</code>派生，类名由EventArgs结束。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MailManager</span> &#123;</span><br><span class="line">	<span class="comment">// 事件成员</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">event</span> EventHandler&lt;NewMailEventArgs&gt; NewMail;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 常用的泛型委托EventHandler：</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">EventHandler</span>&lt;<span class="title">TEventArgs</span>&gt; (<span class="params">Object sender,TEventArgs e</span>)</span>;</span><br><span class="line"><span class="comment">// 所有登录的方法原型必须满足以下签名：</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MethodName</span>(<span class="params">Object sender,NewMailEventArgs e</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.定义引发事件的方法：OnEvent</strong></p>
+<p>根据约定，类要定义一个受保护的虚方法。引发事件时，方法会被调用，获取到<code>NewMailEventArgs</code>对象并传递对象信息给接收者们。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">MailManager</span> &#123;</span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">OnNewMail</span> (<span class="params">NewMailEventArgs e</span>)</span>&#123;</span><br><span class="line">		EventHandler&lt;NewMailEventArgs&gt; tmp = NewMail;</span><br><span class="line">		tmp?.Invoke(<span class="keyword">this</span>,e);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>4.定义引发事件的方法：Publish</strong></p>
+<p>相当于对外暴露的接口，按照指定格式输入入参，再将入参转化为配置好的事件进行调用。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">MailManager</span> &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SimulateNewMail</span>(<span class="params">String <span class="keyword">from</span>,String to,String subject</span>)</span>&#123;</span><br><span class="line">		NewMailEventArgs e = <span class="keyword">new</span> NewMailEventArgs(<span class="keyword">from</span>,to,subject);</span><br><span class="line">		<span class="comment">// 调用虚方法通知对象事件已发生</span></span><br><span class="line">		OnNewMail(e);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>5.简单使用：Subscribe &amp; Use</strong></p>
+<p>书里没有，我补一下最简单的使用方法。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">Main</span>() &#123;</span><br><span class="line">	<span class="keyword">var</span> manager = <span class="keyword">new</span> MailManager();</span><br><span class="line">	manager.NewMail += (sender, eventArgs) =&gt; &#123; </span><br><span class="line">		Console.WriteLine(<span class="string">&quot;Phone got it.&quot;</span>);</span><br><span class="line">		Console.WriteLine(eventArgs.From,eventArgs.To,eventArgs.Subject);</span><br><span class="line">	&#125;;</span><br><span class="line">	manager.NewMail += (sender, eventArgs) =&gt; &#123; </span><br><span class="line">		Console.WriteLine(<span class="string">&quot;Computer got it.&quot;</span>);</span><br><span class="line">		Console.WriteLine(eventArgs.From,eventArgs.To,eventArgs.Subject);</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="编译器如何实现事件"><a href="#编译器如何实现事件" class="headerlink" title="编译器如何实现事件"></a>编译器如何实现事件</h3><p><strong>事件成员</strong></p>
+<p>前面代码中，事件成员，用一行代码就完成了定义：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">event</span> EventHandler&lt;NewMailEventArgs&gt; NewMail;</span><br></pre></td></tr></table></figure>
+
+<p><strong>编译</strong></p>
+<p>C#编译器编译时把它转换为以下3个构造：</p>
+<p><strong>1.具有恰当委托类型的字段</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> EventHandler&lt;NewMailEventArgs&gt; NewMail = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+
+<p>第一个构造是一个具有恰当委托类型(<code>EventHandler&lt;NewMailEventArgs&gt;</code>)的<font color="red">字段</font>。</p>
+<p>把<code>NewMail</code>理解成一个委托实例列表，事件发生时会通知这个列表中的所有委托实例，目前为<code>null</code>意味着没有监听者(listener)。<br>登记监听该事件，就相当于对委托列表添加一个实例；反之，注销意味着从列表中移除委托。</p>
+<p><em>注意了，上面代码也提到过，EventHandler就是委托！委托类似于签名定义，下面说的委托实例是说遵照签名定义的方法。</em></p>
+<p><strong>~.插播一下</strong></p>
+<p>下面用到很多<code>Interlocked.CompareExchange</code>方法，先了解一下，摘自微软官方文档。</p>
+<ul>
+<li><code>System.Threading.Interlocked</code>类：为多个线程共享的变量提供原子操作。</li>
+<li><code>Interlocked.CompareExchange(ref A, B, C)</code>静态方法：比较BC两个值是否相等，如果相等，则替换第一个值A。</li>
+</ul>
+<p><strong>2.为事件构造add方法</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 允许方法登记对事件的关注</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add_NewMail</span>(<span class="params">EventHandler&lt;NewMailEventArgs&gt; <span class="keyword">value</span></span>)</span>&#123;</span><br><span class="line">	EventHandler&lt;NewMailEventArgs&gt; prevHandler;</span><br><span class="line">	EventHandler&lt;NewMailEventArgs&gt; newMail = <span class="keyword">this</span>.NewMail;</span><br><span class="line">	<span class="keyword">do</span>&#123;</span><br><span class="line">        <span class="comment">// 通过循环和对CompareExchange的调用，可以以一种线程安全的方式向事件添加委托</span></span><br><span class="line">		prevHandler = newMail;</span><br><span class="line">		EventHandler&lt;NewMailEventArgs&gt; newHandler =</span><br><span class="line">			(EventHandler&lt;NewMailEventArgs&gt;) Delegate.Combine(prevHandler,<span class="keyword">value</span>);</span><br><span class="line">		newMail = Interlocked.CompareExchange&lt;EventHandler&lt;NewMailEventArgs&gt;&gt;(<span class="keyword">ref</span> <span class="keyword">this</span>.NewMial,newHandler,prevHandler)</span><br><span class="line">	&#125; <span class="keyword">while</span> (newMial != prevHandler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>C#编译器在事件名(NewMail)前加add_前缀，并自动生成代码。<br>添加委托是通过调用<code>Delegate.Combine</code>方法，它将委托实例添加到委托实例列表中，返回新的列表头(地址)，并将这个地址存回字段。</p>
+<p><strong>3.为事件构造remove方法</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 允许方法注销对事件的关注</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove_NewMail</span>(<span class="params">EventHandler&lt;NewMailEventArgs&gt; <span class="keyword">value</span></span>)</span>&#123;</span><br><span class="line">	EventHandler&lt;NewMailEventArgs&gt; prevHandler;</span><br><span class="line">	EventHandler&lt;NewMailEventArgs&gt; newMail = <span class="keyword">this</span>.NewMail;</span><br><span class="line">	<span class="keyword">do</span>&#123;</span><br><span class="line">        <span class="comment">// 通过循环和对CompareExchange的调用，可以以一种线程安全的方式向事件移除委托</span></span><br><span class="line">		prevHandler = newMail;</span><br><span class="line">		EventHandler&lt;NewMailEventArgs&gt; newHandler =</span><br><span class="line">			(EventHandler&lt;NewMailEventArgs&gt;) Delegate.Remove(prevHandler,<span class="keyword">value</span>);</span><br><span class="line">		newMail = Interlocked.CompareExchange&lt;EventHandler&lt;NewMailEventArgs&gt;&gt;(<span class="keyword">ref</span> <span class="keyword">this</span>.NewMial,newHandler,prevHandler)</span><br><span class="line">	&#125; <span class="keyword">while</span> (newMial != prevHandler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>C#编译器在事件名(NewMail)前加remove_前缀，并自动生成代码。<br>添加委托是通过调用<code>Delegate.Remove</code>方法，它将委托实例从委托实例列表中移除，返回新的列表头(地址)，并将这个地址存回字段。</p>
+<p><strong>ps.关于add和remove</strong></p>
+<p>上述由编译器自动生成的add和remove方法的可访问性，都是根据event申明的可访问性来的，也就是都是public。</p>
+<p>编译器除了上述3块，还会在元数据中生成一个事件定义记录项，它引用了add和remove访问其方法。它们用来建立“事件”和访问其方法之间的联系，可以通过反射<code>System.Reflection.EventInfo</code>获取调用。</p>
+<h3 id="设计监听者的类型"><a href="#设计监听者的类型" class="headerlink" title="设计监听者的类型"></a>设计监听者的类型</h3><p><strong>我分割为3要素</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Phone</span> &#123;</span><br><span class="line">	<span class="comment">// 实例化必须给一个MailManager。</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Phone</span>(<span class="params">MailManager manager</span>)</span>&#123;</span><br><span class="line">		<span class="comment">// 1.登记方法到事件</span></span><br><span class="line">		manager.NewMail += PhoneMsg;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 2.登记到事件的方法</span></span><br><span class="line">	<span class="comment">// sender:表示MailManager对象，便于将信息传回给它</span></span><br><span class="line">	<span class="comment">// e:表示MailManager对象向传给我们的附加事件信息</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">PhoneMsg</span>(<span class="params">Object sender,NewMailEventArgs e</span>)</span>&#123;</span><br><span class="line">		Console.WriteLine(<span class="string">&quot;Phone mail message:&quot;</span>);</span><br><span class="line">		Console.WriteLine(e.From + e.To + e.Subject);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 3.公开的注销关注方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Unregister</span>(<span class="params">MailManager manager</span>)</span>&#123;</span><br><span class="line">		manager.NewMail -= PhoneMsg;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>+=操作符</strong></p>
+<p>C#编译器内部对+=的操作符由特殊处理，会翻译成以下代码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">manager.NewMail += PhoneMsg;</span><br><span class="line"><span class="comment">// C#编译</span></span><br><span class="line">manager.add_NewMail(<span class="keyword">new</span> EventHandler&lt;NewMailEventArgs&gt;(PhoneMsg));</span><br></pre></td></tr></table></figure>
+
+<p><strong>-=操作符</strong></p>
+<p>代码和上面一样，就不多写了。</p>
+<p>值得一提的是，-=是扫描委托列表，找到匹配再删除的，没有找到也不会报错。</p>
+<p><strong>登记方法属于引用</strong></p>
+<p>实例的方法被登记到了某事件，那么该实例就无法被垃圾回收了。</p>
+<h3 id="显式实现事件"><a href="#显式实现事件" class="headerlink" title="显式实现事件"></a>显式实现事件</h3><p>下面自己使用Dictionary来实现一个维护委托实例列表的事件类。</p>
+<p><strong>调用</strong></p>
+<p>先看做完后怎么调用的。使用标准语法即可：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	TypeWithLotsOfEvents twle = <span class="keyword">new</span> TypeWithLotsOfEvents();</span><br><span class="line">	<span class="comment">// 添加回调</span></span><br><span class="line">	twle.myDelegateList += SomeMyEvent;</span><br><span class="line">	<span class="comment">// 触发事件</span></span><br><span class="line">	twle.Simulate();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SomeMyEvent</span>(<span class="params"><span class="built_in">object</span> sender,MyEventArgs e</span>)</span>&#123;</span><br><span class="line">	Console.WriteLine(<span class="string">&quot;Nice!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>实现委托列表</strong></p>
+<p>映射EventKey -&gt; Delegate，且对外提供Add、Remove、Raise方法。书中用了很多线程安全方法诸如<code>Monitor.Enter</code>，由于在将事件，这块简化掉：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">EventKey</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">EventSet</span> &#123;</span><br><span class="line">	<span class="comment">// 委托列表，设置为只读是可以add、remove的，但是不可以再被 &quot;= new Dictionary&quot;</span></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">readonly</span> <span class="title">Dictionary</span>&lt;<span class="title">EventKey</span>,<span class="title">Delegate</span>&gt; eventList</span> = <span class="keyword">new</span> Dictionary&lt;EventKey,Delegate&gt;();</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Add</span>(<span class="params">EventKey key,Delegate handler</span>)</span>&#123;</span><br><span class="line">		Delegate d;</span><br><span class="line">		eventList.TryGetValue(key,<span class="keyword">out</span> d);</span><br><span class="line">        <span class="comment">// Delegate.Combine，像+=操作符一样连接委托</span></span><br><span class="line">		eventList[key] = Delegate.Combine(d,handler);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Remove</span>(<span class="params">EventKey key,Delegate handler</span>)</span>&#123;</span><br><span class="line">		Delegate d;</span><br><span class="line">		<span class="keyword">if</span>(eventList.TryGetValue(key,<span class="keyword">out</span> d))&#123;</span><br><span class="line">			d = Delegate.Remove(d,handler);</span><br><span class="line">			<span class="comment">// 如果还有委托，就设置新的头部(地址)，否则删除EventKey</span></span><br><span class="line">			<span class="keyword">if</span> (d != <span class="literal">null</span>)</span><br><span class="line">				eventList[key] = d;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				eventList.Remove(key);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Raise</span>(<span class="params">EventKey key,Object sender,EventArgs e</span>)</span>&#123;</span><br><span class="line">		Delegate d;</span><br><span class="line">		eventList.TryGetValue(key,<span class="keyword">out</span> d);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 由于字典包含不同的委托类型，所以无法再编译时构造一个类型安全的委托调用。</span></span><br><span class="line">		<span class="comment">// DynamicInvoke会向调用的回调方法查证参数类型安全性，并调用方法。</span></span><br><span class="line">		<span class="keyword">if</span> (d != <span class="literal">null</span>) d.DynamicInvoke(<span class="keyword">new</span> Object[] &#123; sender,e &#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>调用委托列表的类</strong></p>
+<p>接着定义一个类来使用EventSet类。在这个类中，一个字段引用了一个EventSet对象，且显式实现了事件的add/remove。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 事件类型，可以在里面加想要的附加信息</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyEventArgs</span> : <span class="title">EventArgs</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TypeWithLotsOfEvents</span> &#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">readonly</span> EventSet eventSet = <span class="keyword">new</span> EventSet();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">protected</span> EventSet EventSet &#123; <span class="keyword">get</span> &#123;<span class="keyword">return</span> eventSet;&#125; &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 定义本类的key</span></span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">readonly</span> EventKey eventKey = <span class="keyword">new</span> EventKey();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">event</span> EventHandler&lt;MyEventArgs&gt; myDelegateList &#123;</span><br><span class="line">		<span class="keyword">add</span> &#123; eventSet.Add(eventKey,<span class="keyword">value</span>); &#125;</span><br><span class="line">		<span class="keyword">remove</span> &#123; eventSet.Remove(eventKey,<span class="keyword">value</span>); &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">OnDelegate</span>(<span class="params">MyEventArgs e</span>)</span>&#123;</span><br><span class="line">		eventSet.Raise(eventKey,<span class="keyword">this</span>,e);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 调用事件</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Simulate</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">		OnDelegate(<span class="keyword">new</span> MyEventArgs());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>疑问与思考</strong></p>
+<p>其实到这里，我还是不理解为什么要用一个字典型来实现，明明按照示例一个使用类单独维护一个委托队列，那么key就是一个，压根用不到key啊。</p>
+<p>我怀疑可能是为了让<code>eventSet</code>实例复用，像我可以在<code>TypeWithLotsOfEvents</code>类里加一套新的委托，但还是加到原来的<code>eventSet</code>实例中。可以这么写：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyEventArgs2</span> : <span class="title">EventArgs</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// partical</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TypeWithLotsOfEvents</span> &#123;</span><br><span class="line">	<span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">readonly</span> EventKey eventKey2 = <span class="keyword">new</span> EventKey();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">event</span> EventHandler&lt;MyEventArgs2&gt; myDelegateList2</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">add</span> &#123; eventSet.Add(eventKey2, <span class="keyword">value</span>); &#125;</span><br><span class="line">		<span class="keyword">remove</span> &#123; eventSet.Remove(eventKey2, <span class="keyword">value</span>); &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">OnDelegate</span>(<span class="params">MyEventArgs2 e</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		eventSet.Raise(eventKey2, <span class="keyword">this</span>, e);</span><br><span class="line">	&#125;	</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 调用事件</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Simulate</span>(<span class="params"></span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		OnDelegate(<span class="keyword">new</span> MyEventArgs());<span class="comment">// 这条原来就有</span></span><br><span class="line">		OnDelegate(<span class="keyword">new</span> MyEventArgs2());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，本节核心思想是维护一个基于key-value的集合，引发事件时会在集合中查找事件标识符，如果找到就调用委托列表，如果没找到意味着没人登记关注所以就不做回调。</p>
+<h1 id="大章12：泛型"><a href="#大章12：泛型" class="headerlink" title="大章12：泛型"></a><center>大章12：泛型</center></h1><h3 id="FCL中的泛型"><a href="#FCL中的泛型" class="headerlink" title="FCL中的泛型"></a>FCL中的泛型</h3><p><strong>泛型是什么</strong></p>
+<p>泛型(generic)是CLR和编程语言提供的一个特殊机制，目的是为了“算法重用”。</p>
+<p><strong>泛型提供更佳的性能</strong></p>
+<p>泛型可以替换很多需要Object装箱拆箱实现的场景，还可以避免强制类型转换，从而提高代码运行速度、减少资源使用。</p>
+<p>比如，一个使用泛型的<code>List&lt;T&gt;</code>比非泛型的ArraryList算法，在面对频繁拆装箱的情况下，能有非常大的性能差距！</p>
+<h3 id="泛型基础结构"><a href="#泛型基础结构" class="headerlink" title="泛型基础结构"></a>泛型基础结构</h3><p><strong>实现泛型</strong></p>
+<p>为了在CLR2.0加入泛型，微软至少做了以下工作：</p>
+<ul>
+<li>创建新的IL指令，使之能够识别类型实参。</li>
+<li>修改编译器和JIT编译器，使之识别处理泛型生成IL代码。</li>
+<li>修改现有元数据表格式，以便表示具有泛型参数的类型名称和方法。</li>
+<li>修改C#、.NET库来支持新语法。</li>
+</ul>
+<p><strong>开放类型、封闭类型</strong></p>
+<ul>
+<li>  开放类型：具有泛型类型参数的类型。</li>
+<li>  封闭类型：为所有类型参数都传递了实际的数据类型的类型。</li>
+<li>  两者使用区别：开放类型无法创建实例，和接口一样；封闭类型可以。</li>
+</ul>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个部分指定的开放类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">DictionaryStringKey</span>&lt;<span class="title">TValue</span>&gt; : <span class="title">Dctionary</span>&lt;<span class="title">String</span>,<span class="title">TValue</span>&gt; &#123; &#125;</span><br><span class="line">...</span><br><span class="line"><span class="comment">// 2个都是开放类型</span></span><br><span class="line">Type t1 = <span class="keyword">typeof</span>(Dictionary&lt;,&gt;);</span><br><span class="line">Type t2 = <span class="keyword">typeof</span>(DictionaryStringKey&lt;&gt;);</span><br><span class="line"><span class="comment">// 封闭类型</span></span><br><span class="line">Type t3 = <span class="keyword">typeof</span>(DictionaryStringKey&lt;Int&gt;);</span><br></pre></td></tr></table></figure>
+
+<p>关于静态字段，开放类型转换成封闭类型后会其分配各自的静态字段，相同的T共用一个静态字段。<br>由此可知，<font color="Red">对于同一个开放类型，相同的T入参会共用一个封闭类型</font>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	MyList&lt;<span class="built_in">int</span>&gt;.Test = <span class="string">&quot;2&quot;</span>;</span><br><span class="line">	MyList&lt;<span class="built_in">int</span>&gt;.Test = <span class="string">&quot;3&quot;</span>;</span><br><span class="line">	MyList&lt;<span class="built_in">string</span>&gt;.Test = <span class="string">&quot;4&quot;</span>;</span><br><span class="line">	Console.WriteLine(MyList&lt;<span class="built_in">int</span>&gt;.Test);<span class="comment">// 输出3，而不是1、2</span></span><br><span class="line">	Console.WriteLine(MyList&lt;<span class="built_in">string</span>&gt;.Test);<span class="comment">// 输出4</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyList</span>&lt;<span class="title">T</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">List</span>&lt;<span class="title">T</span>&gt; list</span> = <span class="keyword">new</span> List&lt;T&gt;();</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Test = <span class="string">&quot;1&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，利用开放类型转换封闭类型时会为static重新分配的技巧，可以如此约束封闭类型：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">MyList</span>&lt;<span class="title">T</span>&gt; &#123;</span><br><span class="line">	<span class="comment">// 每次构造新的封闭类型，都会执行一次这个，所以可以加入一些对类型的限制</span></span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="title">MyList</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">typeof</span>(T).IsClass)&#123;</span><br><span class="line">			<span class="comment">// 限制该类只允许T为值类型</span></span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> ArgumentException(<span class="string">&quot;Type construct failed!&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>泛型类型的继承</strong></p>
+<p>泛型类型也是类型，他是一样可以继承的，可以继承也意味着可以利用各种类型转换。</p>
+<p>下面实现一个节点为泛型的链表：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Node</span>&#123;</span><br><span class="line">	<span class="keyword">protected</span> Node next;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Node</span>(<span class="params">Node next</span>)</span>&#123;</span><br><span class="line">		next = next;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过泛型实现了类型各不相同的链表，比Node&lt;Object&gt;更优化</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TypedNode</span>&lt;<span class="title">T</span>&gt; : <span class="title">Node</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> T data;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">TypedNode</span>(<span class="params">T data</span>) : <span class="title">this</span>(<span class="params">data, <span class="literal">null</span></span>)</span> &#123; &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">TypedNode</span>(<span class="params">T data, Node next</span>) : <span class="title">base</span>(<span class="params">next</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">this</span>.data = data;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">string</span> <span class="title">ToString</span>(<span class="params"></span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> data.ToString() + ((next == <span class="literal">null</span>)? <span class="built_in">string</span>.Empty : next.ToString());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>泛型类型的同一性、相等性</strong></p>
+<p>如果对泛型类型进行派生：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DateTimeList</span> : <span class="title">List</span>&lt;<span class="title">DateTime</span>&gt; &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这么派生，虽然程序员的意思是想简写<code>List&lt;DateTime&gt;</code>为<code>DateTimeList</code>，但是这样是不可行的，因为：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// x = false</span></span><br><span class="line"><span class="built_in">bool</span> x = <span class="keyword">typeof</span>(DateTimeList) == <span class="keyword">typeof</span>(List&lt;DateTime&gt;) ;</span><br></pre></td></tr></table></figure>
+
+<p>这样即使两者数据完全一致，但是仍然在类型上不同。你就无法直接用=给<code>DateTimeList实例</code>赋值了。</p>
+<p>有一种比较好的解决方案是用using重命名<code>List&lt;DateTime&gt;</code>。当然，我的建议不命名，保持<code>List&lt;DateTime&gt;</code>。</p>
+<p><strong>代码爆炸</strong></p>
+<p>这块说的就是因为泛型给程序员带来的书写简便，是由编译器承担更多处理、生成更多IL代码来实现的，所以每次用类型都会生成一个新类型的IL代码，这样内存里的代码量会爆炸。</p>
+<p>CLR为解决这个问题做了2个优化：</p>
+<ol>
+<li>上面提过的，对于同类型同入参T的泛型类型，只进行一次编译，后面复用这个类型。</li>
+<li>CLR会认为所有是引用类型的T实参都完全相同，所以能够共享引用类型的IL代码。意思就是说，因为引用类型的实参或者变量都是在堆上的指针，不同的T类型也只是指针指向的对象不同而已。</li>
+</ol>
+<h3 id="泛型接口"><a href="#泛型接口" class="headerlink" title="泛型接口"></a>泛型接口</h3><p><strong>目的</strong></p>
+<p>除了上面提的泛型（值、引用）类型，泛型接口也非常常用来避免频繁拆装箱：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IEnumerator</span>&lt;<span class="title">T</span>&gt; : <span class="title">IDisposable</span>,<span class="title">IEnumerator</span> &#123;</span><br><span class="line">	T Current &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体看13章。</p>
+<h3 id="泛型委托"><a href="#泛型委托" class="headerlink" title="泛型委托"></a>泛型委托</h3><p><strong>目的</strong></p>
+<p>泛型委托是为了保证未知类型对象能以安全的方式传给回调方法，且不必装箱。</p>
+<p><strong>本质</strong></p>
+<p>委托实际只是提供了4个方法的一个类，17章会细说，这里展示一下泛型委托：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如此定义泛型委托，</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> TReturn <span class="title">CallMe</span>&lt;<span class="title">TReturn</span>,<span class="title">TKey</span>,<span class="title">TValue</span>&gt; (<span class="params">Tkey key,TValue <span class="keyword">value</span></span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译器会转换为这样的类：</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">CallMe</span>&lt;<span class="title">TReturn</span>,<span class="title">TKey</span>,<span class="title">TValue</span>&gt; : <span class="title">MulticastDelegate</span> &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">CallMe</span> (<span class="params">Object <span class="built_in">object</span>,IntPtr* method</span>)</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> TReturn <span class="title">Invoke</span> (<span class="params">TKey key,TValue <span class="keyword">value</span></span>)</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> IAsyncResult <span class="title">BeginInvoke</span> (<span class="params">TKey key, TValue <span class="keyword">value</span>, AsyncCallback callback, Object <span class="built_in">object</span></span>)</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> TReturn <span class="title">EndInvoke</span> (<span class="params">IAsyncResult result</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>逆变协变</strong></p>
+<p>协变和逆变是指对返回值和参数的类型进行转换，使得T更灵活。</p>
+<ul>
+<li><strong>不变量(invariant)</strong>，意味着泛型类型参数不能更改。目前为止提过的都是不变量形式的泛型类型参数。</li>
+<li><strong>逆变量(contravariant)</strong>，意味着泛型类型参数可以从一个类更改为它的某个<font color="red">派生类</font>。C#中用<code>in</code>来标记，只能出现在输入位置，比如入参。</li>
+<li><strong>协变量(covariant)</strong>，意味着泛型类型参数可以从一个类更改为它的某个<font color="red">基类</font>。C#中用<code>out</code>来标记，只能出现在输出位置，比如返回值。</li>
+</ul>
+<p>好了，看完上面的概念，反正我是一头雾水，但其实就是下面这玩意：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 可以这么定义，没错就是Func&lt;&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> TResult <span class="title">Func</span>&lt;<span class="keyword">in</span> <span class="title">T</span>, <span class="keyword">out</span> <span class="title">TResult</span>&gt; (<span class="params">T arg</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以这么申明</span></span><br><span class="line">Func&lt;<span class="built_in">string</span>,<span class="built_in">int</span>&gt; fn1 = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以这么用</span></span><br><span class="line">Func&lt;<span class="built_in">string</span>,<span class="built_in">int</span>&gt; fn2 = fn1;</span><br><span class="line"><span class="built_in">int</span> i = fn2(<span class="string">&quot;test&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以及上面提到的，返回值协变(基类)，入参逆变(派生类)</span></span><br><span class="line">Func&lt;<span class="built_in">object</span>, <span class="built_in">int</span>&gt; fn3 = <span class="literal">null</span>;</span><br><span class="line">Object i = fn3(<span class="string">&quot;a string&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h3><p><strong>示例</strong></p>
+<p>可以很好的让<code>ref</code>、<code>out</code>这两个要求入参必须与签名保持一致的关键字，很好的得到运用。</p>
+<p>具体的可以看之前的9.2节：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Swap</span>&lt;<span class="title">T</span>&gt;(<span class="params"><span class="keyword">ref</span> T o1, <span class="keyword">ref</span> T o2</span>)</span> &#123;</span><br><span class="line">	T temp = o1;</span><br><span class="line">	o1 = o2;</span><br><span class="line">	o2 = temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>类型推断</strong></p>
+<p>因为上述这么些泛型方法，<code>&lt;&gt;</code>实在是太多了，所以C#编译器支持泛型方法在调用时，自动推断T类型。<br>比如：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> n1 = <span class="string">&quot;testA&quot;</span>;</span><br><span class="line"><span class="built_in">string</span> n2 = <span class="string">&quot;testB&quot;</span>;</span><br><span class="line">Swap(<span class="keyword">ref</span> n1,<span class="keyword">ref</span> n2);	<span class="comment">//	自动推断调用Swap&lt;string&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>此外，可以重名定义明确的参数，编译器会选择先调用明确的，比如：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Display</span>(<span class="params"><span class="built_in">string</span> s</span>)</span>&#123;</span><br><span class="line">	Console.WriteLine(s);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Display</span>&lt;<span class="title">T</span>&gt;(<span class="params">T o</span>)</span>&#123;</span><br><span class="line">	Console.WriteLine(o.ToString());</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">Display(<span class="string">&quot;Jeff&quot;</span>);			<span class="comment">// 调用Display(string)</span></span><br><span class="line">Display(<span class="number">123</span>);			    <span class="comment">// 调用Display&lt;T&gt;(T)</span></span><br><span class="line">Display&lt;String&gt;(<span class="string">&quot;Aidan&quot;</span>);   <span class="comment">// 调用Display&lt;T&gt;(T)</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h3><p><strong>约束</strong></p>
+<p>向C#编译器承诺，入参T会使用后续类型的实现、派生类。</p>
+<p>就是where：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通使用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> T <span class="title">Min</span>&lt;<span class="title">T</span>&gt;(<span class="params">T o1, T o2</span>) <span class="keyword">where</span> T : IComparable&lt;T&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>主要约束</strong></p>
+<p>参数T可以指定0~1个主要约束，主要约束代表类，注意了必须要非密封类：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 主要约束：要求为引用类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">SomeClassType</span>&lt;<span class="title">T</span>&gt; <span class="keyword">where</span> <span class="title">T</span> : <span class="keyword">class</span> &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SomeMethod</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="comment">// 因为T一定是引用类型所以可以指空</span></span><br><span class="line">		T temp = <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 主要约束：要求为值类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">SomeValType</span>&lt;<span class="title">T</span>&gt; <span class="keyword">where</span> <span class="title">T</span> : <span class="title">struct</span> &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> T <span class="title">Factory</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="comment">// 因为T一定是值类型，值类型隐式有一个公共无参构造器</span></span><br><span class="line">		T temp = <span class="literal">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>次要约束</strong></p>
+<p>参数T可以指定0~n个次要约束，次要约束代表接口。代码就不show了。</p>
+<p><strong>类型参数约束</strong></p>
+<p>参数T可以指定0~n个次要约束，类型参数约束，就是用参数来约束参数。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 类型参数约束 T : TBase</span></span><br><span class="line"><span class="keyword">class</span> <span class="title">List</span>&lt;<span class="title">TBase</span>&gt; <span class="title">ConvertIList</span>&lt;<span class="title">T</span>, <span class="title">TBase</span>&gt;(<span class="title">IList</span>&lt;<span class="title">T</span>&gt; <span class="title">list</span>) <span class="keyword">where</span> <span class="title">T</span> : <span class="title">TBase</span></span><br><span class="line">&#123;</span><br><span class="line">	List&lt;TBase&gt; baseList = <span class="keyword">new</span> List&lt;TBase&gt;(list.Count);</span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">int</span> index = <span class="number">0</span>; index &lt; list.Count ; index++ )&#123;</span><br><span class="line">		baseList.Add(list[index]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> baseList;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line">IList&lt;IComparable&gt; list = ConvertIList&lt;<span class="built_in">string</span>,IComparable&gt;(ls);</span><br></pre></td></tr></table></figure>
+
+<p><strong>构造器约束</strong></p>
+<p>参数T可以指定0~1个构造器约束，就是new：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SomeType</span>&lt;<span class="title">T</span>&gt; <span class="keyword">where</span> <span class="title">T</span> : <span class="title">new</span>() &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> T <span class="title">Factory</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">		<span class="comment">// 允许值类型，因为所有值类型隐式有一个公共无参构造器</span></span><br><span class="line">		<span class="comment">// 也允许实现了公共无参构造器的引用类型</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> T();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="可验证性"><a href="#可验证性" class="headerlink" title="可验证性"></a>可验证性</h3><p><strong>可验证性</strong></p>
+<p>为了确保安全，约束代码有所验证。</p>
+<p><strong>1.泛型类型变量的转换</strong></p>
+<p>如果不提供约束并按照约束规则转型，直接将泛型类型的变量强转型为其他类型会报错：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Test</span> &#123; &#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Test2</span> : <span class="title">Test</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 提供约束并按照约束规则转型，可以编译过。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Method1</span>&lt;<span class="title">T</span>&gt;(<span class="params">T obj</span>) <span class="keyword">where</span> T : Test2</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">var</span> x = (Test)obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不兼容的转型，下面这段是编译不过的：无法将T转换为int。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Method2</span>&lt;<span class="title">T</span>&gt;(<span class="params">T obj</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">var</span> x = (<span class="built_in">int</span>)obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不约束就只能转换为object！可以编译过。但是如果转型失败会报InvalidCastException异常。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Method3</span>&lt;<span class="title">T</span>&gt;(<span class="params">T obj</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">var</span> x = (<span class="built_in">object</span>)obj;</span><br><span class="line">	<span class="keyword">var</span> y = (<span class="built_in">int</span>)(<span class="built_in">object</span>)obj;</span><br><span class="line">	<span class="keyword">var</span> z = obj <span class="keyword">as</span> <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.将泛型类型变量设为默认值</strong></p>
+<p>将泛型类型变量设置为null是编译不过的，除非将泛型类型约束成引用类型。</p>
+<p>原因是编译器确定不了T的类型，而值类型不能为null，引用类型可以。<br>添加约束为引用类型就可以合法了。</p>
+<p>但是我们也可以这么做：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Method</span>&lt;<span class="title">T</span>&gt;(<span class="params"></span>)</span> &#123;</span><br><span class="line">	<span class="comment">// 下面的编译不过</span></span><br><span class="line">	T temp = <span class="literal">null</span>;</span><br><span class="line">	<span class="comment">// 下面的编译得过</span></span><br><span class="line">	T temp = <span class="literal">default</span>(T);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.将泛型类型变量与null进行比较</strong></p>
+<p>可以比较。</p>
+<p>如果T是值类型，永远不会为null、永远返回false，编译器知道，所以在生成代码中就会直接理解为false。</p>
+<p><strong>4.两个泛型类型变量相互比较</strong></p>
+<p>如果泛型类型参数不能肯定是引用类型，对同一个泛型类型的两个变量比较也是非法的。</p>
+<p><strong>5.泛型类型变量作为操作数使用</strong></p>
+<p>+、-、*、/ 是非法的。</p>
+<h1 id="大章13：接口"><a href="#大章13：接口" class="headerlink" title="大章13：接口"></a><center>大章13：接口</center></h1><h3 id="实现接口和继承的关系"><a href="#实现接口和继承的关系" class="headerlink" title="实现接口和继承的关系"></a>实现接口和继承的关系</h3><p><strong>关于接口继承</strong></p>
+<p>因为C#不支持多继承，所以推出了“缩水版”的多继承，也就是接口。</p>
+<p><strong>聊下继承</strong></p>
+<p>System.Object类是终极基类，所有类都继承了Object的4个实例方法，这个之前讲过不提了。</p>
+<p>这里要聊一下的是方法签名，就是C#编译器会认为自己在操作Object类的实例（因为继承了Object），可以有各种智能感知等等，但实际操作的可能是其他类的实例。</p>
+<h3 id="接口初识"><a href="#接口初识" class="headerlink" title="接口初识"></a>接口初识</h3><p><strong>聊下接口</strong></p>
+<p>接口，是用来被实现的。</p>
+<p>它实际只是对一组方法签名进行了统一命名。这些方法不提供任何实现，继承了某接口的类需要显式实现该接口定义的所有方法。</p>
+<p>除了实现了多继承，它的另一个好处和类一样，就是“里氏替换原则”：</p>
+<blockquote>
+<p>派生类对象可以在程式中代替其基类对象。</p>
+</blockquote>
+<p><strong>CLR怎么看接口</strong></p>
+<p>其实CLR看来，接口定义就是类型定义。也就是CLR会为接口类型对象定义内部数据结构，同时可通过反射机制来查询接口类型的功能。</p>
+<p>接口支持泛型方法。</p>
+<p><strong>接口“继承”接口</strong></p>
+<p>接口“继承”接口就有点不一样了，这和传统的类继承类不一样，它更接近于将其他接口的协定(contract)包括到新接口中。</p>
+<h3 id="接口幕后"><a href="#接口幕后" class="headerlink" title="接口幕后"></a>接口幕后</h3><p><strong>显式实现接口</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">SomeType</span> : <span class="title">IDisposable</span> &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Dispose</span>(<span class="params"></span>)</span> &#123; Console.WriteLine(<span class="string">&quot;public Dispose&quot;</span>); &#125;</span><br><span class="line">	<span class="comment">// 显式实现，无法限制可访问性必须是private</span></span><br><span class="line">	<span class="keyword">void</span> IDisposable.Dispose() &#123; Console.WriteLine(<span class="string">&quot;IDisposable Dispose&quot;</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line">Main()&#123;</span><br><span class="line">	SomeType st = <span class="keyword">new</span> SomeType();</span><br><span class="line">	<span class="comment">// 调用公共Dispose方法实现</span></span><br><span class="line">	st.Dispose();</span><br><span class="line">	</span><br><span class="line">	IDisposable dp = st;</span><br><span class="line">	<span class="comment">// 调用IDispose的Dispose方法实现</span></span><br><span class="line">    dp.Dispose();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// output: public Dispose , IDisposable Dispose</span></span><br></pre></td></tr></table></figure>
+
+<p>输出不同，说明后者调用到的是显式实现接口的方法。下面再解释为什么。</p>
+<p><strong>隐式实现：编译器是怎么看待接口实现的？</strong></p>
+<p>先再来看隐式实现，并给出编译器执行流程：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">SomeType</span> : <span class="title">IDisposable</span> &#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Dispose</span>(<span class="params"></span>)</span> &#123; Console.WriteLine(<span class="string">&quot;public Dispose&quot;</span>); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用同上</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// output: public Dispose , public Dispose</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，与显式实现比对，输出又相同了。CLR对这段代码的处理流程如下：</p>
+<ol>
+<li>首先CLR加载类型时，会为该类型创建并初始化一个方法表，每个方法都有对应的记录项（第一章）。<br>对于上述<code>SomeType</code>类型的方法表，会生成以下3个记录项：</li>
+</ol>
+<ul>
+<li>Object（隐式继承的基类）定义的所有虚实例方法。</li>
+<li>IDisposable（继承的接口）定义的所有接口方法。这里指Dispose。</li>
+<li>SomeType引入的新方法Dispose。</li>
+</ul>
+<ol start="2">
+<li><p>为简化编程，C#编译器假定SomeType引入的新方法Dispose是对IDisposable的Dispose方法的实现。因为两者签名和返回值完全一致。</p>
+</li>
+<li><p>C#编译器接下来，会将这新方法和接口方法进行匹配，生成元数据，指明<code>SomeType</code>类型的放发表中的两个记录项应引用同一个实现。</p>
+</li>
+</ol>
+<p>综上，<br>隐式实现接口方法的时候，2个方法在元数据里指向同一个实现，所以完全一致；<br>显式实现接口方法的时候，2个方法在元数据里指向不同的实现，只不过接口的同签名方法是private的，想要调用，需要用接口申明的变量去接这个实例，才能调用到。</p>
+<h3 id="泛型接口-1"><a href="#泛型接口-1" class="headerlink" title="泛型接口"></a>泛型接口</h3><p>使用泛型接口有一些好处：</p>
+<ol>
+<li>类型确定，提高编译时安全性。</li>
+<li>避免装箱拆箱。</li>
+<li>类可以实现同一个接口若干次，只要T不同即可，接口代码复用率提高。</li>
+<li>泛型接口也可以协变逆变，具体看12.4泛型委托里。</li>
+</ol>
+<h3 id="泛型接口约束"><a href="#泛型接口约束" class="headerlink" title="泛型接口约束"></a>泛型接口约束</h3><p>一样是where，书中只举了个方法例子，避免了拆装箱 并 验证了类型：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 值类型实现了IComparable,IConvertible</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">SomeMethod</span>&lt;<span class="title">T</span>&gt;(<span class="params">T t</span>) <span class="keyword">where</span> T : IComparable,IConvertible</span>&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Main()&#123;</span><br><span class="line">	<span class="built_in">int</span> x = <span class="number">5</span>;</span><br><span class="line">	Guid g = <span class="keyword">new</span> Guid();</span><br><span class="line">	<span class="comment">// 避免装箱，要知道IComparable接口的Compare方法入参是object类型！</span></span><br><span class="line">	SomeMethod(x);</span><br><span class="line">	<span class="comment">// 编译错误，Guid未实现IConvertible</span></span><br><span class="line">	SomeMethod(g);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="再聊显式实现方法"><a href="#再聊显式实现方法" class="headerlink" title="再聊显式实现方法"></a>再聊显式实现方法</h3><p><strong>优点1：可实现多个具有同签名方法的接口</strong></p>
+<p>就是说可以靠显式实现，来实现多个同名、同签名方法的接口。</p>
+<p>基本没用过，不同接口接同一个对象，能有不同的方法实现，这算是另一种意义上的多态吗？</p>
+<p>总之是能有效解决多个接口有同签名方法，一个类无法同时实现多个这样的接口的问题。</p>
+<p><strong>缺点1：无智能感知</strong></p>
+<p><strong>缺点2：无法被派生类调用</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 比如有一个基类显式实现了IComparable的CompareTo</span></span><br><span class="line">...</span><br><span class="line"><span class="comment">// 想在派生类里调用基类的CompareTo，下面这样是编译不过的</span></span><br><span class="line"><span class="keyword">base</span>.CompareTo(o);</span><br><span class="line"><span class="comment">// 要这么写</span></span><br><span class="line">((IComparable)<span class="keyword">base</span>).CompareTo(o);</span><br><span class="line"><span class="comment">// 或者在基类写一个公开的虚方法，与显式调用同名同实现</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>缺点3：值类型调用时需要装箱</strong></p>
+<p>代码不贴了，和2一样，<font color="red">需要转换成对应接口才能调用显式实现方法</font>，而值类型转换接口时需要装箱。</p>
+<h3 id="设计：基类还是接口"><a href="#设计：基类还是接口" class="headerlink" title="设计：基类还是接口"></a>设计：基类还是接口</h3><p><strong>1.IS-A对比CAN-DO关系</strong></p>
+<p>CAN-DO关系，就是很多类型对象都“能”做某事，这需要用接口。</p>
+<p><strong>2.易用性</strong></p>
+<p>基类提供各个方面的功能，接口需要一个个实现。</p>
+<p><strong>3.一致性实现</strong></p>
+<p>基类型可以提供好的默认实现，接口不能提供默认实现，容易让开发人员出错。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">CodingCodingK</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://codingcodingk.github.io/2021/11/20/Tech/CSharp/CLR-Via-CSharp/cp4/">https://codingcodingk.github.io/2021/11/20/Tech/CSharp/CLR-Via-CSharp/cp4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://CodingCodingK.github.io" target="_blank">CodingCodingK Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C#</a><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF/">技术</a><a class="post-meta__tags" href="/tags/%E8%99%9A%E6%96%B9%E6%B3%95/">虚方法</a><a class="post-meta__tags" href="/tags/%E5%8F%AF%E8%AE%BF%E9%97%AE%E6%80%A7/">可访问性</a><a class="post-meta__tags" href="/tags/%E5%85%83%E6%95%B0%E6%8D%AE/">元数据</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/11/27/Project/Unity/Moba/HOK/chara/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/hok.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">王者荣耀复刻项目 模型控制篇</div></div></a></div><div class="next-post pull-right"><a href="/2021/11/20/Project/Unity/Moba/HOK/netSyn/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/hok.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">王者荣耀复刻项目 网络同步篇</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/11/06/Tech/CSharp/CLR-Via-CSharp/cp2/" title="CLR Via C#个人笔记2 - 类与分配"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-06</div><div class="title">CLR Via C#个人笔记2 - 类与分配</div></div></a></div><div><a href="/2021/12/26/Tech/CSharp/CLR-Via-CSharp/cp6/" title="CLR Via C#个人笔记6 - 核心机制"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-26</div><div class="title">CLR Via C#个人笔记6 - 核心机制</div></div></a></div><div><a href="/2021/12/18/Tech/CSharp/CLR-Via-CSharp/cp5/" title="CLR Via C#个人笔记5 - 基本类型"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">CLR Via C#个人笔记5 - 基本类型</div></div></a></div><div><a href="/2021/10/29/Tech/CSharp/CLR-Via-CSharp/cp1/" title="CLR Via C#个人笔记1 - CLR基础"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-29</div><div class="title">CLR Via C#个人笔记1 - CLR基础</div></div></a></div><div><a href="/2021/11/13/Tech/CSharp/CLR-Via-CSharp/cp3/" title="CLR Via C#个人笔记3 - 基元类型、引用类型和值类型"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-13</div><div class="title">CLR Via C#个人笔记3 - 基元类型、引用类型和值类型</div></div></a></div><div><a href="/2022/01/14/Tech/CSharp/CLR-Via-CSharp/cp7/" title="CLR Via C#个人笔记7 - 线程处理"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-14</div><div class="title">CLR Via C#个人笔记7 - 线程处理</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CodingCodingK</div><div class="author-info__description">一个正在成为游戏开发者的人</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">31</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">25</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CodingCodingK"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CodingCodingK" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">本站主要用途为存储个人笔记，请勿用于商业用途，转载请注明出处！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A06%EF%BC%9A%E7%B1%BB%E5%9E%8B%E5%92%8C%E6%88%90%E5%91%98%E5%9F%BA%E7%A1%80"><span class="toc-number">1.</span> <span class="toc-text">大章6：类型和成员基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%90%84%E7%A7%8D%E6%88%90%E5%91%98"><span class="toc-number">1.0.1.</span> <span class="toc-text">类型的各种成员</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE"><span class="toc-number">1.0.2.</span> <span class="toc-text">元数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-number">1.0.3.</span> <span class="toc-text">类型的可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%90%E5%91%98%E7%9A%84%E5%8F%AF%E8%AE%BF%E9%97%AE%E6%80%A7"><span class="toc-number">1.0.4.</span> <span class="toc-text">成员的可访问性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E7%B1%BB-static"><span class="toc-number">1.0.5.</span> <span class="toc-text">静态类 static</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E7%B1%BB-partial"><span class="toc-number">1.0.6.</span> <span class="toc-text">分布类 partial</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91%E5%92%8C%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%88%E8%99%9A%E5%AE%9E%E8%B0%83%E7%94%A8%E3%80%81virtual%E3%80%81new%EF%BC%89"><span class="toc-number">1.0.7.</span> <span class="toc-text">组件化开发和版本控制（虚实调用、virtual、new）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A07%EF%BC%9A%E5%B8%B8%E9%87%8F%E5%92%8C%E5%AD%97%E6%AE%B5"><span class="toc-number">2.</span> <span class="toc-text">大章7：常量和字段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F"><span class="toc-number">2.0.1.</span> <span class="toc-text">常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5"><span class="toc-number">2.0.2.</span> <span class="toc-text">字段</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A08%EF%BC%9A%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">大章8：方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%9E%84%E9%80%A0%E5%99%A8-%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.0.1.</span> <span class="toc-text">实例构造器(引用类型)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E6%9E%84%E9%80%A0%E5%99%A8-%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.0.2.</span> <span class="toc-text">实例构造器(值类型)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9E%8B%E6%9E%84%E9%80%A0%E5%99%A8"><span class="toc-number">3.0.3.</span> <span class="toc-text">类型构造器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%87%8D%E8%BD%BD"><span class="toc-number">3.0.4.</span> <span class="toc-text">操作符重载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BD%AC%E6%8D%A2%E6%93%8D%E4%BD%9C%E7%AC%A6%E6%96%B9%E6%B3%95"><span class="toc-number">3.0.5.</span> <span class="toc-text">转换操作符方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E6%96%B9%E6%B3%95"><span class="toc-number">3.0.6.</span> <span class="toc-text">扩展方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E9%83%A8%E6%96%B9%E6%B3%95"><span class="toc-number">3.0.7.</span> <span class="toc-text">分部方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A09%EF%BC%9A%E5%8F%82%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">大章9：参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%80%89%E5%8F%82%E6%95%B0%E5%92%8C%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0"><span class="toc-number">4.0.1.</span> <span class="toc-text">可选参数和命名参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E5%8F%82%E6%95%B0%E4%BC%A0%E5%BC%95%E7%94%A8"><span class="toc-number">4.0.2.</span> <span class="toc-text">向参数传引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9%E5%8F%82%E6%95%B0%E7%9A%84%E6%95%B0%E9%87%8F%E5%8F%AF%E5%8F%98"><span class="toc-number">4.0.3.</span> <span class="toc-text">让参数的数量可变</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E5%92%8C%E8%BF%94%E5%9B%9E%E7%B1%BB%E5%9E%8B%E7%9A%84%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83-%E2%AD%90"><span class="toc-number">4.0.4.</span> <span class="toc-text">参数和返回类型的设计规范 ⭐</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%80%A7"><span class="toc-number">4.0.5.</span> <span class="toc-text">常量性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A010%EF%BC%9A%E5%B1%9E%E6%80%A7"><span class="toc-number">5.</span> <span class="toc-text">大章10：属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7"><span class="toc-number">5.0.1.</span> <span class="toc-text">属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E5%8F%82%E5%B1%9E%E6%80%A7"><span class="toc-number">5.0.2.</span> <span class="toc-text">无参属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%8F%82%E5%B1%9E%E6%80%A7"><span class="toc-number">5.0.3.</span> <span class="toc-text">有参属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%A6%E5%A4%96%EF%BC%8C%E5%85%B3%E4%BA%8E%E5%B1%9E%E6%80%A7%E8%AE%BF%E9%97%AE%E5%99%A8"><span class="toc-number">5.0.4.</span> <span class="toc-text">另外，关于属性访问器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A011%EF%BC%9A%E4%BA%8B%E4%BB%B6"><span class="toc-number">6.</span> <span class="toc-text">大章11：事件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">6.0.1.</span> <span class="toc-text">事件是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E5%85%AC%E5%BC%80%E4%BA%8B%E4%BB%B6"><span class="toc-number">6.0.2.</span> <span class="toc-text">设计公开事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%BA%8B%E4%BB%B6"><span class="toc-number">6.0.3.</span> <span class="toc-text">编译器如何实现事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%91%E5%90%AC%E8%80%85%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.0.4.</span> <span class="toc-text">设计监听者的类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%BE%E5%BC%8F%E5%AE%9E%E7%8E%B0%E4%BA%8B%E4%BB%B6"><span class="toc-number">6.0.5.</span> <span class="toc-text">显式实现事件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A012%EF%BC%9A%E6%B3%9B%E5%9E%8B"><span class="toc-number">7.</span> <span class="toc-text">大章12：泛型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FCL%E4%B8%AD%E7%9A%84%E6%B3%9B%E5%9E%8B"><span class="toc-number">7.0.1.</span> <span class="toc-text">FCL中的泛型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B%E5%9F%BA%E7%A1%80%E7%BB%93%E6%9E%84"><span class="toc-number">7.0.2.</span> <span class="toc-text">泛型基础结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B%E6%8E%A5%E5%8F%A3"><span class="toc-number">7.0.3.</span> <span class="toc-text">泛型接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B%E5%A7%94%E6%89%98"><span class="toc-number">7.0.4.</span> <span class="toc-text">泛型委托</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B%E6%96%B9%E6%B3%95"><span class="toc-number">7.0.5.</span> <span class="toc-text">泛型方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F"><span class="toc-number">7.0.6.</span> <span class="toc-text">约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E9%AA%8C%E8%AF%81%E6%80%A7"><span class="toc-number">7.0.7.</span> <span class="toc-text">可验证性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A013%EF%BC%9A%E6%8E%A5%E5%8F%A3"><span class="toc-number">8.</span> <span class="toc-text">大章13：接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E5%92%8C%E7%BB%A7%E6%89%BF%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">8.0.1.</span> <span class="toc-text">实现接口和继承的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E5%88%9D%E8%AF%86"><span class="toc-number">8.0.2.</span> <span class="toc-text">接口初识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E5%B9%95%E5%90%8E"><span class="toc-number">8.0.3.</span> <span class="toc-text">接口幕后</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B%E6%8E%A5%E5%8F%A3-1"><span class="toc-number">8.0.4.</span> <span class="toc-text">泛型接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B%E6%8E%A5%E5%8F%A3%E7%BA%A6%E6%9D%9F"><span class="toc-number">8.0.5.</span> <span class="toc-text">泛型接口约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%8D%E8%81%8A%E6%98%BE%E5%BC%8F%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="toc-number">8.0.6.</span> <span class="toc-text">再聊显式实现方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%EF%BC%9A%E5%9F%BA%E7%B1%BB%E8%BF%98%E6%98%AF%E6%8E%A5%E5%8F%A3"><span class="toc-number">8.0.7.</span> <span class="toc-text">设计：基类还是接口</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/02/08/Tech/Game/tools/luban_study/" title="工具篇：本地配置"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="工具篇：本地配置"/></a><div class="content"><a class="title" href="/2022/02/08/Tech/Game/tools/luban_study/" title="工具篇：本地配置">工具篇：本地配置</a><time datetime="2022-02-08T07:27:47.192Z" title="发表于 2022-02-08 15:27:47">2022-02-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/01/Tech/Game/tools/unity_await-async/" title="工具篇：async-await在unity中的应用"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="工具篇：async-await在unity中的应用"/></a><div class="content"><a class="title" href="/2022/02/01/Tech/Game/tools/unity_await-async/" title="工具篇：async-await在unity中的应用">工具篇：async-await在unity中的应用</a><time datetime="2022-02-01T02:52:39.179Z" title="发表于 2022-02-01 10:52:39">2022-02-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/01/Tech/Game/tools/CodingKTimer/" title="工具篇：定时系统"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="工具篇：定时系统"/></a><div class="content"><a class="title" href="/2022/02/01/Tech/Game/tools/CodingKTimer/" title="工具篇：定时系统">工具篇：定时系统</a><time datetime="2022-02-01T02:52:39.176Z" title="发表于 2022-02-01 10:52:39">2022-02-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/01/Tech/Game/tools/protobuf/" title="工具篇：protobuf序列化"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="工具篇：protobuf序列化"/></a><div class="content"><a class="title" href="/2022/02/01/Tech/Game/tools/protobuf/" title="工具篇：protobuf序列化">工具篇：protobuf序列化</a><time datetime="2022-02-01T02:52:39.172Z" title="发表于 2022-02-01 10:52:39">2022-02-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/01/Tech/Game/tools/CodingK_Session/" title="工具篇：帧同步网络库"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="工具篇：帧同步网络库"/></a><div class="content"><a class="title" href="/2022/02/01/Tech/Game/tools/CodingK_Session/" title="工具篇：帧同步网络库">工具篇：帧同步网络库</a><time datetime="2022-02-01T02:52:39.169Z" title="发表于 2022-02-01 10:52:39">2022-02-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> CodingCodingK</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/chocolate.js"></script><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/cursor.js"></script><script src="/live2d-widget/autoload.js"></script><script src="/js/mine.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?CodingCodingK";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="CodingCodingK";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><!-- hexo injector body_end end --></body></html>
