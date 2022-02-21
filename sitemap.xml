@@ -282,14 +282,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/index.html</loc>
+    <loc>https://codingcodingk.github.io/categories/index.html</loc>
     
     <lastmod>2021-10-29</lastmod>
     
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/index.html</loc>
+    <loc>https://codingcodingk.github.io/tags/index.html</loc>
     
     <lastmod>2021-10-29</lastmod>
     
@@ -303,6 +303,13 @@
     <priority>1.0</priority>
   </url>
 
+  
+  <url>
+    <loc>https://codingcodingk.github.io/tags/Hexo/</loc>
+    <lastmod>2022-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
   
   <url>
     <loc>https://codingcodingk.github.io/tags/%E6%8A%80%E6%9C%AF/</loc>
@@ -326,7 +333,7 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/A/</loc>
+    <loc>https://codingcodingk.github.io/tags/C/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -340,7 +347,7 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E6%B8%B2%E6%9F%93/</loc>
+    <loc>https://codingcodingk.github.io/tags/A/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -354,14 +361,7 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/C/</loc>
-    <lastmod>2022-02-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://codingcodingk.github.io/tags/Hexo/</loc>
+    <loc>https://codingcodingk.github.io/tags/%E6%B8%B2%E6%9F%93/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -410,6 +410,20 @@
   </url>
   
   <url>
+    <loc>https://codingcodingk.github.io/tags/%E7%BA%BF%E7%A8%8B/</loc>
+    <lastmod>2022-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codingcodingk.github.io/tags/%E4%B8%80%E4%BA%9B%E5%9D%91/</loc>
+    <lastmod>2022-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://codingcodingk.github.io/tags/%E5%B7%A5%E5%85%B7%E7%BB%84/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
@@ -424,21 +438,7 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E7%BA%BF%E7%A8%8B/</loc>
-    <lastmod>2022-02-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://codingcodingk.github.io/tags/%E7%BD%91%E7%BB%9C%E5%BA%93/</loc>
-    <lastmod>2022-02-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://codingcodingk.github.io/tags/%E7%BC%96%E8%BE%91%E5%99%A8/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -452,14 +452,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E5%8D%8F%E7%A8%8B/</loc>
+    <loc>https://codingcodingk.github.io/tags/%E7%BC%96%E8%BE%91%E5%99%A8/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E4%B8%80%E4%BA%9B%E5%9D%91/</loc>
+    <loc>https://codingcodingk.github.io/tags/%E5%8D%8F%E7%A8%8B/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -487,6 +487,13 @@
   </url>
   
 
+  
+  <url>
+    <loc>https://codingcodingk.github.io/categories/Hexo/</loc>
+    <lastmod>2022-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
   
   <url>
     <loc>https://codingcodingk.github.io/categories/Game/</loc>
@@ -524,6 +531,13 @@
   </url>
   
   <url>
+    <loc>https://codingcodingk.github.io/categories/Unity/GameFramework%E6%A1%86%E6%9E%B6/</loc>
+    <lastmod>2022-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://codingcodingk.github.io/categories/Game/UI/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
@@ -531,14 +545,7 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/Unity/%E6%B8%B2%E6%9F%93/</loc>
-    <lastmod>2022-02-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://codingcodingk.github.io/categories/Unity/GameFramework%E6%A1%86%E6%9E%B6/</loc>
+    <loc>https://codingcodingk.github.io/categories/CSharp/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -552,14 +559,7 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/Hexo/</loc>
-    <lastmod>2022-02-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://codingcodingk.github.io/categories/CSharp/</loc>
+    <loc>https://codingcodingk.github.io/categories/Unity/%E6%B8%B2%E6%9F%93/</loc>
     <lastmod>2022-02-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
