@@ -289,14 +289,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/index.html</loc>
+    <loc>https://codingcodingk.github.io/tags/index.html</loc>
     
     <lastmod>2021-10-29</lastmod>
     
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/index.html</loc>
+    <loc>https://codingcodingk.github.io/categories/index.html</loc>
     
     <lastmod>2021-10-29</lastmod>
     
@@ -354,14 +354,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/UI/</loc>
+    <loc>https://codingcodingk.github.io/tags/%E6%B8%B2%E6%9F%93/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E6%B8%B2%E6%9F%93/</loc>
+    <loc>https://codingcodingk.github.io/tags/UI/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -417,14 +417,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E7%BA%BF%E7%A8%8B/</loc>
+    <loc>https://codingcodingk.github.io/tags/%E4%B8%80%E4%BA%9B%E5%9D%91/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E4%B8%80%E4%BA%9B%E5%9D%91/</loc>
+    <loc>https://codingcodingk.github.io/tags/%E7%BA%BF%E7%A8%8B/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -438,14 +438,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E7%BD%91%E7%BB%9C%E5%BA%93/</loc>
+    <loc>https://codingcodingk.github.io/tags/%E5%AE%9A%E6%97%B6%E7%B3%BB%E7%BB%9F/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E5%AE%9A%E6%97%B6%E7%B3%BB%E7%BB%9F/</loc>
+    <loc>https://codingcodingk.github.io/tags/%E7%BD%91%E7%BB%9C%E5%BA%93/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -510,14 +510,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/Unity%E4%B8%AA%E4%BA%BA%E7%A7%AF%E7%B4%AF/</loc>
+    <loc>https://codingcodingk.github.io/categories/Game/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/Game/%E7%AE%97%E6%B3%95/</loc>
+    <loc>https://codingcodingk.github.io/categories/Unity%E4%B8%AA%E4%BA%BA%E7%A7%AF%E7%B4%AF/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -545,14 +545,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/Hexo/</loc>
+    <loc>https://codingcodingk.github.io/categories/Unity/%E6%B8%B2%E6%9F%93/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/Unity%E4%B8%AA%E4%BA%BA%E7%A7%AF%E7%B4%AF/UI/</loc>
+    <loc>https://codingcodingk.github.io/categories/Hexo/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -566,7 +566,7 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/Unity/%E6%B8%B2%E6%9F%93/</loc>
+    <loc>https://codingcodingk.github.io/categories/Unity%E4%B8%AA%E4%BA%BA%E7%A7%AF%E7%B4%AF/UI/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
