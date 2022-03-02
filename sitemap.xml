@@ -289,14 +289,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/index.html</loc>
+    <loc>https://codingcodingk.github.io/tags/index.html</loc>
     
     <lastmod>2021-10-29</lastmod>
     
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/index.html</loc>
+    <loc>https://codingcodingk.github.io/categories/index.html</loc>
     
     <lastmod>2021-10-29</lastmod>
     
@@ -410,14 +410,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E7%BA%BF%E7%A8%8B/</loc>
+    <loc>https://codingcodingk.github.io/tags/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/tags/%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/</loc>
+    <loc>https://codingcodingk.github.io/tags/%E7%BA%BF%E7%A8%8B/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -580,13 +580,6 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/Unity/Moba/</loc>
-    <lastmod>2022-03-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://codingcodingk.github.io/categories/CSharp/CLR-via-C/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
@@ -602,13 +595,6 @@
   
   <url>
     <loc>https://codingcodingk.github.io/categories/CSharp/%E4%B8%80%E4%BA%9B%E5%9D%91/</loc>
-    <lastmod>2022-03-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://codingcodingk.github.io/categories/Unity/Moba/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80%E5%A4%8D%E5%88%BB%E9%A1%B9%E7%9B%AE/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -636,6 +622,13 @@
   </url>
   
   <url>
+    <loc>https://codingcodingk.github.io/categories/CSharp/CLR-via-C/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2022-03-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://codingcodingk.github.io/categories/CSharp/CLR-via-C/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
@@ -643,7 +636,14 @@
   </url>
   
   <url>
-    <loc>https://codingcodingk.github.io/categories/CSharp/CLR-via-C/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6/</loc>
+    <loc>https://codingcodingk.github.io/categories/Unity/Moba/</loc>
+    <lastmod>2022-03-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://codingcodingk.github.io/categories/Unity/Moba/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80%E5%A4%8D%E5%88%BB%E9%A1%B9%E7%9B%AE/</loc>
     <lastmod>2022-03-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
