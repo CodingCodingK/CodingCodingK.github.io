@@ -1,0 +1,222 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C#精要 - 异步篇 | CodingCodingK Blog</title><meta name="keywords" content="技术,C#"><meta name="author" content="CodingCodingK"><meta name="copyright" content="CodingCodingK"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="什么是异步？异步是一种任务执行的机制或者说方式，它的目的在于解决I&#x2F;O等待会阻塞线程这个问题（最常见的就是GUI线程阻塞造成画面卡顿），它的实现依托于硬件底层的IRP(I&#x2F;O Request Packet)，它的本质其实是回调。 我可以使用比如 ReadAsync + Task.ContinueWith 的组合，来实现一个异步实践； 而更简单的方式是通过微软后续推出 .net4.5 的 async">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#精要 - 异步篇">
+<meta property="og:url" content="https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/async/index.html">
+<meta property="og:site_name" content="CodingCodingK Blog">
+<meta property="og:description" content="什么是异步？异步是一种任务执行的机制或者说方式，它的目的在于解决I&#x2F;O等待会阻塞线程这个问题（最常见的就是GUI线程阻塞造成画面卡顿），它的实现依托于硬件底层的IRP(I&#x2F;O Request Packet)，它的本质其实是回调。 我可以使用比如 ReadAsync + Task.ContinueWith 的组合，来实现一个异步实践； 而更简单的方式是通过微软后续推出 .net4.5 的 async">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg">
+<meta property="article:published_time" content="2022-03-18T13:18:05.695Z">
+<meta property="article:modified_time" content="2022-03-18T13:18:05.695Z">
+<meta property="article:author" content="CodingCodingK">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="C#">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png"><link rel="canonical" href="https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/async/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C#精要 - 异步篇',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-03-18 21:18:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/css/mine.css"><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="CodingCodingK Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">27</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">CodingCodingK Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">C#精要 - 异步篇</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-18T13:18:05.695Z" title="发表于 2022-03-18 21:18:05">2022-03-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-03-18T13:18:05.695Z" title="更新于 2022-03-18 21:18:05">2022-03-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/">CSharp</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/C-%E7%B2%BE%E8%A6%81/">C#精要</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="C#精要 - 异步篇"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="什么是异步？"><a href="#什么是异步？" class="headerlink" title="什么是异步？"></a>什么是异步？</h1><p>异步是一种任务执行的机制或者说方式，它的目的在于解决<strong>I/O等待会阻塞线程</strong>这个问题（最常见的就是GUI线程阻塞造成画面卡顿），它的实现依托于硬件底层的<strong>IRP</strong>(I/O Request Packet)，它的本质其实是回调。</p>
+<p>我可以使用比如 ReadAsync + Task.ContinueWith 的组合，来实现一个<a target="_blank" rel="noopener" href="https://blog.51cto.com/huangxincheng/2525748">异步实践</a>；</p>
+<p>而更简单的方式是通过微软后续推出 .net4.5 的 <strong>async-await</strong> 这套关键词来实践。</p>
+<h1 id="异步函数-async-await"><a href="#异步函数-async-await" class="headerlink" title="异步函数 async-await"></a>异步函数 async-await</h1><p>异步函数，实际通过 核心类TaskAwaiter + 状态机 实现。</p>
+<h2 id="核心类-TaskAwaiter"><a href="#核心类-TaskAwaiter" class="headerlink" title="核心类 TaskAwaiter"></a>核心类 TaskAwaiter</h2><p>这个类比较简单，每个异步Task都有。我把它看作黑盒不细究，只看对外接口：</p>
+<ul>
+<li>  IsCompleted 属性：表示Task是否完成</li>
+<li>  GetResult() 方法：结束异步任务完成的等待</li>
+<li>  UnsafeOnCompleted(Action) 方法：设置延续任务</li>
+</ul>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>await必须在有async标记的方法内使用。如果async方法内部没有await，那它就和同步方法一样执行。</p>
+<p>如果执行中遇到了await，就把需要await执行的Task交给线程池来执行，而原来那个线程则退出async方法的方法体，去执行外部的后续代码，直到await的Task执行完毕返回结果后，这个线程会回到方法体await处继续执行。整体流程看上去很像ContinueWith。</p>
+<p>接下来研究编译器做的事。</p>
+<h2 id="外部调用层"><a href="#外部调用层" class="headerlink" title="外部调用层"></a>外部调用层</h2><p>1.首先编译器看到方法有async标记，就会为其生成一个实现了IAsyncStateMachine接口的类，这个接口意味着它是一个<strong>异步状态机</strong>。</p>
+<p>2.async方法自身则会被标记<strong>AsyncStateMachine特性</strong>，意味着这是个异步方法。</p>
+<p>3.async方法内部则是new了一个异步状态机实例，先初始化，然后调用它的Start方法来启动状态机。Start方法内部主要是调用了状态机的<strong>MoveNext方法</strong>。</p>
+<p>4.最后将指示方法运行状态的<code>builder.Task</code>对象 return 。</p>
+<h2 id="内部状态机层"><a href="#内部状态机层" class="headerlink" title="内部状态机层"></a>内部状态机层</h2><p>每个异步状态机都有2个核心字段和一个核心方法：</p>
+<ul>
+<li>  builder：负责异步相关的操作，是方法实现异步执行的核心</li>
+<li>  state：状态机的当前状态，<strong>初始化时赋值为 -1</strong>。</li>
+<li>  MoveNext方法：状态机切换状态、执行任务、设置延续任务的方法</li>
+</ul>
+<p>我们直接讲MoveNext方法。</p>
+<p><strong>第一次MoveNext时，我把它分成3块流程：</strong></p>
+<p>1.第一次进入状态机时<code>state!=0</code>，await之前的代码被包裹到了MoveNext方法体内，照常顺序执行。</p>
+<p>2.await那一行的代码，变成了获取任务的awaiter <code>Task.GetAwaiter()</code>。然后对任务的awaiter进行判断：</p>
+<p>​      - 如果awaiter.IsCompleted 为true，意味着任务已经执行完了，执行第3步。</p>
+<p>​      - 如果awaiter.IsCompleted 为false，意味着任务还未执行完（一般初始化完第一次进来，都是false）那就会做以下操作：</p>
+<p>将<strong>state赋值为0</strong>，将awaiter存到自身字段内供后续使用，然后<strong>设置延续任务</strong><code>builder.AwaitUnsafeOnCompleted</code>，设置完之后会<strong>return掉而不执行第3步</strong>。</p>
+<p>延续任务内部<a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaoxiaotank/p/14303803.html">怎么设置的</a>比较复杂，我觉得不需要理解深入，理解为调了awaiter的接口就行了，反正最终效果是<strong>await的任务完成后再次调用MoveNext转动状态机</strong>。</p>
+<p>3.结束awaiter <code>TaskAwaiter.GetResult() </code>。执行原先await那一行之后的后续代码。执行完成后，将state赋值为-2，并为builder标记任务成功<code>AsyncTaskMethodBuilder.SetResult()</code>。</p>
+<p><strong>如果不是第一次MoveNext，就会省去1、2步：</strong></p>
+<p>如果await的任务完成，就会触发延续任务：再次调用MoveNext。但是和第一次进不一样，此时因为<code>state==0</code>会跳过第1步第2步，将state设置为-1之后直接跳入第3步。</p>
+<h2 id="多层嵌套async-await"><a href="#多层嵌套async-await" class="headerlink" title="多层嵌套async-await"></a>多层嵌套async-await</h2><p>其实实现也只是多层嵌套异步状态机而已，是一样的。</p>
+<h2 id="一个async中多个await"><a href="#一个async中多个await" class="headerlink" title="一个async中多个await"></a>一个async中多个await</h2><p>在同一个异步状态机中，生成更多的awaiter、更多的state。</p>
+<p>state的-2（完成）、-1（初始）是定好的，所以只会从0开始生成，而有几个await就有几个awaiter、state。</p>
+<p>一旦state多起来，内部就不再 if-else 了，而是 switch-case + goto 。</p>
+<h1 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h1><p>接触的主要是，</p>
+<p>SynchronizationContext 同步上下文：<strong>捕获</strong>提供在各种同步模型中传播同步上下文的基本功能。它有一个<code>Post()</code>虚方法，Winform、WPF等等会重写它，让它被调用时能产生不同的过程，但目的都是一个：实现使用GUI线程执行Post过去的委托。</p>
+<p>ExecutionContext 执行上下文：<strong>流动</strong>。在执行委托时恢复另一个线程的状态环境。</p>
+<h2 id="WPF中使用-async-await"><a href="#WPF中使用-async-await" class="headerlink" title="WPF中使用 async await"></a>WPF中使用 async await</h2><p>上面我们都是通过控制台举的例子，这是没有任何<code>SynchronizationContext</code>的，但是WPF（Winform同理）就不同了，在UI线程中，它拥有属于自己的<code>DispatcherSynchronizationContext</code>。</p>
+<p>这个工作中有体会，就是<code>View.xmal.cs</code>文件内写诸如点击事件的async-await，延续任务会默认借调GUI线程而非await内分配的任务池线程。。</p>
+<p>而我可以改成使用<code>SynchronizationContext.Post()</code>来实现类似的效果。</p>
+<h2 id="怎么用"><a href="#怎么用" class="headerlink" title="怎么用"></a>怎么用</h2><p>用SynchronizationContext可以实现确定性使用GUI线程来执行委托，我的理解只到此。</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaoxiaotank/p/14303803.html">https://www.cnblogs.com/xiaoxiaotank/p/14303803.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaoxiaotank/p/13666913.html">https://www.cnblogs.com/xiaoxiaotank/p/13666913.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://codingcodingk.top/2022/01/14/Tech/CSharp/CLR-Via-CSharp/cp7/">https://codingcodingk.top/2022/01/14/Tech/CSharp/CLR-Via-CSharp/cp7/</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">CodingCodingK</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/async/">https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/async/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://CodingCodingK.github.io" target="_blank">CodingCodingK Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF/">技术</a><a class="post-meta__tags" href="/tags/C/">C#</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/03/18/Tech/CSharp/Essence/arrary_list_dic/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">C#精要 - 常用数据结构篇</div></div></a></div><div class="next-post pull-right"><a href="/2022/03/18/Tech/CSharp/Essence/classMember/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">C#精要 - 类内成员篇</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/10/29/Tech/CSharp/CLR-Via-CSharp/cp1/" title="CLR Via C#个人笔记1 - CLR基础"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-29</div><div class="title">CLR Via C#个人笔记1 - CLR基础</div></div></a></div><div><a href="/2021/11/06/Tech/CSharp/CLR-Via-CSharp/cp2/" title="CLR Via C#个人笔记2 - 类与分配"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-06</div><div class="title">CLR Via C#个人笔记2 - 类与分配</div></div></a></div><div><a href="/2021/11/13/Tech/CSharp/CLR-Via-CSharp/cp3/" title="CLR Via C#个人笔记3 - 基元类型、引用类型和值类型"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-13</div><div class="title">CLR Via C#个人笔记3 - 基元类型、引用类型和值类型</div></div></a></div><div><a href="/2021/11/20/Tech/CSharp/CLR-Via-CSharp/cp4/" title="CLR Via C#个人笔记4 - 类型和成员基础"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-20</div><div class="title">CLR Via C#个人笔记4 - 类型和成员基础</div></div></a></div><div><a href="/2021/12/18/Tech/CSharp/CLR-Via-CSharp/cp5/" title="CLR Via C#个人笔记5 - 基本类型"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">CLR Via C#个人笔记5 - 基本类型</div></div></a></div><div><a href="/2021/12/26/Tech/CSharp/CLR-Via-CSharp/cp6/" title="CLR Via C#个人笔记6 - 核心机制"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-26</div><div class="title">CLR Via C#个人笔记6 - 核心机制</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CodingCodingK</div><div class="author-info__description">一个正在成为游戏开发者的人</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">27</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CodingCodingK"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CodingCodingK" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">2022年的目标是：ET框架 + 烟雨Moba | Lua程序设计 + C++Primer</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%BC%82%E6%AD%A5%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是异步？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0-async-await"><span class="toc-number">2.</span> <span class="toc-text">异步函数 async-await</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%B1%BB-TaskAwaiter"><span class="toc-number">2.1.</span> <span class="toc-text">核心类 TaskAwaiter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">使用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E9%83%A8%E8%B0%83%E7%94%A8%E5%B1%82"><span class="toc-number">2.3.</span> <span class="toc-text">外部调用层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E7%8A%B6%E6%80%81%E6%9C%BA%E5%B1%82"><span class="toc-number">2.4.</span> <span class="toc-text">内部状态机层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E5%B1%82%E5%B5%8C%E5%A5%97async-await"><span class="toc-number">2.5.</span> <span class="toc-text">多层嵌套async-await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%B8%AAasync%E4%B8%AD%E5%A4%9A%E4%B8%AAawait"><span class="toc-number">2.6.</span> <span class="toc-text">一个async中多个await</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">3.</span> <span class="toc-text">上下文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#WPF%E4%B8%AD%E4%BD%BF%E7%94%A8-async-await"><span class="toc-number">3.1.</span> <span class="toc-text">WPF中使用 async await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E7%94%A8"><span class="toc-number">3.2.</span> <span class="toc-text">怎么用</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/03/18/Tech/Game/tools/serialize/" title="什么叫“二进制”配置方案？"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="什么叫“二进制”配置方案？"/></a><div class="content"><a class="title" href="/2022/03/18/Tech/Game/tools/serialize/" title="什么叫“二进制”配置方案？">什么叫“二进制”配置方案？</a><time datetime="2022-03-18T13:18:05.707Z" title="发表于 2022-03-18 21:18:05">2022-03-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/18/Tech/Game/UI/uiboy_4/" title="Unity编辑器拓展"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Unity编辑器拓展"/></a><div class="content"><a class="title" href="/2022/03/18/Tech/Game/UI/uiboy_4/" title="Unity编辑器拓展">Unity编辑器拓展</a><time datetime="2022-03-18T13:18:05.702Z" title="发表于 2022-03-18 21:18:05">2022-03-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/18/Tech/Game/UI/uiboy_5/" title="Unity协程原理"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Unity协程原理"/></a><div class="content"><a class="title" href="/2022/03/18/Tech/Game/UI/uiboy_5/" title="Unity协程原理">Unity协程原理</a><time datetime="2022-03-18T13:18:05.702Z" title="发表于 2022-03-18 21:18:05">2022-03-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/18/Tech/Game/UI/uiboy_1/" title="UI屏幕自适应"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UI屏幕自适应"/></a><div class="content"><a class="title" href="/2022/03/18/Tech/Game/UI/uiboy_1/" title="UI屏幕自适应">UI屏幕自适应</a><time datetime="2022-03-18T13:18:05.701Z" title="发表于 2022-03-18 21:18:05">2022-03-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/03/18/Tech/Game/UI/uiboy_2/" title="UI常见优化"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UI常见优化"/></a><div class="content"><a class="title" href="/2022/03/18/Tech/Game/UI/uiboy_2/" title="UI常见优化">UI常见优化</a><time datetime="2022-03-18T13:18:05.701Z" title="发表于 2022-03-18 21:18:05">2022-03-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> CodingCodingK</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/chocolate.js"></script><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/cursor.js"></script><script src="/live2d-widget/autoload.js"></script><script src="/js/mine.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?CodingCodingK";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="CodingCodingK";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><!-- hexo injector body_end end --></body></html>
