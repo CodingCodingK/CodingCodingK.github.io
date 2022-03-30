@@ -6,7 +6,7 @@
   <link href="https://codingcodingk.github.io/atom.xml" rel="self"/>
   
   <link href="https://codingcodingk.github.io/"/>
-  <updated>2022-03-18T13:18:05.707Z</updated>
+  <updated>2022-03-29T06:06:33.516Z</updated>
   <id>https://codingcodingk.github.io/</id>
   
   <author>
@@ -17,9 +17,126 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>UGUI学习 - Graphic</title>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/ugui_5/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/ugui_5/</id>
+    <published>2022-03-28T14:28:54.982Z</published>
+    <updated>2022-03-29T06:06:33.516Z</updated>
+    
+    <content type="html"><![CDATA[<p>学习博客：<br><a href="https://blog.csdn.net/qq_28820675/article/details/106245195">https://blog.csdn.net/qq_28820675/article/details/106245195</a></p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220329134659.png"></p><h1 id="Graphic"><a href="#Graphic" class="headerlink" title="Graphic"></a>Graphic</h1><p>图形组件的基类，基础中的基础组件</p><p>Graphic 作为图像组件的基类，主要实现了网格与图像的生成/刷新方法。<br><strong>层级/颜色/材质</strong>改变时都会进行相应的刷新（重建）。重建过程主要通过 CanvasUpdateSystem 最终被Canvas所重新渲染。</p><p>重建主要分为两个部分：<strong>顶点重建（UpdateGeometry）与 材质重建（UpdateMaterial）</strong>。更新完成的结果会设置进CanvasRenderer，从而被渲染形成图像。</p><h2 id="重建流程"><a href="#重建流程" class="headerlink" title="重建流程"></a>重建流程</h2><p>GraphicRegistry管理同Canvas下的所有Graphic对象</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Dictionary&lt;Canvas, IndexedSet&lt;Graphic&gt;&gt; m_Graphics;</span><br></pre></td></tr></table></figure><p>Graphic 初始化时（Enable）会寻找其最近根节点的<strong>Canvas</strong>组件，并以此为key存储在<strong>GraphicRegistry</strong>中。</p><h3 id="1-顶点（网格）更新与生成"><a href="#1-顶点（网格）更新与生成" class="headerlink" title="1.顶点（网格）更新与生成"></a>1.顶点（网格）更新与生成</h3>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;学习博客：&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/qq_28820675/article/details/106245195&quot;&gt;https://blog.csdn.net/qq_28820675/article/details/10624519</summary>
+      
+    
+    
+    
+    <category term="Game" scheme="https://codingcodingk.github.io/categories/Game/"/>
+    
+    <category term="UI" scheme="https://codingcodingk.github.io/categories/Game/UI/"/>
+    
+    
+    <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
+    
+    <category term="UGUI" scheme="https://codingcodingk.github.io/tags/UGUI/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>UGUI学习 - LayoutSystem布局系统</title>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/ugui_4/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/ugui_4/</id>
+    <published>2022-03-25T12:02:18.563Z</published>
+    <updated>2022-03-29T05:44:10.095Z</updated>
+    
+    <content type="html"><![CDATA[<p>学习博客：<br><a href="https://blog.csdn.net/qq_28820675/article/details/106245195">https://blog.csdn.net/qq_28820675/article/details/106245195</a></p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220328144810.png"></p><blockquote><p> CanvasUpdateSystem中更新布局的具体实现系统。</p></blockquote><h1 id="布局-LayoutSystem"><a href="#布局-LayoutSystem" class="headerlink" title="布局 LayoutSystem"></a>布局 LayoutSystem</h1><p>也就是上一篇中说的 Canvas刷新系统 中，重建得2个数组之一<strong>Layout数组</strong>是怎么来的、又是怎么重建得。</p><h2 id="什么时候标记"><a href="#什么时候标记" class="headerlink" title="什么时候标记"></a>什么时候标记</h2><p>也是用脏标记。时机一般为尺寸改变时（RectTransform Dimensions）。</p><h2 id="标记后干什么"><a href="#标记后干什么" class="headerlink" title="标记后干什么"></a>标记后干什么</h2><p>UGUI组件（如Graphic、ScrollRect…）在需要布局处理时（也就是被标记或OnDisable时），会把自身的RectTransform组件用LayoutRebuilder对象包装，之后加入<strong>Layout数组</strong>。</p><h2 id="重建布局"><a href="#重建布局" class="headerlink" title="重建布局"></a>重建布局</h2><p>这个的执行时机，在画布刷新系统那篇里有细写。</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CanvasUpdateSystem触发重建</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Rebuild</span>(<span class="params">CanvasUpdate executing</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span> (executing)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> CanvasUpdate.Layout:</span><br><span class="line">            PerformLayoutCalculation(m_ToRebuild, e =&gt; (e <span class="keyword">as</span> ILayoutElement).CalculateLayoutInputHorizontal());</span><br><span class="line">            PerformLayoutControl(m_ToRebuild, e =&gt; (e <span class="keyword">as</span> ILayoutController).SetLayoutHorizontal());</span><br><span class="line">            PerformLayoutCalculation(m_ToRebuild, e =&gt; (e <span class="keyword">as</span> ILayoutElement).CalculateLayoutInputVertical());</span><br><span class="line">            PerformLayoutControl(m_ToRebuild, e =&gt; (e <span class="keyword">as</span> ILayoutController).SetLayoutVertical());</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1 id="布局组件-LayoutGroup"><a href="#布局组件-LayoutGroup" class="headerlink" title="布局组件 LayoutGroup"></a>布局组件 LayoutGroup</h1><p>经过对LayoutSystem、LayoutRebuilder的分析，布局接口的触发规则已经被摸清楚了。</p><p>虽然UGUI组件中有一些组件都继承了ILayoutElement接口（例如：Image,Text,ScrollRect,InputField），但它们并不会涉及对接口方法的实现。这是因为这些组件主要是布局操作的接收方，只需要通过该接口被布局实施方所发现即可。而UGUI中负责这些接收物体的布局设置功能主要是由LayoutGroup衍生的子类组件来完成。</p><blockquote><p><strong>LayoutGroup</strong>，是布局组件的基类（GridLayoutGroup、HorizontalOrVerticalLayoutGroup）。先对纵横布局组件（HorizontalLayoutGroup、VerticalLayoutGroup）进行分析。</p></blockquote><h2 id="组件介绍"><a href="#组件介绍" class="headerlink" title="组件介绍"></a>组件介绍</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220328212851.png"></p><p>Padding：内部边距，调整实际用于布局区域的大小<br>Spacing ：子物体直接的间隔<br>Child Alignment ：子物体对齐方式<br>Child Controls Size ：组件控制子物体尺寸开关，开启时组件可以更改物体尺寸。<br>Child Force Expand ：组件控制子物体填充区域开关，若可以修改尺寸则会改变子物体尺寸填充区域，若不可以修改尺寸，则根据区域大小均衡分布子物体。</p><h2 id="布局过程"><a href="#布局过程" class="headerlink" title="布局过程"></a>布局过程</h2><p>以HorizontalLayoutGroup为例。</p><p>1.对该GameObject下所有子物体（只做一次GetChild）进行遍历，获取其子节点下所有没有被标记<strong>ignoreLayout</strong>的物体。放到一个List中。</p><p>2.对List中的每一个Cell都进行尺寸与位置的计算。然后设置其属性。</p><h1 id="ContentSizeFitter"><a href="#ContentSizeFitter" class="headerlink" title="ContentSizeFitter"></a>ContentSizeFitter</h1><p>布局系统中尺寸调节组件。</p><p><strong>ContentSizeFitter</strong>，是用于调整组件区域使其自适的组件，一般用于与ScrollRect滑动列表以及纵横布局组件搭配，实现动态数量的滑动列表效果，以及与Text组件一起使用，可以根据文字长短进行区域尺寸的变化。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;学习博客：&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/qq_28820675/article/details/106245195&quot;&gt;https://blog.csdn.net/qq_28820675/article/details/10624519</summary>
+      
+    
+    
+    
+    <category term="Game" scheme="https://codingcodingk.github.io/categories/Game/"/>
+    
+    <category term="UI" scheme="https://codingcodingk.github.io/categories/Game/UI/"/>
+    
+    
+    <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
+    
+    <category term="UGUI" scheme="https://codingcodingk.github.io/tags/UGUI/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>UGUI学习 - 画布刷新系统</title>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/ugui_3/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/ugui_3/</id>
+    <published>2022-03-25T12:02:18.562Z</published>
+    <updated>2022-03-28T13:02:49.251Z</updated>
+    
+    <content type="html"><![CDATA[<p>学习博客：</p><p><a href="https://blog.csdn.net/qq_28820675/article/details/105746002">https://blog.csdn.net/qq_28820675/article/details/105746002</a></p><p><a href="https://blog.csdn.net/gaojinjingg/article/details/103565840">https://blog.csdn.net/gaojinjingg/article/details/103565840</a></p><p><img src="https://img-blog.csdnimg.cn/20200425104339184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI4ODIwNjc1,size_16,color_FFFFFF,t_70" alt="img"></p><blockquote><p>由Canvas控制，通过 ICanvasElement 接口，使用脏标记方法来统一更新CanvasElement</p></blockquote><h1 id="扫盲"><a href="#扫盲" class="headerlink" title="扫盲"></a>扫盲</h1><p>摘自<a href="https://blog.csdn.net/gaojinjingg/article/details/103565840">大佬博客</a>。</p><ul><li>   <strong>Canvas</strong>， 是Unity渲染系统给层状几何体( layered geometry )提供的可以被画入、被放在上面或者放在世界空间的底层Unity组件。Canvas负责将它包含的几何体组合成batch，生成合适的渲染命令发送给Unity图形系统。这个过程在底层的C++代码中完成，这个过程被称为一次rebatch或者一次batch build。当一个Canvas被标记为包含需要rebatch的几何体时，这个Canvas被认为是dirty的。</li><li>   <strong>layered geometry</strong> , 由Canvas Renderer组件提供给Canvas。[ Canvas 负责进行渲染, Canvas Renderer负责采集/接收. ]</li><li>   **动静隔离 **, 一个子Canvas仅仅是一个嵌套在父Canvas中的组件，子Canvas将它的子物体和它的父Canvas隔离，一个子Canvas下dirty的子物体不会触发父Canvas的rebuild，反之亦然。（这些在某些特殊情况下是不确定的，比如说改变父Canvas的大小导致子Canvas的大小改变。）</li><li>   <strong>Graphic</strong> , 是UGUI的C#库提供的一个基类。它是UGUI所有类的基类，给所有的UGUI类提供可以画在Canvas系统上的几何图形。大多数Unity内置的继承Graphic的类都是通过继承一个叫MaskableGraphic的子类来实现，这使得他们可以通过IMaskable接口来被隐藏。Drawable类的子类主要是image和text，已经提供了同名的组件。</li><li>  <strong>Layout</strong> , 组件控制着RectTransform的大小和位置，经常被用于要生成具有相似的大小和位置关系内容的复杂布局。它只依靠RectTransform，只影响与其相关的RectTransform的属性。这些layout组件不依赖于Graphic类，可以独立于UGUI的Graphic组件之外使用。</li><li>  <strong>CanvasUpdateRegistry</strong> , Graphic和Layout组件都依赖于CanvasUpdateRegistry类，它不会在Unity编辑器的界面中显示。这个类追踪那些Graphic和Layout组件必须被更新的时候，还有与其对应的Canvas触发了willRenderCanvases事件的时候。更新Graphic类和Layout类叫做rebuild。</li><li> <strong>Rebuild</strong> , 过程是指Layout和UGUI的C#的Graphic组件的网格被重新计算，这是在CanvasUpdateRegistry类中执行的。这是一个C＃类，它的源码可以在Unity的Bitbucket上找到。<br>   <strong>CanvasUpdateRegistry</strong> , 类中，PerformUpdate方法，当一个Canvas组件触发它的WillRenderCanvases事件时，这个方法就会被执行。这个事件每帧调用一次。<br>   <strong>PerformUpdate</strong> , 函数运行的三个步骤：<br>   1- 通过ICanvasElement.Rebuild函数，请求rebuild被Dirty的Layout组件。<br>   2- 所有被注册的裁剪组件（例如Mask），对需要被裁剪的组件进行剔除。这在ClippingRegistry.Cull中执行。<br>   3- dirty的Graphic组件被要求rebuild其图形元素。</li><li>   <strong>Layout Rebuild</strong> , 要重新计算一个或者多个Layout组件所包含的UI组件的适当位置（以及可能的大小），有必要对Layout应用层次的排序。在GameObject的hierarchy中靠近root的Layout可能会影响改变嵌套在它里面的其他Layout的位置和大小，所以必须首先计算。 </li><li>   <strong>Graphic Rebuild</strong> , 当Graphic组件被rebuild的时候，UGUI将控制传递给ICanvasElement接口的Rebuild方法。Graphic执行了这一步，并在rebuild过程中的PreRender阶段运行了两个不同的rebuild步骤：1.如果顶点数据已经被标为Dirty（例如组件的<strong>RectTransform</strong>已经改变大小），则重建网格。2.如果材质数据已经被标为Dirty（例如组件的<strong>material或者texture</strong>已经被改变），则关联的Canvas Renderer的材质将被更新。Graphic的Rebuild不会按照Graphic组件的特殊顺序进行，也不会进行任何的排序操作。</li></ul><h1 id="代码运行流程"><a href="#代码运行流程" class="headerlink" title="代码运行流程"></a>代码运行流程</h1><h2 id="Canvas"><a href="#Canvas" class="headerlink" title="Canvas"></a>Canvas</h2><p>Canvas在<strong>渲染前</strong>会调用willRenderCanvases，也就是Registry的PerformUpdate方法。</p><h2 id="CanvasUpdateRegistry"><a href="#CanvasUpdateRegistry" class="headerlink" title="CanvasUpdateRegistry"></a>CanvasUpdateRegistry</h2><p>画面刷新的注册工具类，在它的构造函数中会给Canvas注册回调：<code>Canvas.willRenderCanvases += PerformUpdate;</code></p><p>内部维护2个队列（都是 ICanvasElement类型 的）：</p><ul><li>  LayoutRebuildQueue：布局重建队列</li><li>  GraphicRebuildQueue：图像重建队列</li></ul><p>从此可以看到，<strong>Rebuild分两种，一种是布局重建，一种是图像重建。</strong></p><h1 id="顺序枚举"><a href="#顺序枚举" class="headerlink" title="顺序枚举"></a>顺序枚举</h1><p>CanvasUpdate，一个枚举类，很核心，代表着Canvas对Layout、Render的处理顺序：</p><ol start="0"><li>  Prelayout：Called before layout.</li><li>  Layout</li><li>  PostLayout：Called after layout.</li><li>  PreRender：Called before rendering.</li><li>  LatePreRender：Called late, before render.</li><li>  MaxUpdateValue：Max enum value. Always last.</li></ol><h1 id="一整轮重建：PerformUpdate方法"><a href="#一整轮重建：PerformUpdate方法" class="headerlink" title="一整轮重建：PerformUpdate方法"></a>一整轮重建：PerformUpdate方法</h1><p>1.在布局重建队列、图像重建队列中，<strong>剔除已销毁对象</strong>。</p><p>2.<strong>更新布局</strong>。根据父节点数量排序，先深后浅。更新类型依次为 Prelayout 、Layout 、PostLayout。详细见ugui_4。</p><p>3.执行<code>LayoutComplete</code>回调，也就是通知LayoutRebuild队列的所有元素，<strong>通知布局已完成</strong>。</p><p>4.布局完成，可以<strong>对UI（IClipper）进行裁剪</strong>了，显示不到的就不渲染</p><p>5.<strong>更新图像</strong>。依次 PreRender、LatePreRender、MaxUpdateValue：1.如果顶点数据已经被标为Dirty（例如组件的RectTransform已经改变大小），则重建网格。2.如果材质数据已经被标为Dirty（例如组件的material或者texture已经被改变），则关联的Canvas Renderer的材质将被更新。</p><p>6.执行<code>GraphicUpdateComplete</code>回调，<strong>通知图像更新完成</strong>。</p><h1 id="脏标记"><a href="#脏标记" class="headerlink" title="脏标记"></a>脏标记</h1><p>这里用脏标记，就是将重建的行为延迟到用户需要这个物体的时候才执行，一种优化重新渲染的手段。</p><p>在Graphic 中存在三种脏标记分别代表三种等待重建</p><ul><li><p>  尺寸改变时（RectTransformDimensions）：LayoutRebuild 布局重建</p></li><li><p>  尺寸、颜色改变时：Vertices to GraphicRebuild 图像重建</p></li><li><p>  材质改变时：Material to GraphicRebuild 图像重建</p></li></ul><p>层级改变、应用动画属性（DidApplyAnimationProperties） ：All to Rebuild 重建所有</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;学习博客：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_28820675/article/details/105746002&quot;&gt;https://blog.csdn.net/qq_28820675/article/details/1057</summary>
+      
+    
+    
+    
+    <category term="Game" scheme="https://codingcodingk.github.io/categories/Game/"/>
+    
+    <category term="UI" scheme="https://codingcodingk.github.io/categories/Game/UI/"/>
+    
+    
+    <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
+    
+    <category term="UGUI" scheme="https://codingcodingk.github.io/tags/UGUI/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>王者荣耀复刻项目 展示</title>
+    <link href="https://codingcodingk.github.io/Intro/display/"/>
+    <id>https://codingcodingk.github.io/Intro/display/</id>
+    <published>2022-03-25T12:02:18.559Z</published>
+    <updated>2022-03-25T12:02:18.559Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Demo简介"><a href="#Demo简介" class="headerlink" title="Demo简介"></a>Demo简介</h1><p>个人Demo项目，所有代码都已在github开源。// <strong>个人博客</strong>：CodingCodingK.top    <strong>github首页</strong>：github.com/CodingCodingK</p><p>使用Unity客户端、.net core服务端实现类王者荣耀帧同步Moba手游。系统方面主要实现了背包系统；战斗方面，实现了主要游戏流程、实现了3个人物及其技能：亚瑟、后裔、金克斯(lol)。</p><ul><li>使用UDP通信、Protobuf协议实现帧同步网络通信库</li><li>使用Odin、xNode实现自定义可视化编辑器，且保持数据一致</li><li>使用Luban实现本地Excel数据配置导表方案</li><li>使用对象池、虚拟列表等进行背包系统优化</li><li>使用定点数实现碰撞环境生成、确定性物理碰撞检测</li><li>实现基于客户端负责计算的帧同步Moba战斗系统</li><li>不同客户端独立计算的显示结果统一与运动平滑</li><li>逻辑层与显示层分离，复用技能、Buff、子弹逻辑代码的战斗系统</li><li>业务内容上，大致实现了登陆系统、大厅主城、背包系统、匹配系统、选角系统、加载系统、战斗系统。</li></ul><h1 id="Demo演示视频⭐"><a href="#Demo演示视频⭐" class="headerlink" title="Demo演示视频⭐"></a>Demo演示视频⭐</h1><p>1P 游戏内容展示：登录客户端1 =&gt; 大厅、背包系统展示 =&gt; 登录客户端2 =&gt; 匹配、选人、加载读条系统展示 =&gt; 整个战斗流程展示 =&gt; 结束返回大厅。</p><p>2P 开发环境展示：Excel配置、自定义编辑器、服务器数据库等。</p><h2 id="视频地址-↓↓↓"><a href="#视频地址-↓↓↓" class="headerlink" title="视频地址 ↓↓↓"></a>视频地址 ↓↓↓</h2><p><a href="https://www.bilibili.com/video/BV1ML4y177hc">https://www.bilibili.com/video/BV1ML4y177hc</a></p><h2 id="Demo演示环境"><a href="#Demo演示环境" class="headerlink" title="Demo演示环境"></a>Demo演示环境</h2><p>服务器：使用腾讯云，配置 4核 8G 带宽10M 微型个人服务器。</p><p>真机测试：华为P40手机 鸿蒙OS。</p><h1 id="Demo源码"><a href="#Demo源码" class="headerlink" title="Demo源码"></a>Demo源码</h1><p>apk下载地址（可连远端服务器，支持安卓实机）：<a href="https://pan.baidu.com/s/1tI8O0xLUQ4xP9YpQrNxOgQ">https://pan.baidu.com/s/1tI8O0xLUQ4xP9YpQrNxOgQ</a> 提取码：1234 </p><p>MobaDemo（双端）源码地址：<a href="https://github.com/CodingCodingK/UnityMobaDemo">https://github.com/CodingCodingK/UnityMobaDemo</a></p><h1 id="Demo实现细节展示"><a href="#Demo实现细节展示" class="headerlink" title="Demo实现细节展示"></a>Demo实现细节展示</h1><p>限于篇幅以及可观赏性，很多东西没办法通过视频的形式呈现，</p><p>每个模块的demo代码以及个人笔记地址。</p><h2 id="项目实现细节"><a href="#项目实现细节" class="headerlink" title="项目实现细节"></a>项目实现细节</h2><p>技能系统、物理碰撞模拟等在项目中的运用：<a href="https://codingcodingk.top/categories/Unity/Moba/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80%E5%A4%8D%E5%88%BB%E9%A1%B9%E7%9B%AE/">王者荣耀复刻项目 笔记目录</a></p><h2 id="使用Protobuf协议的UDP简易网络通信库"><a href="#使用Protobuf协议的UDP简易网络通信库" class="headerlink" title="使用Protobuf协议的UDP简易网络通信库"></a>使用Protobuf协议的UDP简易网络通信库</h2><p>源码地址：<a href="https://github.com/CodingCodingK/CodingK_Session">https://github.com/CodingCodingK/CodingK_Session</a></p><p>个人笔记：<a href="https://codingcodingk.top/Tech/Game/tools/protobuf/">工具篇：protobuf序列化</a>    <a href="https://codingcodingk.top/Tech/Game/tools/CodingK_Session/">工具篇：帧同步网络库</a></p><h2 id="常用定时器"><a href="#常用定时器" class="headerlink" title="常用定时器"></a>常用定时器</h2><p>源码地址：<a href="https://github.com/CodingCodingK/CodingKTimer">https://github.com/CodingCodingK/CodingKTimer</a></p><p>个人笔记：<a href="https://codingcodingk.top/Tech/Game/tools/CodingKTimer/">工具篇：定时系统</a></p><h2 id="自用定点数数学库"><a href="#自用定点数数学库" class="headerlink" title="自用定点数数学库"></a>自用定点数数学库</h2><p>源码地址：<a href="https://github.com/CodingCodingK/CodingKMath">https://github.com/CodingCodingK/CodingKMath</a></p><p>个人笔记：<a href="https://codingcodingk.top/Tech/Game/tools/CodingKMath/">工具篇：定点数运算数学库</a></p><h2 id="自用定点数物理碰撞模拟"><a href="#自用定点数物理碰撞模拟" class="headerlink" title="自用定点数物理碰撞模拟"></a>自用定点数物理碰撞模拟</h2><p>源码地址：<a href="https://github.com/CodingCodingK/CodingKPhysx">https://github.com/CodingCodingK/CodingKPhysx</a></p><p>个人笔记：<a href="https://codingcodingk.top/Tech/Game/tools/CodingKPhysx/">工具篇：定点数物理碰撞库</a></p><h2 id="基于Luban实现的Excel配置方案"><a href="#基于Luban实现的Excel配置方案" class="headerlink" title="基于Luban实现的Excel配置方案"></a>基于Luban实现的Excel配置方案</h2><p>源码在<a href="https://github.com/CodingCodingK/UnityMobaDemo">moba demo</a>中。</p><p>个人笔记：<a href="https://codingcodingk.top/Tech/Game/tools/luban_study/">工具篇：本地配置</a></p><h2 id="Odin、xNode自定义编辑器"><a href="#Odin、xNode自定义编辑器" class="headerlink" title="Odin、xNode自定义编辑器"></a>Odin、xNode自定义编辑器</h2><p>源码在<a href="https://github.com/CodingCodingK/UnityMobaDemo">moba demo</a>中。</p><p>个人笔记：<a href="https://codingcodingk.top/Tech/Game/tools/odin_study/">工具篇：Odin 可视化编辑器</a>    <a href="https://codingcodingk.top/Project/Unity/Moba/HOK/skilleditor/">王者荣耀复刻项目 技能配置编辑器篇</a></p><h1 id="此外"><a href="#此外" class="headerlink" title="此外"></a>此外</h1><p>其实在开始这个Demo之前，为了能够学习游戏开发，在业余时间我也在各类网课学习了<a href="https://github.com/CodingCodingK/Unity_Studys">很多简单的游戏案例</a>，尝试理解一些框架诸如GameFramework、UGUI的源码。从2021年4月起学习Unity官方游戏案例Ruby，到如今正式求职一份Unity工作已经过去了一年。我还有很多想学习的，想做出更接近商业级的东西。</p><p>非常感谢也许是面试官也许是hr的您，能够看到这里。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;Demo简介&quot;&gt;&lt;a href=&quot;#Demo简介&quot; class=&quot;headerlink&quot; title=&quot;Demo简介&quot;&gt;&lt;/a&gt;Demo简介&lt;/h1&gt;&lt;p&gt;个人Demo项目，所有代码都已在github开源。// &lt;strong&gt;个人博客&lt;/strong&gt;：Codi</summary>
+      
+    
+    
+    
+    <category term="Unity" scheme="https://codingcodingk.github.io/categories/Unity/"/>
+    
+    <category term="Moba" scheme="https://codingcodingk.github.io/categories/Unity/Moba/"/>
+    
+    <category term="王者荣耀复刻项目" scheme="https://codingcodingk.github.io/categories/Unity/Moba/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80%E5%A4%8D%E5%88%BB%E9%A1%B9%E7%9B%AE/"/>
+    
+    
+    <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
+    
+    <category term="工程" scheme="https://codingcodingk.github.io/tags/%E5%B7%A5%E7%A8%8B/"/>
+    
+    <category term="Moba" scheme="https://codingcodingk.github.io/tags/Moba/"/>
+    
+  </entry>
+  
+  <entry>
     <title>什么叫“二进制”配置方案？</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/Game/tools/serialize/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/Game/tools/serialize/</id>
+    <link href="https://codingcodingk.github.io/Tech/Game/tools/serialize/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/tools/serialize/</id>
     <published>2022-03-18T13:18:05.707Z</published>
     <updated>2022-03-18T13:18:05.707Z</updated>
     
@@ -43,9 +160,39 @@
   </entry>
   
   <entry>
+    <title>工具篇：定点数物理碰撞库</title>
+    <link href="https://codingcodingk.github.io/Tech/Game/tools/CodingKPhysx/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/tools/CodingKPhysx/</id>
+    <published>2022-03-18T13:18:05.703Z</published>
+    <updated>2022-03-25T12:02:18.564Z</updated>
+    
+    <content type="html"><![CDATA[<p>定点数基于《工具篇：定点数运算数学库》的定点数库。</p><h1 id="处理流程"><a href="#处理流程" class="headerlink" title="处理流程"></a>处理流程</h1><p>1.读取配置：初始化碰撞环境</p><p>2.读取配置：初始化玩家碰撞体</p><p>3.FixedUpdate（具体看《Unity生命流程》）：固定帧率检测碰撞发生</p><h1 id="碰撞配置"><a href="#碰撞配置" class="headerlink" title="碰撞配置"></a>碰撞配置</h1><p>ColldierConfig。</p><p>长方体类型：位置、长宽高、轴向。</p><p>圆柱体类型：位置、半径。</p><h1 id="碰撞体"><a href="#碰撞体" class="headerlink" title="碰撞体"></a>碰撞体</h1><h2 id="逻辑-视图分离"><a href="#逻辑-视图分离" class="headerlink" title="逻辑-视图分离"></a>逻辑-视图分离</h2><p>只维护逻辑值，视图则根据定点数逻辑值转换成浮点数来进行更新。但是，视图层更新后并不参与任何运算，只显示。</p><h1 id="碰撞环境"><a href="#碰撞环境" class="headerlink" title="碰撞环境"></a>碰撞环境</h1><p>环境初始化的前提是根据固定方式制作地图：<strong>只用 BoxCollider 和 CapsuleCollider 两种碰撞体，且全部放在一个EnvRoot结点下</strong>。</p><p>初始化时，遍历这个根节点，将所有的BoxCollider转化为定点数长方体形碰撞体，将所有的CapsuleCollider转化为定点数圆柱体形碰撞体。</p><p>生成下来，放到一个List中保存。</p><h1 id="碰撞检测-矫正计算（一对一）"><a href="#碰撞检测-矫正计算（一对一）" class="headerlink" title="碰撞检测+矫正计算（一对一）"></a>碰撞检测+矫正计算（一对一）</h1><h2 id="Cylinder碰到Box"><a href="#Cylinder碰到Box" class="headerlink" title="Cylinder碰到Box"></a>Cylinder碰到Box</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220309232208.png"></p><p>1.求出 向量OK = Cylinder.Pos - Box.Pos。</p><p>2.求出 向量OK 分别在 Box.X方向向量、Box.Z方向向量 上的投影的长度：</p><p>使用点乘即可。具体推导是<a href="https://blog.csdn.net/liushao1031177/article/details/119776495">线代问题</a>，简单公式推导如下（向量v必须是方向向量也就是模为1）：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220308235857.png"></p><p>3.对上面求出的2段投影的长度进行钳制，让他们的范围小于的Box的半长和半宽。</p><p>4.由3的两断钳制后的投影距离 + Box.Pos ，简单计算出P点（表面最近的接触点）位置。</p><p>5.判断P点是否在Cylinder内部，不在就不需要矫正直接返回；在就需要矫正，往PO方向<strong>矫正距离</strong> Cylinder半径 - PO长度 即可。</p><p>6.如果需要矫正距离，那同时需要<strong>矫正速度方向</strong>，这可以利用向量的和来求出。求出 向量OV 在 向量PO 上的投影OT，和图中情况一致的话应该是个负数，用它可以求出 向量OT = 投影OT * 向量PO的单位向量。最后使用 向量OV - 向量OT ，得出向量TV，这就是修正后的方向向量。</p><h2 id="Cylinder碰到Cylinder"><a href="#Cylinder碰到Cylinder" class="headerlink" title="Cylinder碰到Cylinder"></a>Cylinder碰到Cylinder</h2><p>两个圆求是否相撞，直接用 两者半径之和 与 两者圆心距离 比较即可。</p><p>至于计算<strong>矫正距离</strong>就比较简单了，公式我在图中给出了。最后计算<strong>矫正速度方向</strong>，方法和上面的6是一样的。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220309213302.png"></p><h1 id="碰撞检测-矫正计算（一对多）"><a href="#碰撞检测-矫正计算（一对多）" class="headerlink" title="碰撞检测+矫正计算（一对多）"></a>碰撞检测+矫正计算（一对多）</h1><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220311014107.png"></p><p>碰撞检测如图。</p><p>目前采用一个有微小误差的办法：<br>检测速度向量OV和向量和OB的夹角：角VOB，<br>与Max(角AOB,角COB)进行比较，</p><p>如果角VOB更小，那么就当作不需要矫正；<br>如果角VOB更大，那么就当作需要矫正。</p><p>如果不需要矫正，就当作墙体的反作用力完美抵消了速度V，撤销本次预执行的位置更新，方向修正为Vector.zero。<br>如果需要矫正，使用之前的方法（步骤6）求出 速度V 与 与法线夹角最大的那个向量的法线向量（AO）情况下的 修正方向。而矫正位置就很好算了，直接取所有碰撞点（一对一）的位置矫正之和。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;定点数基于《工具篇：定点数运算数学库》的定点数库。&lt;/p&gt;
+&lt;h1 id=&quot;处理流程&quot;&gt;&lt;a href=&quot;#处理流程&quot; class=&quot;headerlink&quot; title=&quot;处理流程&quot;&gt;&lt;/a&gt;处理流程&lt;/h1&gt;&lt;p&gt;1.读取配置：初始化碰撞环境&lt;/p&gt;
+&lt;p&gt;2.读取配置：</summary>
+      
+    
+    
+    
+    <category term="Game" scheme="https://codingcodingk.github.io/categories/Game/"/>
+    
+    <category term="工具组" scheme="https://codingcodingk.github.io/categories/Game/%E5%B7%A5%E5%85%B7%E7%BB%84/"/>
+    
+    
+    <category term="工具组" scheme="https://codingcodingk.github.io/tags/%E5%B7%A5%E5%85%B7%E7%BB%84/"/>
+    
+    <category term="物理碰撞库" scheme="https://codingcodingk.github.io/tags/%E7%89%A9%E7%90%86%E7%A2%B0%E6%92%9E%E5%BA%93/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Unity编辑器拓展</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/uiboy_4/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/uiboy_4/</id>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/uiboy_4/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/uiboy_4/</id>
     <published>2022-03-18T13:18:05.702Z</published>
     <updated>2022-03-18T13:18:05.702Z</updated>
     
@@ -70,8 +217,8 @@
   
   <entry>
     <title>Unity协程原理</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/uiboy_5/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/uiboy_5/</id>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/uiboy_5/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/uiboy_5/</id>
     <published>2022-03-18T13:18:05.702Z</published>
     <updated>2022-03-18T13:18:05.702Z</updated>
     
@@ -97,8 +244,8 @@
   
   <entry>
     <title>UI屏幕自适应</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/uiboy_1/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/uiboy_1/</id>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/uiboy_1/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/uiboy_1/</id>
     <published>2022-03-18T13:18:05.701Z</published>
     <updated>2022-03-18T13:18:05.701Z</updated>
     
@@ -123,12 +270,12 @@
   
   <entry>
     <title>UI常见优化</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/uiboy_2/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/uiboy_2/</id>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/uiboy_2/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/uiboy_2/</id>
     <published>2022-03-18T13:18:05.701Z</published>
-    <updated>2022-03-18T13:18:05.701Z</updated>
+    <updated>2022-03-27T07:12:08.732Z</updated>
     
-    <content type="html"><![CDATA[<p>收集一些常见的UI优化手段和思路。当然，大部分是抄的，希望以后自己有能力总结。</p><h1 id="Unity性能优化"><a href="#Unity性能优化" class="headerlink" title="Unity性能优化"></a>Unity性能优化</h1><h2 id="优化关键"><a href="#优化关键" class="headerlink" title="优化关键"></a>优化关键</h2><p>先找到性能瓶颈。影响图形性能的关键因素主要有一下几个方面。</p><ol><li> GPU填充率和存储器带宽。</li><li> CPU经常是渲染物体的数量（也就是常常大家说的Draw Calls）。</li><li> 系统内存容量也是优化的一个关键指标。</li></ol><h2 id="GPU优化"><a href="#GPU优化" class="headerlink" title="GPU优化"></a>GPU优化</h2><p>GPU优化主要有下面几点：</p><ol><li>  减少三角形的使用数量（去掉不必要的三角形面）。</li><li>  尽量避免使用实时光照，能使用Static Lighting就使用烘焙光照，只计算一次。</li><li>  压缩纹理和多重纹理-minmaps（这样可以提高加载速度和降低内存占用），也极大提高渲染的性能。</li><li>  LOD（多细节层次），不同距离使用不同精度的模型。</li><li>  编写高性能着色器，将能能处理的逻辑放在定点着色器里面处理，减少片段着色器的计算量。</li></ol><h2 id="CPU优化"><a href="#CPU优化" class="headerlink" title="CPU优化"></a>CPU优化</h2><p>CPU主要开销在，显卡在渲染一个对象之前，CPU需要计算一些着色器和灯光影响，然后想显卡驱动发送绘制指令，单物体来说，不会太影响性能，累计就会产生性能问题。这里优化点主要从以下几个方面讨论，这里只是说出优化常用的方案，后面如果在下在项目里面遇到更加好的方案，或者是方法，我将会在这里补充出来。也欢迎大家指出错误，或者是更好的CPU优化方案。</p><ol><li> 合并材质球相同的对象，进而减少绘制指令的发送。合并的方式有，手工合并或者是使用Unity内置的选项合并，或者是使用自制脚本合并模型对象，但是注意的是:非相同材质对象，合并不会对性能有任何的提高。</li><li> 在对象或场景中使用更少的材质。可以将独立的纹理合并成一个更大的纹理图集，但是合并时注意，合并要以方便开发，节省资源为基础。</li><li> 避免使用物体被渲染多次的效果，这里主要体现在（反射，阴影，像素光照等）。</li><li> 优化游戏代码，也是优化CPU的一个关键点。</li></ol><h2 id="内存优化"><a href="#内存优化" class="headerlink" title="内存优化"></a>内存优化</h2><p>性能优化最后一点，就是内存的优化，要优化Unity的内存资源，就首先必须了解内存的资源管理模式，以及Unity资源加载的方式，Unity资源动态加载主要有下面两种方式：</p><ol><li> Resource方式资源加载。</li><li> AssetBundle资源加载方式。</li></ol><p>这两种资源加载方式都提供同步和异步加载API，这里我就过多介绍AIP是哪些，使用的时候可以直接查看。这里需要注意的是资源加载到内存里面的规范到底是什么样的，观察下面的图就一目了然。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220210105112.png"></p>]]></content>
+    <content type="html"><![CDATA[<p>收集一些常见的UI优化手段和思路。当然，大部分是抄的，希望以后自己有能力总结。</p><h1 id="Unity性能优化"><a href="#Unity性能优化" class="headerlink" title="Unity性能优化"></a>Unity性能优化</h1><h2 id="优化关键"><a href="#优化关键" class="headerlink" title="优化关键"></a>优化关键</h2><p>先找到性能瓶颈。影响图形性能的关键因素主要有一下几个方面。</p><ol><li> GPU填充率和存储器带宽。</li><li> CPU经常是渲染物体的数量（也就是常常大家说的Draw Calls）。</li><li> 系统内存容量也是优化的一个关键指标。</li></ol><h2 id="GPU优化"><a href="#GPU优化" class="headerlink" title="GPU优化"></a>GPU优化</h2><p>GPU优化主要有下面几点：</p><ol><li>  减少三角形的使用数量（去掉不必要的三角形面）。</li><li>  尽量避免使用实时光照，能使用Static Lighting就使用烘焙光照，只计算一次。</li><li>  压缩纹理和多重纹理-minmaps（这样可以提高加载速度和降低内存占用），也极大提高渲染的性能。</li><li>  LOD（多细节层次），不同距离使用不同精度的模型。</li><li>  编写高性能着色器，将能能处理的逻辑放在定点着色器里面处理，减少片段着色器的计算量。</li></ol><h2 id="CPU优化"><a href="#CPU优化" class="headerlink" title="CPU优化"></a>CPU优化</h2><p>CPU主要开销在，显卡在渲染一个对象之前，CPU需要计算一些着色器和灯光影响，然后想显卡驱动发送绘制指令，单物体来说，不会太影响性能，累计就会产生性能问题。这里优化点主要从以下几个方面讨论，这里只是说出优化常用的方案，后面如果在下在项目里面遇到更加好的方案，或者是方法，我将会在这里补充出来。也欢迎大家指出错误，或者是更好的CPU优化方案。</p><ol><li> 合并材质球相同的对象，进而减少绘制指令的发送。合并的方式有，手工合并或者是使用Unity内置的选项合并，或者是使用自制脚本合并模型对象，但是注意的是:非相同材质对象，合并不会对性能有任何的提高。</li><li> 在对象或场景中使用更少的材质。可以将独立的纹理合并成一个更大的纹理图集，但是合并时注意，合并要以方便开发，节省资源为基础。</li><li> 避免使用物体被渲染多次的效果，这里主要体现在（反射，阴影，像素光照等）。</li><li> 优化游戏代码，也是优化CPU的一个关键点。</li></ol><h2 id="内存优化"><a href="#内存优化" class="headerlink" title="内存优化"></a>内存优化</h2><p>性能优化最后一点，就是内存的优化，要优化Unity的内存资源，就首先必须了解内存的资源管理模式，以及Unity资源加载的方式，Unity资源动态加载主要有下面两种方式：</p><ol><li> Resource方式资源加载。</li><li> AssetBundle资源加载方式。</li></ol><p>这两种资源加载方式都提供同步和异步加载API。资源加载到内存里面的规范到底是什么样的，观察下面的图就一目了然。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220210105112.png"></p>]]></content>
     
     
       
@@ -150,8 +297,8 @@
   
   <entry>
     <title>Unity生命流程</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/uiboy_3/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/uiboy_3/</id>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/uiboy_3/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/uiboy_3/</id>
     <published>2022-03-18T13:18:05.701Z</published>
     <updated>2022-03-18T13:18:05.701Z</updated>
     
@@ -176,8 +323,8 @@
   
   <entry>
     <title>Unity常见UI基础问题手册</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/Guide_UnityUI/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/Guide_UnityUI/</id>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/Guide_UnityUI/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/Guide_UnityUI/</id>
     <published>2022-03-18T13:18:05.700Z</published>
     <updated>2022-03-18T13:18:05.700Z</updated>
     
@@ -204,38 +351,9 @@
   </entry>
   
   <entry>
-    <title>Unity渲染原理</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/Rendering/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/Rendering/</id>
-    <published>2022-03-18T13:18:05.700Z</published>
-    <updated>2022-03-18T13:18:05.700Z</updated>
-    
-    <content type="html"><![CDATA[<p>渲染原理学习。// TODO</p><h1 id="Rending面板"><a href="#Rending面板" class="headerlink" title="Rending面板"></a>Rending面板</h1><h2 id="Color-Space"><a href="#Color-Space" class="headerlink" title="Color Space"></a>Color Space</h2><p>以前的阴极射线管电视，需要更强烈的色彩来弥补差设备显示，但现在硬件提升已经不需要了。</p><p>这就是为什么把Rendering的Color Space从Gamma切到Linear。</p><h3 id="阴极-真空管-电视"><a href="#阴极-真空管-电视" class="headerlink" title="阴极 真空管 电视"></a>阴极 真空管 电视</h3><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220118131229.png"></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;渲染原理学习。// TODO&lt;/p&gt;
-&lt;h1 id=&quot;Rending面板&quot;&gt;&lt;a href=&quot;#Rending面板&quot; class=&quot;headerlink&quot; title=&quot;Rending面板&quot;&gt;&lt;/a&gt;Rending面板&lt;/h1&gt;&lt;h2 id=&quot;Color-Space&quot;&gt;&lt;a</summary>
-      
-    
-    
-    
-    <category term="Unity" scheme="https://codingcodingk.github.io/categories/Unity/"/>
-    
-    <category term="渲染" scheme="https://codingcodingk.github.io/categories/Unity/%E6%B8%B2%E6%9F%93/"/>
-    
-    
-    <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
-    
-    <category term="渲染" scheme="https://codingcodingk.github.io/tags/%E6%B8%B2%E6%9F%93/"/>
-    
-  </entry>
-  
-  <entry>
     <title>UGUI学习 - Base篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/ugui_1/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/ugui_1/</id>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/ugui_1/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/ugui_1/</id>
     <published>2022-03-18T13:18:05.700Z</published>
     <updated>2022-03-18T13:18:05.700Z</updated>
     
@@ -262,19 +380,48 @@
   </entry>
   
   <entry>
-    <title>UGUI学习 - 事件系统篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/ugui_2/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/Game/UI/ugui_2/</id>
+    <title>Unity渲染原理</title>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/Rendering/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/Rendering/</id>
     <published>2022-03-18T13:18:05.700Z</published>
     <updated>2022-03-18T13:18:05.700Z</updated>
     
-    <content type="html"><![CDATA[<p><a href="https://blog.csdn.net/zzmkljd/article/details/52880870">https://blog.csdn.net/zzmkljd/article/details/52880870</a></p><p><a href="https://blog.csdn.net/qq_28820675/article/details/105619356">https://blog.csdn.net/qq_28820675/article/details/105619356</a></p><h1 id="EventSystem"><a href="#EventSystem" class="headerlink" title="EventSystem"></a>EventSystem</h1><p>平时新建一个Canvas时，会创建EventSystem组件，这个组件所挂载的脚本就是EventSystem。EventSystem组件主要负责处理输入、射线投射以及发送事件，一个场景中只能有一个EventSystem组件。</p><h2 id="只会有一个EventSystem正在on-call"><a href="#只会有一个EventSystem正在on-call" class="headerlink" title="只会有一个EventSystem正在on call"></a>只会有一个EventSystem正在on call</h2><p>它的内部有一个静态队列：</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="title">List</span>&lt;<span class="title">EventSystem</span>&gt; m_EventSystems</span> = <span class="keyword">new</span> List&lt;EventSystem&gt;();</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> EventSystem current &#123; <span class="keyword">get</span> &#123; <span class="keyword">return</span> m_EventSystems.Count &gt; <span class="number">0</span> ? m_EventSystems[<span class="number">0</span>] : <span class="literal">null</span>; &#125; <span class="keyword">set</span> &#123;...&#125; &#125;</span><br></pre></td></tr></table></figure><p>所有的EventSystem都是在事件组件OnEnable时注册进队，OnDisable时反注册离队。</p><p>外部能接触的只有current，也就是返回队列中第一个EventSystem对象的属性方法。所以可以把EventSystem理解为单例。</p>]]></content>
+    <content type="html"><![CDATA[<p>渲染原理学习。// TODO</p><h1 id="Rending面板"><a href="#Rending面板" class="headerlink" title="Rending面板"></a>Rending面板</h1><h2 id="Color-Space"><a href="#Color-Space" class="headerlink" title="Color Space"></a>Color Space</h2><p>以前的阴极射线管电视，需要更强烈的色彩来弥补差设备显示，但现在硬件提升已经不需要了。</p><p>这就是为什么把Rendering的Color Space从Gamma切到Linear。</p><h3 id="阴极-真空管-电视"><a href="#阴极-真空管-电视" class="headerlink" title="阴极 真空管 电视"></a>阴极 真空管 电视</h3><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220118131229.png"></p>]]></content>
     
     
       
       
-    <summary type="html">&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/zzmkljd/article/details/52880870&quot;&gt;https://blog.csdn.net/zzmkljd/article/details/52880870&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a hre</summary>
+    <summary type="html">&lt;p&gt;渲染原理学习。// TODO&lt;/p&gt;
+&lt;h1 id=&quot;Rending面板&quot;&gt;&lt;a href=&quot;#Rending面板&quot; class=&quot;headerlink&quot; title=&quot;Rending面板&quot;&gt;&lt;/a&gt;Rending面板&lt;/h1&gt;&lt;h2 id=&quot;Color-Space&quot;&gt;&lt;a</summary>
+      
+    
+    
+    
+    <category term="Unity" scheme="https://codingcodingk.github.io/categories/Unity/"/>
+    
+    <category term="渲染" scheme="https://codingcodingk.github.io/categories/Unity/%E6%B8%B2%E6%9F%93/"/>
+    
+    
+    <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
+    
+    <category term="渲染" scheme="https://codingcodingk.github.io/tags/%E6%B8%B2%E6%9F%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>UGUI学习 - 事件系统、射线检测</title>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/ugui_2/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/ugui_2/</id>
+    <published>2022-03-18T13:18:05.700Z</published>
+    <updated>2022-03-25T12:02:18.562Z</updated>
+    
+    <content type="html"><![CDATA[<p>图片转自<a href="https://blog.csdn.net/qq_28820675/article/details/105619356">大佬博客</a></p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220321175024.png"></p><h1 id="事件系统"><a href="#事件系统" class="headerlink" title="事件系统"></a>事件系统</h1><p>总的来说事件系统分为3个大组件：</p><p>EventSystem组件 负责管理 所有的输入检测模块（InputModule）并在Update中每帧调用Module的执行（Process）。</p><p>InputModule组件 负责输入（点击、拖拽、选中等），调用Raycaster获得返回值PointerEventData，最后通过ExecuteEvents触发事件（IPointerClickHandler 等）。</p><p>Raycaster组件 负责确定目标对象，返回结果PointerEventData给InputModule组件。</p><h2 id="管理者-EventSystem"><a href="#管理者-EventSystem" class="headerlink" title="管理者 EventSystem"></a>管理者 EventSystem</h2><ul><li>  平时新建一个Canvas时，会创建EventSystem组件，这个组件所挂载的脚本就是EventSystem和InputModule。</li></ul><p>EventSystem组件主要负责<strong>处理输入、射线投射以及发送事件</strong>，一个场景中只能有一个EventSystem组件。</p><h2 id="输入-InputModule"><a href="#输入-InputModule" class="headerlink" title="输入 InputModule"></a>输入 InputModule</h2><ul><li>平时新建一个Canvas时，会创建EventSystem组件，这个组件所挂载的脚本就是EventSystem和InputModule。</li></ul><p>BaseInputModule基类，负责发送输入事件（点击、拖拽、选中等）到具体对象，可以自己派生实现输入模块而官方提供2个：</p><ul><li>  标准输入模块（StandaloneInputModule）</li><li>  触摸输入模块（TouchInputModule， 现在已经不需要了它整合进StandaloneInputModule中了！）</li></ul><p>这2个官方提供的模块会检测一些输入操作，以事件的方式（message系统）通知目标对象，所以给摇杆的mono脚本实现接口（IPointerClickHandler 等）就可以触发事件 。</p><h2 id="射线-Raycaster"><a href="#射线-Raycaster" class="headerlink" title="射线 Raycaster"></a>射线 Raycaster</h2><ul><li>  对于UI对象，在平时新建一个Canvas时，如果Canvas的渲染模式是SceenSpace-Overlay，Canvas会挂载GraphRaycaster脚本。</li><li>  场景中的非UI对象，如果想要接收输入模块的事件，也需要给摄像机挂上一个射线检测组件（3D是PhysicsRaycaster、2D是Physics2Draycaster）。然后需要给想被检测到的物体添加collider脚本，否则检测不到。</li></ul><h2 id="事件执行器-ExecuteEvents"><a href="#事件执行器-ExecuteEvents" class="headerlink" title="事件执行器 ExecuteEvents"></a>事件执行器 ExecuteEvents</h2><p>事件执行器，InputModule在通过射线确定了最近的命中物体后，会用ExecuteEvents触发Click等事件。</p><p>Execute方法：获取物体上所有包含IEventSystemHandler且可用的组件，根据情况调用执行接口方法，传入PointerEventData参数。</p><h1 id="射线检测流程"><a href="#射线检测流程" class="headerlink" title="射线检测流程"></a>射线检测流程</h1><p>0.在EventSystem的Update中，每帧调用InputModule.Process，进行点击/触击检测。</p><p>1.如果InputModule检测到了点击/触击，就会向EventSystem请求发射射线。 <code>eventSystem.RaycastAll(pointerData, m_RaycastResultCache);</code></p><p>2.将屏幕触击点投影到相机切面(near)上的位置，生成一条射线，将射线所有命中的物体保存到 hitDistance击中点数组 和 <strong>RaycastResult被命中物体数组</strong> 中。具体射线怎么计算命中的，是<code>UnityEngine.Physics</code>内的接口，没开源。</p><p>3.遍历所有Graphic，获取可接收射线广播的Graphic信息。</p><p>4.取出RaycastResult数组中，距离最近的那个物体作为射线检测的结果返回。</p><p>5.射线检测结果PointerEventData 返回到了InputModule中，对其触发那些事件接口（IPointerClickHandler之类的）并传入PointerEventData参数。</p><p>// 2中具体还会记录射线起点到相机渲染终点的切面(far)之间的距离。这个具体看<a href="https://www.cnblogs.com/w-wfy/p/7243459.html">下图</a>。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220321164508.png"></p><h1 id="UI穿透"><a href="#UI穿透" class="headerlink" title="UI穿透"></a>UI穿透</h1><p>现象就是射线检测到了后面的物体。</p><p>解决1.一般新窗口和底层窗口之间，都会有一个暗灰色的透明背景，可以把这个透明背景的Raycast Target勾选上，这样就终止了射线检测到后面的窗口。</p><p>解决2.自己实现一个简单的射线检测，射线使用graphicRaycaster射线，这是针对UI检测的射线。</p><p>ps.针对UI检测的射线：其实每个组件在创建的时候已经被添加进了一个公共列表（我们使用的UGUI中的每个组件都是继承自Graphic或者依赖一个继承自Graphic的组件）。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;图片转自&lt;a href=&quot;https://blog.csdn.net/qq_28820675/article/details/105619356&quot;&gt;大佬博客&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/CodingCod</summary>
       
     
     
@@ -292,8 +439,8 @@
   
   <entry>
     <title>C#精要 - 同步异步、多线程篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/tongbuyibu_obsolete/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/tongbuyibu_obsolete/</id>
+    <link href="https://codingcodingk.github.io/Tech/CSharp/Essence/tongbuyibu_obsolete/"/>
+    <id>https://codingcodingk.github.io/Tech/CSharp/Essence/tongbuyibu_obsolete/</id>
     <published>2022-03-18T13:18:05.699Z</published>
     <updated>2022-03-18T13:18:05.699Z</updated>
     
@@ -320,8 +467,8 @@
   
   <entry>
     <title>C#精要 - Mono篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/mono/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/mono/</id>
+    <link href="https://codingcodingk.github.io/Tech/CSharp/Essence/mono/"/>
+    <id>https://codingcodingk.github.io/Tech/CSharp/Essence/mono/</id>
     <published>2022-03-18T13:18:05.697Z</published>
     <updated>2022-03-18T13:18:05.697Z</updated>
     
@@ -348,8 +495,8 @@
   
   <entry>
     <title>C#精要 - 反射篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/reflection/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/reflection/</id>
+    <link href="https://codingcodingk.github.io/Tech/CSharp/Essence/reflection/"/>
+    <id>https://codingcodingk.github.io/Tech/CSharp/Essence/reflection/</id>
     <published>2022-03-18T13:18:05.697Z</published>
     <updated>2022-03-18T13:18:05.697Z</updated>
     
@@ -376,8 +523,8 @@
   
   <entry>
     <title>C#精要 - 委托与事件篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/delegate/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/delegate/</id>
+    <link href="https://codingcodingk.github.io/Tech/CSharp/Essence/delegate/"/>
+    <id>https://codingcodingk.github.io/Tech/CSharp/Essence/delegate/</id>
     <published>2022-03-18T13:18:05.696Z</published>
     <updated>2022-03-18T13:18:05.696Z</updated>
     
@@ -404,8 +551,8 @@
   
   <entry>
     <title>C#精要 - 常用数据结构篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/arrary_list_dic/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/arrary_list_dic/</id>
+    <link href="https://codingcodingk.github.io/Tech/CSharp/Essence/arrary_list_dic/"/>
+    <id>https://codingcodingk.github.io/Tech/CSharp/Essence/arrary_list_dic/</id>
     <published>2022-03-18T13:18:05.695Z</published>
     <updated>2022-03-18T13:18:05.695Z</updated>
     
@@ -428,154 +575,6 @@
     <category term="技术" scheme="https://codingcodingk.github.io/tags/%E6%8A%80%E6%9C%AF/"/>
     
     <category term="C#" scheme="https://codingcodingk.github.io/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>C#精要 - 异步篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/async/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/async/</id>
-    <published>2022-03-18T13:18:05.695Z</published>
-    <updated>2022-03-18T13:18:05.695Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="什么是异步？"><a href="#什么是异步？" class="headerlink" title="什么是异步？"></a>什么是异步？</h1><p>异步是一种任务执行的机制或者说方式，它的目的在于解决<strong>I/O等待会阻塞线程</strong>这个问题（最常见的就是GUI线程阻塞造成画面卡顿），它的实现依托于硬件底层的<strong>IRP</strong>(I/O Request Packet)，它的本质其实是回调。</p><p>我可以使用比如 ReadAsync + Task.ContinueWith 的组合，来实现一个<a href="https://blog.51cto.com/huangxincheng/2525748">异步实践</a>；</p><p>而更简单的方式是通过微软后续推出 .net4.5 的 <strong>async-await</strong> 这套关键词来实践。</p><h1 id="异步函数-async-await"><a href="#异步函数-async-await" class="headerlink" title="异步函数 async-await"></a>异步函数 async-await</h1><p>异步函数，实际通过 核心类TaskAwaiter + 状态机 实现。</p><h2 id="核心类-TaskAwaiter"><a href="#核心类-TaskAwaiter" class="headerlink" title="核心类 TaskAwaiter"></a>核心类 TaskAwaiter</h2><p>这个类比较简单，每个异步Task都有。我把它看作黑盒不细究，只看对外接口：</p><ul><li>  IsCompleted 属性：表示Task是否完成</li><li>  GetResult() 方法：结束异步任务完成的等待</li><li>  UnsafeOnCompleted(Action) 方法：设置延续任务</li></ul><h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>await必须在有async标记的方法内使用。如果async方法内部没有await，那它就和同步方法一样执行。</p><p>如果执行中遇到了await，就把需要await执行的Task交给线程池来执行，而原来那个线程则退出async方法的方法体，去执行外部的后续代码，直到await的Task执行完毕返回结果后，这个线程会回到方法体await处继续执行。整体流程看上去很像ContinueWith。</p><p>接下来研究编译器做的事。</p><h2 id="外部调用层"><a href="#外部调用层" class="headerlink" title="外部调用层"></a>外部调用层</h2><p>1.首先编译器看到方法有async标记，就会为其生成一个实现了IAsyncStateMachine接口的类，这个接口意味着它是一个<strong>异步状态机</strong>。</p><p>2.async方法自身则会被标记<strong>AsyncStateMachine特性</strong>，意味着这是个异步方法。</p><p>3.async方法内部则是new了一个异步状态机实例，先初始化，然后调用它的Start方法来启动状态机。Start方法内部主要是调用了状态机的<strong>MoveNext方法</strong>。</p><p>4.最后将指示方法运行状态的<code>builder.Task</code>对象 return 。</p><h2 id="内部状态机层"><a href="#内部状态机层" class="headerlink" title="内部状态机层"></a>内部状态机层</h2><p>每个异步状态机都有2个核心字段和一个核心方法：</p><ul><li>  builder：负责异步相关的操作，是方法实现异步执行的核心</li><li>  state：状态机的当前状态，<strong>初始化时赋值为 -1</strong>。</li><li>  MoveNext方法：状态机切换状态、执行任务、设置延续任务的方法</li></ul><p>我们直接讲MoveNext方法。</p><p><strong>第一次MoveNext时，我把它分成3块流程：</strong></p><p>1.第一次进入状态机时<code>state!=0</code>，await之前的代码被包裹到了MoveNext方法体内，照常顺序执行。</p><p>2.await那一行的代码，变成了获取任务的awaiter <code>Task.GetAwaiter()</code>。然后对任务的awaiter进行判断：</p><p>​      - 如果awaiter.IsCompleted 为true，意味着任务已经执行完了，执行第3步。</p><p>​      - 如果awaiter.IsCompleted 为false，意味着任务还未执行完（一般初始化完第一次进来，都是false）那就会做以下操作：</p><p>将<strong>state赋值为0</strong>，将awaiter存到自身字段内供后续使用，然后<strong>设置延续任务</strong><code>builder.AwaitUnsafeOnCompleted</code>，设置完之后会<strong>return掉而不执行第3步</strong>。</p><p>延续任务内部<a href="https://www.cnblogs.com/xiaoxiaotank/p/14303803.html">怎么设置的</a>比较复杂，我觉得不需要理解深入，理解为调了awaiter的接口就行了，反正最终效果是<strong>await的任务完成后再次调用MoveNext转动状态机</strong>。</p><p>3.结束awaiter <code>TaskAwaiter.GetResult() </code>。执行原先await那一行之后的后续代码。执行完成后，将state赋值为-2，并为builder标记任务成功<code>AsyncTaskMethodBuilder.SetResult()</code>。</p><p><strong>如果不是第一次MoveNext，就会省去1、2步：</strong></p><p>如果await的任务完成，就会触发延续任务：再次调用MoveNext。但是和第一次进不一样，此时因为<code>state==0</code>会跳过第1步第2步，将state设置为-1之后直接跳入第3步。</p><h2 id="多层嵌套async-await"><a href="#多层嵌套async-await" class="headerlink" title="多层嵌套async-await"></a>多层嵌套async-await</h2><p>其实实现也只是多层嵌套异步状态机而已，是一样的。</p><h2 id="一个async中多个await"><a href="#一个async中多个await" class="headerlink" title="一个async中多个await"></a>一个async中多个await</h2><p>在同一个异步状态机中，生成更多的awaiter、更多的state。</p><p>state的-2（完成）、-1（初始）是定好的，所以只会从0开始生成，而有几个await就有几个awaiter、state。</p><p>一旦state多起来，内部就不再 if-else 了，而是 switch-case + goto 。</p><h1 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h1><p>接触的主要是，</p><p>SynchronizationContext 同步上下文：<strong>捕获</strong>提供在各种同步模型中传播同步上下文的基本功能。它有一个<code>Post()</code>虚方法，Winform、WPF等等会重写它，让它被调用时能产生不同的过程，但目的都是一个：实现使用GUI线程执行Post过去的委托。</p><p>ExecutionContext 执行上下文：<strong>流动</strong>。在执行委托时恢复另一个线程的状态环境。</p><h2 id="WPF中使用-async-await"><a href="#WPF中使用-async-await" class="headerlink" title="WPF中使用 async await"></a>WPF中使用 async await</h2><p>上面我们都是通过控制台举的例子，这是没有任何<code>SynchronizationContext</code>的，但是WPF（Winform同理）就不同了，在UI线程中，它拥有属于自己的<code>DispatcherSynchronizationContext</code>。</p><p>这个工作中有体会，就是<code>View.xmal.cs</code>文件内写诸如点击事件的async-await，延续任务会默认借调GUI线程而非await内分配的任务池线程。。</p><p>而我可以改成使用<code>SynchronizationContext.Post()</code>来实现类似的效果。</p><h2 id="怎么用"><a href="#怎么用" class="headerlink" title="怎么用"></a>怎么用</h2><p>用SynchronizationContext可以实现确定性使用GUI线程来执行委托，我的理解只到此。</p><p>参考：</p><p><a href="https://www.cnblogs.com/xiaoxiaotank/p/14303803.html">https://www.cnblogs.com/xiaoxiaotank/p/14303803.html</a></p><p><a href="https://www.cnblogs.com/xiaoxiaotank/p/13666913.html">https://www.cnblogs.com/xiaoxiaotank/p/13666913.html</a></p><p><a href="https://codingcodingk.top/2022/01/14/Tech/CSharp/CLR-Via-CSharp/cp7/">https://codingcodingk.top/2022/01/14/Tech/CSharp/CLR-Via-CSharp/cp7/</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;什么是异步？&quot;&gt;&lt;a href=&quot;#什么是异步？&quot; class=&quot;headerlink&quot; title=&quot;什么是异步？&quot;&gt;&lt;/a&gt;什么是异步？&lt;/h1&gt;&lt;p&gt;异步是一种任务执行的机制或者说方式，它的目的在于解决&lt;strong&gt;I/O等待会阻塞线程&lt;/strong&gt;这</summary>
-      
-    
-    
-    
-    <category term="CSharp" scheme="https://codingcodingk.github.io/categories/CSharp/"/>
-    
-    <category term="C#精要" scheme="https://codingcodingk.github.io/categories/CSharp/C-%E7%B2%BE%E8%A6%81/"/>
-    
-    
-    <category term="技术" scheme="https://codingcodingk.github.io/tags/%E6%8A%80%E6%9C%AF/"/>
-    
-    <category term="C#" scheme="https://codingcodingk.github.io/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>C#精要 - 类内成员篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/classMember/"/>
-    <id>https://codingcodingk.github.io/2022/03/18/Tech/CSharp/Essence/classMember/</id>
-    <published>2022-03-18T13:18:05.695Z</published>
-    <updated>2022-03-18T13:18:05.695Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="类成员初始化顺序"><a href="#类成员初始化顺序" class="headerlink" title="类成员初始化顺序"></a>类成员初始化顺序</h1><p>一般初始化顺序：</p><ol><li> 子类静态字段内联</li><li> 子类静态构造</li><li> 子类实例字段内联</li><li> 父类静态字段内联</li><li> 父类静态构造</li><li> 父类实例字段内联</li><li> 父类实例构造</li><li> 子类实例构造</li></ol><p>原则就是：先内联后构造；先静态后实例；先子类后父类（除了构造器）。</p><h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p>abstract抽象方法、virtual方法、隐式实现接口方法，它们本质上、在IL代码层中，都是virtual方法。</p><p>IL提供两种方式去调用方法：</p><p>call：可用于调用实例方法、虚方法和静态方法。// 我个人测下来感觉只有静态方法是用call…</p><p>callvirt：可用于调用实例方法、虚方法。过程会比call复杂一些，事前会check null，执行时也会去查虚函数表。</p><h2 id="非虚方式调用-call"><a href="#非虚方式调用-call" class="headerlink" title="非虚方式调用 call"></a>非虚方式调用 call</h2><p>call 调用的，是编译时确定的类型，也就是申明类型。</p><p>如果变量申明的类型没有对应的方法，就检查基类型来查找匹配方法。</p><h2 id="虚方法调用-callvirt"><a href="#虚方法调用-callvirt" class="headerlink" title="虚方法调用 callvirt"></a>虚方法调用 callvirt</h2><p>callvirt 调用的，是运行时确定的类型，也就是变量指向对象的实际类型（new的类型）。</p><p>上面说的是结果，但如果深究过程，在IL代码层的话，多态方法全部都是 callvirt 最初父类的同一个方法。</p><p>c++版本 虚表、虚函数调用整体流程：</p><p>1.编译器发现一个类中有虚函数时，便为该类<strong>生成虚函数表</strong>，虚表各表项为指向对应虚函数的指针。父类虚函数地址在前，子类在后，按照声明顺序。</p><p>2.<strong>生成子类</strong>时，如果发现子类中函数重写了父类中的虚函数，则用子类虚函数的地址<strong>覆盖</strong>掉对应父类虚函数的地址。</p><p>3.<strong>虚函数调用</strong>过程：</p><p>查自己类型的虚函数表，找到对应位置的虚函数。</p><p>​    有覆盖：该指针指向子类函数，调用子类的函数。</p><p>​    无覆盖：调用父类自己的函数。</p><p>4.每一个有虚函数的类都有一个虚函数表（V-Tablle），每个这些类的对象都会生成一个指向虚函数表的指针。</p><p>c#版本 虚表、虚函数调用整体流程：</p><p>网上很难找到c#版本的虚函数实现，全只有猜测。我自己整理了一下，目前理解是：</p><p>可以确定的是，在IL代码层，多态方法全部都是 callvirt 最初父类的同一个方法。</p><p>因此估计JIT是根据 <strong>推上栈的实际变量指向的对象 + callvirt最初父类的同一个方法</strong> 来获取偏移量、再根据偏移量确定具体调用方法，内部则可能和c++一样是用V-Table。</p><p><strong>那么最终结论就是</strong>，每个带有虚函数的类型，都会有一张V表；他们的每个子类，也有自己的V表，起始布局和父类一致，如果override了就替换自己的V表的方法指针；这些子类在堆上的对象，都有一个指针指向子类类型的V表。</p><p><a href="https://blog.csdn.net/li1914309758/article/details/79916414">文章推荐1</a>： <a href="http://c.biancheng.net/view/267.html">文章推荐2</a></p><h2 id="自己实现虚方法"><a href="#自己实现虚方法" class="headerlink" title="自己实现虚方法"></a>自己实现虚方法</h2><p>用静态方法就可以实现，将对象自己作为参数传入静态方法，然后根据其type来switch-case就可以简单实现一个。</p><p>总的来说，虚方法这么复杂的内部机制就是为了实现多态。</p><h1 id="字段"><a href="#字段" class="headerlink" title="字段"></a>字段</h1><p>常量，const关键字，是指值从不变化的符号，它的值必须能在编译时确定，最后会在元数据中嵌入。它总是隐式static的。</p><p>字段，是一种数据成员，其中容纳了一个值类型的实例或者对一个引用类型的引用。</p><table><thead><tr><th>C#关键字</th><th>含义</th><th>说明</th></tr></thead><tbody><tr><td>默认</td><td>实例字段</td><td>该字段只与对象的一个实例关联，而不是与类型本身关联</td></tr><tr><td>static</td><td>静态字段</td><td>该字段是类型状态的一部分，而不是对象状态的一部分</td></tr><tr><td><strong>readonly</strong></td><td>只读字段</td><td><strong>该字段只能由一个构造器方法中的代码写入</strong>（但是可以通过反射修改）</td></tr></tbody></table><h1 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h1><p>属性的本质是方法（get、set访问器），是对字段的封装。C#提供<code>&#123;get;set;&#125;</code>语法糖，编译时自动实现创建一个字段。</p><p>无参属性：我们常规说的属性。</p><p>有参属性：get、set访问器接受一个或多个参数，就叫有参属性。有参属性一般用处是索引器，索引器的实现是通过对<code>this[]</code>操作符进行重载。</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Students</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">string</span>[] name = <span class="keyword">new</span> <span class="built_in">string</span>[<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//索引器必须以this关键字定义，其实这个this就是类实例化之后的对象</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> <span class="keyword">this</span>[<span class="built_in">int</span> index]</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">return</span> name[index]; &#125;</span><br><span class="line">        <span class="keyword">set</span> &#123; name[index] = <span class="keyword">value</span>; &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line">...</span><br><span class="line">Console.WriteLine(Students[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure><h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><p>具体见《C#精要 - 委托与事件篇》。</p><h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><p>避免拆装箱的最佳选择。最好的例子就是 ArrayList ( Object[ ] ) =&gt; List&lt; T &gt;；Action&lt; T &gt; (T arg)、Func&lt;in T, out TResult&gt; (T arg)。</p><p>它可以用where约束。</p><ul><li>  **逆变量(contravariant)**，意味着泛型类型参数可以从一个类更改为它的某个派生类。C#中用<code>in</code>来标记，只能出现在输入位置，比如入参。</li><li>  **协变量(covariant)**，意味着泛型类型参数可以从一个类更改为它的某个基类。C#中用<code>out</code>来标记，只能出现在输出位置，比如返回值。</li></ul><p>这两个概念看着挺复杂，其实就是 Func&lt;in T, out TResult&gt; (T arg)。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;类成员初始化顺序&quot;&gt;&lt;a href=&quot;#类成员初始化顺序&quot; class=&quot;headerlink&quot; title=&quot;类成员初始化顺序&quot;&gt;&lt;/a&gt;类成员初始化顺序&lt;/h1&gt;&lt;p&gt;一般初始化顺序：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt; 子类静态字段内联&lt;/li&gt;
-&lt;li&gt; 子类静态</summary>
-      
-    
-    
-    
-    <category term="CSharp" scheme="https://codingcodingk.github.io/categories/CSharp/"/>
-    
-    <category term="C#精要" scheme="https://codingcodingk.github.io/categories/CSharp/C-%E7%B2%BE%E8%A6%81/"/>
-    
-    
-    <category term="技术" scheme="https://codingcodingk.github.io/tags/%E6%8A%80%E6%9C%AF/"/>
-    
-    <category term="C#" scheme="https://codingcodingk.github.io/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>C#精要 - 线程篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/04/Tech/CSharp/Essence/thread/"/>
-    <id>https://codingcodingk.github.io/2022/03/04/Tech/CSharp/Essence/thread/</id>
-    <published>2022-03-04T14:13:03.121Z</published>
-    <updated>2022-03-18T13:18:05.699Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="什么是线程、进程？"><a href="#什么是线程、进程？" class="headerlink" title="什么是线程、进程？"></a>什么是线程、进程？</h1><p><strong>线程</strong>是对物理CPU进行虚拟化，也是操作系统能调度的最小单位。</p><p><strong>进程</strong>实际是应用程序的实例要使用的资源的集合，每个进程都被赋予了一个虚拟地址空间来避免被其它进程访问。</p><p>一个线程确定由某一进程拥有，一般不能跨进程。</p><h1 id="线程结构"><a href="#线程结构" class="headerlink" title="线程结构"></a>线程结构</h1><p>线程有空间（内存耗用）和时间（上下文调度）上的开销。</p><h2 id="内存耗用"><a href="#内存耗用" class="headerlink" title="内存耗用"></a>内存耗用</h2><p>① 线程内核对象 (thread kernel object)</p><p>主要是有对线程的描述属性。x64使用约1240字节。</p><p>值得注意的是<strong>线程上下文</strong>(thread context)：线程上下文是是线程上一次执行完毕后，CPU寄存器的状态（内存块）。</p><p>② 线程环境块 (thread environment block,TEB)</p><p>有GDI(图形设备接口)和OpenGL用的一些数据，以及<strong>异常处理链首</strong>：线程每进入一个try块，都会在链首(head)中插入一个节点(node)，退出try块时删除该节点。x64中4KB。</p><p>③ 用户模式栈 (user- mode stack)</p><p>堆栈概念中的栈说的就是这个了，默认分配1MB内存（其实windows是保留1MB容量，等用了才调拨给你）。</p><p>④ 内核模式栈 (kernel- mode stack)</p><p>应用程序代码向OS中的内核模式函数传递实参时，会复制 用户模式栈 传去的实参并加以验证并不允许修改。最后OS内核代码开始处理复制的值。分配x86是12KB，x64是24KB。</p><h2 id="上下文调度"><a href="#上下文调度" class="headerlink" title="上下文调度"></a>上下文调度</h2><p>Windows任何时刻都只将一个线程分配给一个CPU(或CPU核，下面称CPU)。</p><p>CPU会为线程执行一个**时间片 (quantum)**的时长，大概30ms吧，等时间片到期了，就会进行上下文调度切换执行另一个线程。</p><p>上下文调度具体流程：</p><ol><li> 将CPU寄存器的值保存到当前正在运行的线程的内核对象内部的一个上下文结构中。</li><li>从现有线程集合中选出一个线程供调度。如果该线程由另一个进程拥有（而不是CPU上一次调度的线程的所属进程）， Windows在<br> 开始执行任何代码或者接触任何数据之前，还必须切换CPU“看见”的虚拟地址空间。</li><li> 将所选上下文结构中的值加载到CPU的寄存器中。</li></ol><p>上下文调度之后线程切换完成，CPU就会执行所选的线程，直到下一个时间片过了又要切换。</p><p>这是<strong>净开销</strong>，只是为了能够提供一个健壮的、响应灵敏的操作系统。具体就是cpu运行的某个线程卡死了，过一个时间片后也会被分配其他线程执行（比如任务管理器线程来终止卡死程序）。</p><h2 id="线程优先级"><a href="#线程优先级" class="headerlink" title="线程优先级"></a>线程优先级</h2><p>系统调度CPU执行哪一个线程，是由线程自己的优先级决定的，所以可能出现高优先级线程太多导致长时间没有处理低优先级线程，这种情况叫<strong>饥饿</strong>。</p><p>低优先级的线程哪怕时间片没用完，也会被立刻挂起执行优先级更高的线程，这是Windows称作<strong>抢占式多线程操作系统</strong>的原因。</p><p>优先级是0~31。</p><p>0是系统启动时会创建一个特殊的<strong>零页线程</strong>，优先级为0，在没有其他线程需要“干活儿”的时候，零页线程将系统RAM的所有空闲页清零。</p><p>自己创建的线程可以通过<code>ThreadA.Priority = ThreadPriority.AboveNormal;</code>的方式，指定优先级。</p><h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>线程的执行是<strong>事件分发式</strong>的，也就是内部维护一个操作请求队列。</p><h2 id="生命流程"><a href="#生命流程" class="headerlink" title="生命流程"></a>生命流程</h2><p>CLR初始化时，线程池中是没有线程的。在内部，线程池维护了一个<strong>操作请求队列</strong>。应用程序执行一个异步操作时，就会对线程池进行请求，具体是将一个记录项(entry)追加到队列中。</p><p>线程池会从这个队列中提取记录项，将这个记录项派发(dispatch)给一个线程池的线程；如果线程池没有线程，就创建一个新线程。当这个线程完成任务后并不销毁，而是返回线程池、进入空闲状态。</p><p>但是如果一个线程在线程池里闲太久了（应用程序很久不向线程池发出请求），为了避免资源浪费，CLR才会终止它。</p><h2 id="调度机制"><a href="#调度机制" class="headerlink" title="调度机制"></a>调度机制</h2><p>也就是具体是怎么分发任务的。</p><p>（线程池）全局队列：当调用ThreadPool.QueueUserWorkItem、Task时，新追加的任务会被添加进<strong>全局队列</strong>中，全局队列采用<strong>先进先出FIFO</strong>的方式，让工作者线程们自己去取任务。全局队列使用<strong>线程同步锁</strong>，这是为了避免多个线程同时取到一个任务。</p><p>（线程）本地队列：在全局队列中领完的任务会放入工作者线程各自的<strong>本地队列</strong>，本地队列采用<strong>后入先出LIFO</strong>的方式来执行任务。本地队列一般不锁，因为只有对应的工作者线程访问它。</p><p>如果工作者线程发现自己<strong>本地队列空</strong>了，就会尝试从另一个工作者线程的本地队列“偷”一个Task。这个Task在本地队列的队尾，并会要求获取一个线程同步锁。</p><p>如果<strong>所有本地队列都空</strong>了，工作者线程会使用FIFO算法从全局队列取出一个工作项并获得它的锁。</p><p>如果<strong>全局队列也为空</strong>，工作者线程会进入睡眠状态。</p><p>如果<strong>工作者线程睡眠时间很长</strong>，它会自己醒来并销毁自身，释放线程使用的资源（内核、栈等）。</p><h2 id="取消任务"><a href="#取消任务" class="headerlink" title="取消任务"></a>取消任务</h2><p>可以使用辅助类<strong>CancellationToken</strong>，它有一个bool字段可以用来判断是否取消执行了任务，只要执行Cancel方法就可以让他变成false。</p><p>自己传到线程里判断就行。</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">CancellationTokenSource cts = <span class="keyword">new</span> CancellationTokenSource();</span><br><span class="line">CancellationToken token = cts.Token;</span><br><span class="line">    <span class="comment">// 注册回调</span></span><br><span class="line">token.Register(() =&gt; Console.WriteLine(<span class="string">&quot;Count is cancelled, thread &quot;</span> + Thread.CurrentThread.ManagedThreadId));</span><br><span class="line">ThreadPool.QueueUserWorkItem(_ =&gt; Count(token, <span class="number">1000</span>));</span><br><span class="line"></span><br><span class="line">Console.WriteLine(<span class="string">&quot;Press &lt;Enter&gt; to cancel Thread Works&quot;</span>);</span><br><span class="line">Console.ReadLine();</span><br><span class="line">cts.Cancel();</span><br><span class="line"></span><br><span class="line">Console.Read();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Count</span>(<span class="params">CancellationToken token, <span class="built_in">int</span> countTo</span>)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">int</span> count = <span class="number">0</span>; count &lt; countTo; count++)</span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">// 当Source执行Cancel时，会变成false</span></span><br><span class="line"><span class="keyword">if</span> (token.IsCancellationRequested)</span><br><span class="line">&#123;</span><br><span class="line">Console.WriteLine(<span class="string">&quot;break, thread &quot;</span> + Thread.CurrentThread.ManagedThreadId);</span><br><span class="line"><span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line">        </span><br><span class="line">Console.WriteLine(count);</span><br><span class="line">Thread.Sleep(<span class="number">200</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;什么是线程、进程？&quot;&gt;&lt;a href=&quot;#什么是线程、进程？&quot; class=&quot;headerlink&quot; title=&quot;什么是线程、进程？&quot;&gt;&lt;/a&gt;什么是线程、进程？&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;线程&lt;/strong&gt;是对物理CPU进行虚拟化，也是操作系统能调度的</summary>
-      
-    
-    
-    
-    <category term="CSharp" scheme="https://codingcodingk.github.io/categories/CSharp/"/>
-    
-    <category term="C#精要" scheme="https://codingcodingk.github.io/categories/CSharp/C-%E7%B2%BE%E8%A6%81/"/>
-    
-    
-    <category term="技术" scheme="https://codingcodingk.github.io/tags/%E6%8A%80%E6%9C%AF/"/>
-    
-    <category term="C#" scheme="https://codingcodingk.github.io/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>C#精要 - GC篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/04/Tech/CSharp/Essence/gc/"/>
-    <id>https://codingcodingk.github.io/2022/03/04/Tech/CSharp/Essence/gc/</id>
-    <published>2022-03-04T14:13:03.119Z</published>
-    <updated>2022-03-18T13:18:05.697Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="什么是GC？为什么需要GC？"><a href="#什么是GC？为什么需要GC？" class="headerlink" title="什么是GC？为什么需要GC？"></a>什么是GC？为什么需要GC？</h1><p>GC，即Garbage Collection，意为垃圾回收。</p><p>.Net不同于原生C++这种需要程序员手动管理内存的机制，存在<strong>自动释放内存的一套机制</strong>，这就叫GC。</p><p>GC可以让程序员<strong>不必关心资源的管理</strong>，也就是一个对象的生命流程中的4：</p><ol><li> 调用IL指令newobj，为代表资源的类型分配内存（C#中用new操作符完成）。</li><li> 初始化内存，设置资源的初始状态并使资源可用。类型的实例构造器负责设置初始状态。</li><li> 访问类型的成员来使用资源（有必要可以重复）。</li><li> 摧毁资源的状态以进行清理。</li><li> 释放内存。垃圾回收器独自负责这一步。</li></ol><p>当然可以自己<strong>重写Finalize方法</strong>或手动<strong>调用GC.Collect</strong>。</p><h1 id="简单列举GC的优势（对比手动管理）"><a href="#简单列举GC的优势（对比手动管理）" class="headerlink" title="简单列举GC的优势（对比手动管理）"></a>简单列举GC的优势（对比手动管理）</h1><p>1.让程序员可以不必关心资源的管理。</p><p>2.避免手动管理时，顺序搞错，先销毁后调用导致空引用抛错。</p><p>3.避免手动管理时，由于标记引用未清空导致的内存泄露。</p><h1 id="讲讲GC算法"><a href="#讲讲GC算法" class="headerlink" title="讲讲GC算法"></a>讲讲GC算法</h1><p>三个方向上讲：从总体流程上来说，它有<strong>标记 -&gt; 压缩</strong>两个阶段；从确定是否销毁的方式上来说，它是<strong>从根遍历</strong>的；从销毁处理方式上来说，它是<strong>分代</strong>的。它解决了<strong>引用计数法</strong>循环引用的问题。</p><h2 id="先说下“引用计数法”是什么？为什么不行？"><a href="#先说下“引用计数法”是什么？为什么不行？" class="headerlink" title="先说下“引用计数法”是什么？为什么不行？"></a>先说下“引用计数法”是什么？为什么不行？</h2><p>引用计数是COM(Component Object Model)使用的办法，GC并不是用这个，而是用的从根遍历。说的是堆上的每个对象都维护着一个内存字段来统计程序中多少“部分”正在使用对象。随着每一“部分”到达代码某个不再需要对象的地方，就递减这个计数，直到0就可以删除了。</p><p>不行的理由很简单，它没有办法处理循环引用的关系，也就是A、B两个对象互相引用，各自引用计数为1，就没法销毁对方。</p><h1 id="1-先从流程上说：标记-gt-压缩"><a href="#1-先从流程上说：标记-gt-压缩" class="headerlink" title="1.先从流程上说：标记 -&gt; 压缩"></a>1.先从流程上说：标记 -&gt; 压缩</h1><p>标记：这个阶段，其实就是判断对象是否可达的过程。当所有的根都检查完毕后，堆中将包含**可达(已标记)与不可达(未标记)**对象。</p><p>标记完成后，进入压缩阶段。</p><p>压缩：在这个阶段中，垃圾回收器线性的遍历堆、并对其进行内存碎片整理。让幸存对象都紧挨在一起，使内存的地址空间得到释放。操作完了之后，对引用了这些堆内对象的指针进行偏移，保持引用与之前一致。</p><p>压缩结束后，如果本次GC并没有分出足够的内存给接下来的new操作，意味着该进程的内存已耗尽，会抛出OutOfMemoryException。</p><h1 id="2-再从确定是否销毁上说：从根遍历"><a href="#2-再从确定是否销毁上说：从根遍历" class="headerlink" title="2.再从确定是否销毁上说：从根遍历"></a>2.再从确定是否销毁上说：从根遍历</h1><h2 id="根（Root）"><a href="#根（Root）" class="headerlink" title="根（Root）"></a>根（Root）</h2><p>我们将所有引用类型的变量都成为<strong>根</strong>，类中定义的任何静态字段，方法的参数，局部变量(仅限引用类型变量)等一系列”引用者”，都是根，根是CLR在堆之外可以找到的各种入口点。</p><h2 id="可达和不可达（Objects-reachable-and-unreachable）"><a href="#可达和不可达（Objects-reachable-and-unreachable）" class="headerlink" title="可达和不可达（Objects reachable and unreachable）"></a>可达和不可达（Objects reachable and unreachable）</h2><p>如果一个根引用了堆中的一个对象，则该对象为“可达”，否则即是“不可达”。不可达的对象是本次销毁的目标。</p><h2 id="引用跟踪"><a href="#引用跟踪" class="headerlink" title="引用跟踪"></a>引用跟踪</h2><p>也就是标记阶段是怎么标记的。</p><p>在这个阶段，CLR会先遍历堆中的所有对象，并全部设置为可回收状态的，然后检查所有活动根，查看他们引用了哪些对象，</p><p>如果一个根包含null，CLR会忽略这个根并检查下一个根；</p><p>如果根引用了堆上的对象，CLR会标记那个对象，并检查这个对象中的根，继续标记它们引用的对象。如果过程中发现对象已标记，则不重新检查，避免了循环引用而造成的死循环。。</p><p>检查完毕后，堆中的对象要么已标记，要么未标记。已标记对象的叫做<strong>可达的</strong>，未标记的对象叫做<strong>不可达的</strong>。</p><h1 id="3-最后说分代回收"><a href="#3-最后说分代回收" class="headerlink" title="3.最后说分代回收"></a>3.最后说分代回收</h1><p>CLR一共有3代：0、1、2代。这是在对可达对象进行处理。</p><h2 id="分代回收"><a href="#分代回收" class="headerlink" title="分代回收"></a>分代回收</h2><p>开始时：CLR初始化会为每一代选择一个<strong>预算容量</strong>。当有对象新分配时，会塞到第0代。</p><p>触发时机：当第0代满了，就会触发GC，没被回收的对象就会成为第1代对象。此时第0代空间中已经不包含任何对象，原来的对象可能已被回收，可能已被放置到第1代中。</p><p>触发特点1：当触发了GC时，第1代内的对象远小于它的预算，那么就不会对第1代进行检查。</p><p>触发特点2：当触发了GC时，可能存在老对象引用了新对象的可能性（比如1代引用0代）。这时新代回收时没有检查到来自老代的引用就会出现错误的回收。为了解决这个问题，垃圾回收器利用了JIT编译器内部的一个机制，这个机制在<strong>对象的引用字段发生变化时，会设置一个对应的标记位</strong>，这样一来垃圾回收器就会知道自上一次垃圾回收以来，哪些老对象的引用字段发生了变化，这样就算这次回收只回收新生代，也会去检测引用字段发生了变化的老对象，是否引用了新生代对象。</p><h2 id="分代回收的意义"><a href="#分代回收的意义" class="headerlink" title="分代回收的意义"></a>分代回收的意义</h2><p>为什么明明是不打算丢弃的可达对象，还要用分代去推出1代、2代呢？全部放0代不就完了？</p><p>事实上是，CLR做出了预设：<strong>回收堆的一部分，速度快于回收整个堆。</strong>事实一般也是如此。</p><p>所以只检查一部分，会比每次都检查全部快很多。</p><h2 id="代预算的动态调节"><a href="#代预算的动态调节" class="headerlink" title="代预算的动态调节"></a>代预算的动态调节</h2><p>在回收第0代后发现存活下来的对象很少，就可能减少第0代的预算，这意味着会更加频繁地执行垃圾回收，但每次回收需要检查的范围更小了。相反，如果回收了第0代后发现还有很多存活的对象，没有多少内存可以回收，就会增大第0代的预算，这样垃圾回收的次数就会减少。</p><h1 id="GC的触发时间点"><a href="#GC的触发时间点" class="headerlink" title="GC的触发时间点"></a>GC的触发时间点</h1><p>除了上文说到的检测到第0代超出预算的时候会触发垃圾回收，还有以下的：</p><h2 id="代码显式调用System-GC的静态Collect方法"><a href="#代码显式调用System-GC的静态Collect方法" class="headerlink" title="代码显式调用System.GC的静态Collect方法"></a>代码显式调用System.GC的静态Collect方法</h2><p>代码可显式请求CLR进行垃圾回收，但微软强烈反对这种请求，托管语言应该信任它本身的垃圾回收机制。</p><p>我日常会在印刷操作的时候调用它。</p><h2 id="Windows报告低内存情况"><a href="#Windows报告低内存情况" class="headerlink" title="Windows报告低内存情况"></a>Windows报告低内存情况</h2><p>如果Windows报告低内存，CLR会强制执行垃圾回收。</p><h2 id="CLR正在卸载AppDomain"><a href="#CLR正在卸载AppDomain" class="headerlink" title="CLR正在卸载AppDomain"></a>CLR正在卸载AppDomain</h2><p>当一个AppDomain卸载时，CLR认为其中一切都不是根，会执行涵盖所有代的垃圾回收。</p><h2 id="CLR正在关闭"><a href="#CLR正在关闭" class="headerlink" title="CLR正在关闭"></a>CLR正在关闭</h2><p>CLR在进程正常终止时关闭，CLR认为其中一切都不是根，对象有机会进行资源清理，但CLR不会试图压缩或释放内存。进程终止时，Windows会回收进程的全部内存。</p><h1 id="大对象"><a href="#大对象" class="headerlink" title="大对象"></a>大对象</h1><p>前面讨论的都是小对象，对于大对象（书中说是85000字节以上），CLR会区分对待：</p><p>内存不是在小对象的地址空间分配，而是进程地址空间的其他地方分配；总是第2代；目前不支持压缩。</p><p>所以GC一般不处理他们。</p><h1 id="Finalize方法"><a href="#Finalize方法" class="headerlink" title="Finalize方法"></a>Finalize方法</h1><p>System.Object定义了受保护的虚方法Finalize，如果类型重写了这个方法，对象在被GC判定销毁时会调用它。重写它一般是为了清理非托管资源。</p><h2 id="1-new时"><a href="#1-new时" class="headerlink" title="1.new时"></a>1.new时</h2><p>如果对象的类型定义了Finalize方法，那么这个实例在被构造之前，会将一个指向该对象的指针放到一个终结列表中（finalization list）。</p><h2 id="2-被回收时"><a href="#2-被回收时" class="headerlink" title="2.被回收时"></a>2.被回收时</h2><p>在被GC回收时，如果发现这个对象在终结列表中，就先不销毁，而是把指向它的指针扔到<strong>freachable队列中</strong>。</p><h2 id="3-在freachable队列时"><a href="#3-在freachable队列时" class="headerlink" title="3.在freachable队列时"></a>3.在freachable队列时</h2><p>freachable队列也是垃圾回收器的一种内部数据结构，队列中每一个引用都代表准备要调用Finalize方法的对象。当垃圾回收器把对象的引用从终结列表移到freachable队列时，对象不再被认为是垃圾，我们可以说对象被<strong>复活</strong>了。同时，该对象内引用的对象也会被标记、复活。</p><h2 id="4-复活"><a href="#4-复活" class="headerlink" title="4.复活"></a>4.复活</h2><p>说是复活，其实也就是本该销毁的对象延迟销毁了，没有在本该销毁的一次GC下被销毁。</p><p>这些复活的对象会被提升到老一代，之后CLR会用特殊的终结线程去调用freachable队列中每个对象的Finalize方法，并清空队列。之后他们就真正被销毁了。</p><h2 id="5-复活的思考"><a href="#5-复活的思考" class="headerlink" title="5.复活的思考"></a>5.复活的思考</h2><p>由3、4可知，这些定义了Finalize方法的“可终结”的对象，由于在第一次回收时，会被“复活”以执行Finalize方法，并可能会被提升到老一代，所以至少需要执行两次垃圾回收才能释放掉它们占用的托管堆内存，更需要注意到的是，这些对象中的引用字段所引用的对象也会存活下来并提升到老一代，会造成更大的性能负担。所以，要尽量避免为引用类型的字段定义为“可终结”对象。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;什么是GC？为什么需要GC？&quot;&gt;&lt;a href=&quot;#什么是GC？为什么需要GC？&quot; class=&quot;headerlink&quot; title=&quot;什么是GC？为什么需要GC？&quot;&gt;&lt;/a&gt;什么是GC？为什么需要GC？&lt;/h1&gt;&lt;p&gt;GC，即Garbage Collection</summary>
-      
-    
-    
-    
-    <category term="CSharp" scheme="https://codingcodingk.github.io/categories/CSharp/"/>
-    
-    <category term="C#精要" scheme="https://codingcodingk.github.io/categories/CSharp/C-%E7%B2%BE%E8%A6%81/"/>
-    
-    
-    <category term="C#" scheme="https://codingcodingk.github.io/tags/C/"/>
-    
-    <category term="GC" scheme="https://codingcodingk.github.io/tags/GC/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>王者荣耀复刻项目 技能编辑器篇</title>
-    <link href="https://codingcodingk.github.io/2022/03/04/Project/Unity/Moba/HOK/skilleditor/"/>
-    <id>https://codingcodingk.github.io/2022/03/04/Project/Unity/Moba/HOK/skilleditor/</id>
-    <published>2022-03-04T14:13:03.118Z</published>
-    <updated>2022-03-18T13:18:05.694Z</updated>
-    
-    <content type="html"><![CDATA[<p>从 技能配置可视化+纯业务 的角度，将原来的技能系统换个角度刨析一遍。</p><h1 id="大体分类"><a href="#大体分类" class="headerlink" title="大体分类"></a>大体分类</h1><p>按照可配置的文件来分类，可分为以下五大类：</p><ul><li>碰撞关系配置</li><li>buff配置</li><li>skill配置</li><li>单位配置</li><li>bullet配置</li></ul><p>下面对这几类的核心配置数据进行列举。</p><h1 id="碰撞关系配置"><a href="#碰撞关系配置" class="headerlink" title="碰撞关系配置"></a>碰撞关系配置</h1><ul><li>目标队伍</li><li>目标选择规则</li><li>目标单位</li><li>目标查找范围</li></ul><h1 id="buff配置"><a href="#buff配置" class="headerlink" title="buff配置"></a>buff配置</h1><ul><li>buff类型</li><li>buff附着目标</li><li>buff位置确定方式</li><li>碰撞关系配置</li></ul><h1 id="skill配置"><a href="#skill配置" class="headerlink" title="skill配置"></a>skill配置</h1><ul><li>  图片、音效资源路径</li><li>  技能动画名</li><li>  技能目标确定方式、范围等</li><li>  技能指示器类型</li></ul><h1 id="单位配置"><a href="#单位配置" class="headerlink" title="单位配置"></a>单位配置</h1><p>UnitInfoCfg，比较特殊，为了方便导表，逻辑碰撞体这块只提供一个Enum，在实际加载时使用它的派生类，根据Enum读取出不同的真实逻辑碰撞数据。</p><ul><li>  单位基础属性（基础血量、防御等）</li><li>  单位资源位置</li><li>  单位逻辑碰撞体类型（受击点高度 + 碰撞体大小、形状）</li></ul><h1 id="实现协作"><a href="#实现协作" class="headerlink" title="实现协作"></a>实现协作</h1><p>即想要结点编辑器、又想要表格式的批量填写。将他们协作起来需要多写一些代码，且他们的数据都必须来自同一套数据源——我采用Json数据源。</p><h2 id="Luban"><a href="#Luban" class="headerlink" title="Luban"></a>Luban</h2><p>由Luban提供2套类型：Editor专用的类型，用于和Json数据源交互；运行时使用的类型，也就是真实类型，用于和bytes数据源交互。</p><p>由Luban提供多种格式数据转换：2种Editor可视化面板中填写数据 =&gt; Editor专用Json类 =&gt; Json数据源；Json数据源 =&gt; bytes数据源；bytes数据源 =&gt; 填充运行时对象。</p><h2 id="Odin"><a href="#Odin" class="headerlink" title="Odin"></a>Odin</h2><p>实现在Unity中，表格式的批量填写配置数据。数据依赖于Json数据源，可视化面板需要单独写一套。</p><h2 id="xNode"><a href="#xNode" class="headerlink" title="xNode"></a>xNode</h2><p>实现在Unity中，结点式的树形填写配置数据。数据依赖于Json数据源，可视化面板需要单独写一套。</p><p>要点小记：</p><p>1.比如<code>List&lt;int&gt;</code>类型外键，实现结点连接。<br>2.多个不同类型的buff实现结点。<br>3.如何全遍历图，输出json。</p><h1 id="完全基于数据驱动的xNode连点图"><a href="#完全基于数据驱动的xNode连点图" class="headerlink" title="完全基于数据驱动的xNode连点图"></a>完全基于数据驱动的xNode连点图</h1><p>不依赖于SerializableObj的数据持久化内的数据，每次打开图，全部清空，只根据json数据来重新绘制整张图。这样就能保证多种编辑方式（普通编辑器、连点编辑器、excel）修改同一主体后，保持数据一致。</p><h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><p>需要人为保障准确的，只有Graph的命名，因为这代表着要读取数据的文件路径。按照统一风格标准来命名即可。</p><h2 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h2><ol><li>  根据命名去取对应路径下的json数据源文件，读取；</li><li>  获取依赖的其他json文件（比如skill下的buffList），读取；</li><li>  将所有取得的文件可视化成对应的Node；</li><li>  根据1中获取的信息，对图中Node进行连线。</li></ol><h2 id="未来计划"><a href="#未来计划" class="headerlink" title="未来计划"></a>未来计划</h2><p>一点是，xNode在这里的用途非常小，数据层已完全分离、存于硬盘，graph是打开绘制的也不依赖于SerializableObj；另一点是，xNode效率真的太低了，实时刷新造成结点一多就卡顿。</p><p><strong>所以其实应该基于odin（甚至直接脱离unity用wpf）自己写一套简单的数据可视化连点器</strong>，再去掉它的高频刷新。会比xNode实现轻便的多，画面板也更轻松。最后<strong>加上Timeline，行为树和状态机的模板</strong>，就可以复用了。</p><p><strong>另外，关于luban的使用方式上有一点改进</strong>。比如SKillCfg.BuffList并不需要以int[]的形式去写数据了，而是直接以BuffCfg[]的形式，因为luban是支持多态记录json的。不过由于luban和editor都是UnityMobaDemo搭建完技能系统后才引入的，本次作罢。</p><p>考虑以后采用的技术方案选择：</p><p>时间线编辑器：timline flux slate</p><p>可视化连点器：NodeGraphProcessor</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;从 技能配置可视化+纯业务 的角度，将原来的技能系统换个角度刨析一遍。&lt;/p&gt;
-&lt;h1 id=&quot;大体分类&quot;&gt;&lt;a href=&quot;#大体分类&quot; class=&quot;headerlink&quot; title=&quot;大体分类&quot;&gt;&lt;/a&gt;大体分类&lt;/h1&gt;&lt;p&gt;按照可配置的文件来分类，可分为以下五大</summary>
-      
-    
-    
-    
-    <category term="Unity" scheme="https://codingcodingk.github.io/categories/Unity/"/>
-    
-    <category term="Moba" scheme="https://codingcodingk.github.io/categories/Unity/Moba/"/>
-    
-    <category term="王者荣耀复刻项目" scheme="https://codingcodingk.github.io/categories/Unity/Moba/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80%E5%A4%8D%E5%88%BB%E9%A1%B9%E7%9B%AE/"/>
-    
-    
-    <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
-    
-    <category term="工程" scheme="https://codingcodingk.github.io/tags/%E5%B7%A5%E7%A8%8B/"/>
-    
-    <category term="Moba" scheme="https://codingcodingk.github.io/tags/Moba/"/>
     
   </entry>
   

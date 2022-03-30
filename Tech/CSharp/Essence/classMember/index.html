@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>C#精要 - 类内成员篇 | CodingCodingK Blog</title><meta name="keywords" content="技术,C#"><meta name="author" content="CodingCodingK"><meta name="copyright" content="CodingCodingK"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="类成员初始化顺序一般初始化顺序：   子类静态字段内联  子类静态构造  子类实例字段内联  父类静态字段内联  父类静态构造  父类实例字段内联  父类实例构造  子类实例构造  原则就是：先内联后构造；先静态后实例；先子类后父类（除了构造器）。 方法abstract抽象方法、virtual方法、隐式实现接口方法，它们本质上、在IL代码层中，都是virtual方法。 IL提供两种方式去调用方法：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#精要 - 类内成员篇">
+<meta property="og:url" content="https://codingcodingk.github.io/Tech/CSharp/Essence/classMember/index.html">
+<meta property="og:site_name" content="CodingCodingK Blog">
+<meta property="og:description" content="类成员初始化顺序一般初始化顺序：   子类静态字段内联  子类静态构造  子类实例字段内联  父类静态字段内联  父类静态构造  父类实例字段内联  父类实例构造  子类实例构造  原则就是：先内联后构造；先静态后实例；先子类后父类（除了构造器）。 方法abstract抽象方法、virtual方法、隐式实现接口方法，它们本质上、在IL代码层中，都是virtual方法。 IL提供两种方式去调用方法：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg">
+<meta property="article:published_time" content="2022-03-18T13:18:05.695Z">
+<meta property="article:modified_time" content="2022-03-18T13:18:05.695Z">
+<meta property="article:author" content="CodingCodingK">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="C#">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png"><link rel="canonical" href="https://codingcodingk.github.io/Tech/CSharp/Essence/classMember/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C#精要 - 类内成员篇',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-03-18 21:18:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/css/mine.css"><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="CodingCodingK Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">CodingCodingK Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">C#精要 - 类内成员篇</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-18T13:18:05.695Z" title="发表于 2022-03-18 21:18:05">2022-03-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-03-18T13:18:05.695Z" title="更新于 2022-03-18 21:18:05">2022-03-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/">CSharp</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/C-%E7%B2%BE%E8%A6%81/">C#精要</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="C#精要 - 类内成员篇"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="类成员初始化顺序"><a href="#类成员初始化顺序" class="headerlink" title="类成员初始化顺序"></a>类成员初始化顺序</h1><p>一般初始化顺序：</p>
+<ol>
+<li> 子类静态字段内联</li>
+<li> 子类静态构造</li>
+<li> 子类实例字段内联</li>
+<li> 父类静态字段内联</li>
+<li> 父类静态构造</li>
+<li> 父类实例字段内联</li>
+<li> 父类实例构造</li>
+<li> 子类实例构造</li>
+</ol>
+<p>原则就是：先内联后构造；先静态后实例；先子类后父类（除了构造器）。</p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p>abstract抽象方法、virtual方法、隐式实现接口方法，它们本质上、在IL代码层中，都是virtual方法。</p>
+<p>IL提供两种方式去调用方法：</p>
+<p>call：可用于调用实例方法、虚方法和静态方法。// 我个人测下来感觉只有静态方法是用call…</p>
+<p>callvirt：可用于调用实例方法、虚方法。过程会比call复杂一些，事前会check null，执行时也会去查虚函数表。</p>
+<h2 id="非虚方式调用-call"><a href="#非虚方式调用-call" class="headerlink" title="非虚方式调用 call"></a>非虚方式调用 call</h2><p>call 调用的，是编译时确定的类型，也就是申明类型。</p>
+<p>如果变量申明的类型没有对应的方法，就检查基类型来查找匹配方法。</p>
+<h2 id="虚方法调用-callvirt"><a href="#虚方法调用-callvirt" class="headerlink" title="虚方法调用 callvirt"></a>虚方法调用 callvirt</h2><p>callvirt 调用的，是运行时确定的类型，也就是变量指向对象的实际类型（new的类型）。</p>
+<p>上面说的是结果，但如果深究过程，在IL代码层的话，多态方法全部都是 callvirt 最初父类的同一个方法。</p>
+<p>c++版本 虚表、虚函数调用整体流程：</p>
+<p>1.编译器发现一个类中有虚函数时，便为该类<strong>生成虚函数表</strong>，虚表各表项为指向对应虚函数的指针。父类虚函数地址在前，子类在后，按照声明顺序。</p>
+<p>2.<strong>生成子类</strong>时，如果发现子类中函数重写了父类中的虚函数，则用子类虚函数的地址<strong>覆盖</strong>掉对应父类虚函数的地址。</p>
+<p>3.<strong>虚函数调用</strong>过程：</p>
+<p>查自己类型的虚函数表，找到对应位置的虚函数。</p>
+<p>​    有覆盖：该指针指向子类函数，调用子类的函数。</p>
+<p>​    无覆盖：调用父类自己的函数。</p>
+<p>4.每一个有虚函数的类都有一个虚函数表（V-Tablle），每个这些类的对象都会生成一个指向虚函数表的指针。</p>
+<p>c#版本 虚表、虚函数调用整体流程：</p>
+<p>网上很难找到c#版本的虚函数实现，全只有猜测。我自己整理了一下，目前理解是：</p>
+<p>可以确定的是，在IL代码层，多态方法全部都是 callvirt 最初父类的同一个方法。</p>
+<p>因此估计JIT是根据 <strong>推上栈的实际变量指向的对象 + callvirt最初父类的同一个方法</strong> 来获取偏移量、再根据偏移量确定具体调用方法，内部则可能和c++一样是用V-Table。</p>
+<p><strong>那么最终结论就是</strong>，每个带有虚函数的类型，都会有一张V表；他们的每个子类，也有自己的V表，起始布局和父类一致，如果override了就替换自己的V表的方法指针；这些子类在堆上的对象，都有一个指针指向子类类型的V表。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/li1914309758/article/details/79916414">文章推荐1</a>： <a target="_blank" rel="noopener" href="http://c.biancheng.net/view/267.html">文章推荐2</a></p>
+<h2 id="自己实现虚方法"><a href="#自己实现虚方法" class="headerlink" title="自己实现虚方法"></a>自己实现虚方法</h2><p>用静态方法就可以实现，将对象自己作为参数传入静态方法，然后根据其type来switch-case就可以简单实现一个。</p>
+<p>总的来说，虚方法这么复杂的内部机制就是为了实现多态。</p>
+<h1 id="字段"><a href="#字段" class="headerlink" title="字段"></a>字段</h1><p>常量，const关键字，是指值从不变化的符号，它的值必须能在编译时确定，最后会在元数据中嵌入。它总是隐式static的。</p>
+<p>字段，是一种数据成员，其中容纳了一个值类型的实例或者对一个引用类型的引用。</p>
+<table>
+<thead>
+<tr>
+<th>C#关键字</th>
+<th>含义</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>默认</td>
+<td>实例字段</td>
+<td>该字段只与对象的一个实例关联，而不是与类型本身关联</td>
+</tr>
+<tr>
+<td>static</td>
+<td>静态字段</td>
+<td>该字段是类型状态的一部分，而不是对象状态的一部分</td>
+</tr>
+<tr>
+<td><strong>readonly</strong></td>
+<td>只读字段</td>
+<td><strong>该字段只能由一个构造器方法中的代码写入</strong>（但是可以通过反射修改）</td>
+</tr>
+</tbody></table>
+<h1 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h1><p>属性的本质是方法（get、set访问器），是对字段的封装。C#提供<code>&#123;get;set;&#125;</code>语法糖，编译时自动实现创建一个字段。</p>
+<p>无参属性：我们常规说的属性。</p>
+<p>有参属性：get、set访问器接受一个或多个参数，就叫有参属性。有参属性一般用处是索引器，索引器的实现是通过对<code>this[]</code>操作符进行重载。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Students</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">string</span>[] name = <span class="keyword">new</span> <span class="built_in">string</span>[<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//索引器必须以this关键字定义，其实这个this就是类实例化之后的对象</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> <span class="keyword">this</span>[<span class="built_in">int</span> index]</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123; <span class="keyword">return</span> name[index]; &#125;</span><br><span class="line">        <span class="keyword">set</span> &#123; name[index] = <span class="keyword">value</span>; &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line">...</span><br><span class="line">Console.WriteLine(Students[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+
+<h1 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h1><p>具体见《C#精要 - 委托与事件篇》。</p>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><p>避免拆装箱的最佳选择。最好的例子就是 ArrayList ( Object[ ] ) =&gt; List&lt; T &gt;；Action&lt; T &gt; (T arg)、Func&lt;in T, out TResult&gt; (T arg)。</p>
+<p>它可以用where约束。</p>
+<ul>
+<li>  **逆变量(contravariant)**，意味着泛型类型参数可以从一个类更改为它的某个派生类。C#中用<code>in</code>来标记，只能出现在输入位置，比如入参。</li>
+<li>  **协变量(covariant)**，意味着泛型类型参数可以从一个类更改为它的某个基类。C#中用<code>out</code>来标记，只能出现在输出位置，比如返回值。</li>
+</ul>
+<p>这两个概念看着挺复杂，其实就是 Func&lt;in T, out TResult&gt; (T arg)。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">CodingCodingK</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://codingcodingk.github.io/Tech/CSharp/Essence/classMember/">https://codingcodingk.github.io/Tech/CSharp/Essence/classMember/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://CodingCodingK.github.io" target="_blank">CodingCodingK Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF/">技术</a><a class="post-meta__tags" href="/tags/C/">C#</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Tech/CSharp/Essence/async/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">C#精要 - 异步篇</div></div></a></div><div class="next-post pull-right"><a href="/Tech/Game/tools/CodingKMath/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">工具篇：定点数运算数学库</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp1/" title="CLR Via C#个人笔记1 - CLR基础"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-29</div><div class="title">CLR Via C#个人笔记1 - CLR基础</div></div></a></div><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp2/" title="CLR Via C#个人笔记2 - 类与分配"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-06</div><div class="title">CLR Via C#个人笔记2 - 类与分配</div></div></a></div><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp6/" title="CLR Via C#个人笔记6 - 核心机制"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-26</div><div class="title">CLR Via C#个人笔记6 - 核心机制</div></div></a></div><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp4/" title="CLR Via C#个人笔记4 - 类型和成员基础"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-20</div><div class="title">CLR Via C#个人笔记4 - 类型和成员基础</div></div></a></div><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp3/" title="CLR Via C#个人笔记3 - 基元类型、引用类型和值类型"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-13</div><div class="title">CLR Via C#个人笔记3 - 基元类型、引用类型和值类型</div></div></a></div><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp5/" title="CLR Via C#个人笔记5 - 基本类型"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">CLR Via C#个人笔记5 - 基本类型</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CodingCodingK</div><div class="author-info__description">一个正在成为游戏开发者的人</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CodingCodingK"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CodingCodingK" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">2022年的目标是：ET框架 + 烟雨Moba | Lua程序设计 + C++Primer</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B1%BB%E6%88%90%E5%91%98%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">类成员初始化顺序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E8%99%9A%E6%96%B9%E5%BC%8F%E8%B0%83%E7%94%A8-call"><span class="toc-number">2.1.</span> <span class="toc-text">非虚方式调用 call</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8-callvirt"><span class="toc-number">2.2.</span> <span class="toc-text">虚方法调用 callvirt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%B7%B1%E5%AE%9E%E7%8E%B0%E8%99%9A%E6%96%B9%E6%B3%95"><span class="toc-number">2.3.</span> <span class="toc-text">自己实现虚方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E6%AE%B5"><span class="toc-number">3.</span> <span class="toc-text">字段</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7"><span class="toc-number">4.</span> <span class="toc-text">属性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B"><span class="toc-number">6.</span> <span class="toc-text">泛型</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Tech/Game/UI/ugui_5/" title="UGUI学习 - Graphic"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UGUI学习 - Graphic"/></a><div class="content"><a class="title" href="/Tech/Game/UI/ugui_5/" title="UGUI学习 - Graphic">UGUI学习 - Graphic</a><time datetime="2022-03-28T14:28:54.982Z" title="发表于 2022-03-28 22:28:54">2022-03-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Game/UI/ugui_4/" title="UGUI学习 - LayoutSystem布局系统"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UGUI学习 - LayoutSystem布局系统"/></a><div class="content"><a class="title" href="/Tech/Game/UI/ugui_4/" title="UGUI学习 - LayoutSystem布局系统">UGUI学习 - LayoutSystem布局系统</a><time datetime="2022-03-25T12:02:18.563Z" title="发表于 2022-03-25 20:02:18">2022-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Game/UI/ugui_3/" title="UGUI学习 - 画布刷新系统"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UGUI学习 - 画布刷新系统"/></a><div class="content"><a class="title" href="/Tech/Game/UI/ugui_3/" title="UGUI学习 - 画布刷新系统">UGUI学习 - 画布刷新系统</a><time datetime="2022-03-25T12:02:18.562Z" title="发表于 2022-03-25 20:02:18">2022-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Intro/display/" title="王者荣耀复刻项目 展示"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/hok.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="王者荣耀复刻项目 展示"/></a><div class="content"><a class="title" href="/Intro/display/" title="王者荣耀复刻项目 展示">王者荣耀复刻项目 展示</a><time datetime="2022-03-25T12:02:18.559Z" title="发表于 2022-03-25 20:02:18">2022-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Game/tools/serialize/" title="什么叫“二进制”配置方案？"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="什么叫“二进制”配置方案？"/></a><div class="content"><a class="title" href="/Tech/Game/tools/serialize/" title="什么叫“二进制”配置方案？">什么叫“二进制”配置方案？</a><time datetime="2022-03-18T13:18:05.707Z" title="发表于 2022-03-18 21:18:05">2022-03-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> CodingCodingK</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/chocolate.js"></script><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/cursor.js"></script><script src="/live2d-widget/autoload.js"></script><script src="/js/mine.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?CodingCodingK";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="CodingCodingK";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><!-- hexo injector body_end end --></body></html>

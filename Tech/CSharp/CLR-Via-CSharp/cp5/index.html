@@ -1,0 +1,872 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CLR Via C#个人笔记5 - 基本类型 | CodingCodingK Blog</title><meta name="keywords" content="技术,C#,可访问性,基本类型"><meta name="author" content="CodingCodingK"><meta name="copyright" content="CodingCodingK"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="大章14：字符、字符串和文本处理字符Char类型System.Char  Char类型，在.NET中总是表示成16位Unicode代码值。 Char类型，提供2个静态只读字段：MinValue &#x3D; \0 和 MaxValue &#x3D; \uffff。 Char类型，提供GetUnicodeCategory方法，它返回枚举类，表明该字符是Unicode标准定义的控制字符、货币符号、小写字母、大写字母、标点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CLR Via C#个人笔记5 - 基本类型">
+<meta property="og:url" content="https://codingcodingk.github.io/Tech/CSharp/CLR-Via-CSharp/cp5/index.html">
+<meta property="og:site_name" content="CodingCodingK Blog">
+<meta property="og:description" content="大章14：字符、字符串和文本处理字符Char类型System.Char  Char类型，在.NET中总是表示成16位Unicode代码值。 Char类型，提供2个静态只读字段：MinValue &#x3D; \0 和 MaxValue &#x3D; \uffff。 Char类型，提供GetUnicodeCategory方法，它返回枚举类，表明该字符是Unicode标准定义的控制字符、货币符号、小写字母、大写字母、标点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png">
+<meta property="article:published_time" content="2021-12-18T06:56:08.414Z">
+<meta property="article:modified_time" content="2021-12-26T06:13:43.700Z">
+<meta property="article:author" content="CodingCodingK">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content="可访问性">
+<meta property="article:tag" content="基本类型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png"><link rel="canonical" href="https://codingcodingk.github.io/Tech/CSharp/CLR-Via-CSharp/cp5/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CLR Via C#个人笔记5 - 基本类型',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-26 14:13:43'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/css/mine.css"><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="CodingCodingK Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">CodingCodingK Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CLR Via C#个人笔记5 - 基本类型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-18T06:56:08.414Z" title="发表于 2021-12-18 14:56:08">2021-12-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-26T06:13:43.700Z" title="更新于 2021-12-26 14:13:43">2021-12-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/">CSharp</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/CLR-via-C/">CLR via C#</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CSharp/CLR-via-C/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/">第三章 基本类型</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CLR Via C#个人笔记5 - 基本类型"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="大章14：字符、字符串和文本处理"><a href="#大章14：字符、字符串和文本处理" class="headerlink" title="大章14：字符、字符串和文本处理"></a><center>大章14：字符、字符串和文本处理</center></h1><h3 id="字符Char类型"><a href="#字符Char类型" class="headerlink" title="字符Char类型"></a>字符Char类型</h3><p><strong>System.Char</strong></p>
+<ol>
+<li>Char类型，在.NET中总是表示成16位Unicode代码值。</li>
+<li>Char类型，提供2个静态只读字段：<code>MinValue = \0</code> 和 <code>MaxValue = \uffff</code>。</li>
+<li>Char类型，提供GetUnicodeCategory方法，它返回枚举类，表明该字符是Unicode标准定义的控制字符、货币符号、小写字母、大写字母、标点符号、数学符号还是其它字符。</li>
+<li>Char类型，在使用ToLower和ToUpper方法时，会需要使用到语言文化来转换，语言文化通过<code>System.Threading.Thread.CurrentCulture静态方法</code>获取。</li>
+</ol>
+<p><strong>Char转换数值类型</strong></p>
+<ol>
+<li>强转，效率最高。</li>
+<li>用Convert类的静态方法。</li>
+<li>用IConvertible接口，效率最低，因为要装箱。</li>
+</ol>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Main()&#123;</span><br><span class="line">	<span class="built_in">char</span> c;</span><br><span class="line">	<span class="built_in">int</span> n;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 1.强转</span></span><br><span class="line">	c = (Char) <span class="number">65</span>;</span><br><span class="line">	n = (<span class="built_in">int</span>) c;</span><br><span class="line">	Console.WriteLine(c);<span class="comment">// output:&quot;A&quot;</span></span><br><span class="line">	Console.WriteLine(n);<span class="comment">// output:&quot;65&quot;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 2.Convert类</span></span><br><span class="line">	c = Convert.ToChar(<span class="number">65</span>);</span><br><span class="line">	n = Convert.ToInt32(c);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 3.IConvertible</span></span><br><span class="line">	c = ((IConvertible) <span class="number">65</span>).ToChar(<span class="literal">null</span>);</span><br><span class="line">	n = ((IConvertible) c).ToInt32(<span class="literal">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>StringInfo处理字符</strong></p>
+<p>可以用StringInfo类提供的方法来实现处理字符、获取字符长度与文本元素等，具体不说了。</p>
+<p>值得了解的是一个概念：Char实际代表一个16位Unicode码值，但是该值不一定就等于一个抽象Unicode字符。比如有的抽象Unicode字符是2个码值的组合，U+0625和U+0650字符组合起来构成一个抽象字符或者文本元素。</p>
+<p>上述提到的一些Unicode抽象字符或者文本元素要求用2个16位值表示，第一个叫“高位代理项(high surrogate)”，第一个叫“低位代理项(low surrogate)”。两个代理项，Unicode可以表示100万以上不同的字符。</p>
+<h3 id="字符串String类型⭐"><a href="#字符串String类型⭐" class="headerlink" title="字符串String类型⭐"></a>字符串String类型⭐</h3><p><strong>System.String</strong></p>
+<ol>
+<li>String代表一个不可变(immutable)的顺序字符集。</li>
+<li>String直接继承自Object，所以是引用类型、总在堆上。</li>
+</ol>
+<p><strong>构造String</strong></p>
+<p>string虽然是引用类型，却不可以用new、只能用简化过的语法：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="string">&quot;Hi there.&quot;</span>;</span><br><span class="line"><span class="comment">// =&gt;IL Code</span></span><br><span class="line">IL_0000: ldstr <span class="string">&quot;Hi there.&quot;</span></span><br><span class="line">IL_0005: stloc<span class="number">.0</span></span><br><span class="line">IL_0006: ldloc<span class="number">.0</span></span><br></pre></td></tr></table></figure>
+
+<p>可见，String构造新实例用的是ldstr(load string)指令 而不是类通用的newobj指令，来处理从元数据获得的字面值(literal) “Hi there.”字符串。</p>
+<p><strong>逐字字符串@</strong></p>
+<p>推出这个是因为C#编译器会对String的实例实行转义机制，在使用比如输出时，会把诸如<code>\r \n</code>进行语义转换。</p>
+<p>逐字字符串(verbatim string)，用<code>@关键字</code>。抛弃转义，所有字符都被视为字符串的一部分。</p>
+<p><strong>字符串是不可变的⭐</strong></p>
+<p>字符串是不可变(immutable)的，也就是说一经创建就不能更改任何字符。</p>
+<ol>
+<li>对字符串的变更操作（比如<code>Substring()</code>）会返回新的字符串。因为它们都在堆上，所以频繁对字符串进行处理会影响GC。执行大量字符串操作更推荐用<code>StringBuilder类</code>。</li>
+<li>不可变所以不会发生线程同步问题。</li>
+<li>CLR会将”字符串留用“，多个String实例共享一个String内容。</li>
+</ol>
+<p><strong>字符串留用⭐</strong></p>
+<p>字符串一经创建不可变更，所以CLR为了提升性能推出了字符串留用(string interning)机制。</p>
+<p>CLR在初始时会创建一个空的内部哈希表，key是字符串，value是对托管堆中String对象的引用。String类提供了2个方法来访问这个内部哈希表：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 把入参str作为哈希值去找内部哈希表，如果存在则返回引用，如果不存在则创建入哈希表并返回引用</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">Intern</span>(<span class="params">String str</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 把入参str作为哈希值去找内部哈希表，如果存在则返回引用，如果不存在则返回null,不会添加到哈希表</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">IsInterned</span>(<span class="params">String str</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>注意了，这种字符串留用机制录入的字符串，因为哈希表引用着String，所以永远不会被GC；一般的新建字符串方法，会被GC。</p>
+<p><strong>重点来了，那么，对于我们日常的字符串写法<code>var s = &quot;Hello&quot;;</code>会进入留用哈希表吗？答案是不一定，但大概率会。</strong></p>
+<p>书中说了，如果<font color="red">元数据中</font>存在“字面值”字符串定义，C#编译器会在加载AppDomain时对这些字面值进行留用。</p>
+<p>在CLR4.5以前的版本中，由于<code>System.Runtime.CompilerServices.CompilationRelaxationsArrtibute</code>和<code>System.Runtime.CompilerServices.NoStringInterning</code>两个标志的标记，CLR会不留用。</p>
+<p>目前的CLR版本中，我测试了，默认是留用的。但是注意了，留用只限于元数据中存在的、编译时就可确定的那些字面值。运行时确定的是不行的。下面展示：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 测试</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="comment">// 1.元数据内能确定的字面值，目前CLR版本留用</span></span><br><span class="line">	String s1 = <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">	String s2 = <span class="string">&quot;Hell&quot;</span> + <span class="string">&quot;o&quot;</span>;</span><br><span class="line">	String b1 = String.IsInterned(s1); <span class="comment">// 返回&quot;Hello&quot;！目前版本留用！</span></span><br><span class="line">	<span class="keyword">var</span> eq1 = Object.ReferenceEquals(s1, s2); <span class="comment">// 返回true！堆中目标只有一个。</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2.元数据内不能确定的字面值，比如需要运行时决定，一定不留用</span></span><br><span class="line">	String s3 = <span class="string">&quot;Hell&quot;</span> + <span class="string">&quot;O&quot;</span>.ToLower();</span><br><span class="line">	<span class="keyword">var</span> eq2 = Object.ReferenceEquals(s1, s3); <span class="comment">// 返回false！堆中目标一定不同！</span></span><br><span class="line">	String s4 = s3.Substring(<span class="number">0</span>, <span class="number">2</span>);</span><br><span class="line">	<span class="keyword">var</span> chaos = String.IsInterned(s4); <span class="comment">// 返回null！一定不留用！</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 3.正确可靠的留用机制使用方式：显式调用Intern</span></span><br><span class="line">	String s5 = String.Intern(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">	String s6 = String.Intern(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">	<span class="keyword">var</span> eq3 = Object.ReferenceEquals(s5, s6); <span class="comment">// 返回true！一定留用！堆中目标只有一个。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，怎么说呢，这块概念很重要，便于去理解C#留用机制的实现。但是真写代码是不会用这么麻烦的<code>String.Intern</code>写法的。</p>
+<p><strong>字符串池</strong></p>
+<p>字符串留用机制之外的另一个优化。</p>
+<p>CLR处理字面值字符串并嵌入元数据，同一个字符串在源代码中多次出现，把它们都嵌入元数据会使生成的文件无谓地增大。</p>
+<p>所以只在元数据中嵌入一次该字符串，剩下的全部是持有那个字符串的实例。</p>
+<p><strong>比较字符串（语言文化）</strong></p>
+<p>了解即可。</p>
+<p>用来比较的<code>String.Equals();String.Compare()</code>等的重载，一般都有一个<font color="red">StringComparison枚举类型</font>或者<font color="red">CompareOptions枚举类型</font>参数，这2个枚举类型跟语言文化有关，可以改变比较的思路。下面进行展示：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// StringComparison枚举类型</span></span><br><span class="line">[<span class="meta">Flags</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="built_in">enum</span> StringComparison &#123;</span><br><span class="line">	CurrentCulture = <span class="number">0</span>, <span class="comment">// 使用语言文化</span></span><br><span class="line">	CurrentCultureIgnoreCase = <span class="number">1</span>, <span class="comment">// 使用语言文化</span></span><br><span class="line">	InvariantCulture = <span class="number">2</span>,</span><br><span class="line">	InvariantCultureIgnoreCase = <span class="number">3</span>,</span><br><span class="line">	Ordinal = <span class="number">4</span>, <span class="comment">// 忽略语言文化</span></span><br><span class="line">	OrdinalIgnoreCase = <span class="number">5</span>, <span class="comment">// 忽略语言文化</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// CompareOptions枚举类型</span></span><br><span class="line">[<span class="meta">Flags</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="built_in">enum</span> CompareOptions &#123;</span><br><span class="line">	None = <span class="number">0</span>,</span><br><span class="line">	IgnoreCase = <span class="number">1</span>,</span><br><span class="line">	IgnoreNonSpace = <span class="number">2</span>,</span><br><span class="line">	IgnoreSymbols = <span class="number">4</span>,</span><br><span class="line">	IgnoreKanaType = <span class="number">8</span>,</span><br><span class="line">	Ordinal = <span class="number">0x40000000</span>, <span class="comment">// 忽略指定语言文化</span></span><br><span class="line">	OrdinalIgnoreCase = <span class="number">0x10000000</span>, <span class="comment">// 忽略指定语言文化</span></span><br><span class="line">	StringSort = <span class="number">0x20000000</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果进行一些url、值得比较，不需要语言文化，那就选择忽略语言文化。</p>
+<p>下面讲一下语言文化，.NET把语言文化放在<code>System.Globalization.CultureInfo类</code>表示一个”语言/国家“对，例如”en-US“。</p>
+<p>在CLR中，每个线程都关联了2个特殊属性，每个属性都引用一个<font color="red">CultureInfo对象</font>。它们是：</p>
+<ul>
+<li>CurrentUICulture属性：在GUI或者Web窗体等等程序中，UI元素的显示资源用的就是它。</li>
+<li>CurrentCulture属性：不适合CurrentUICulture属性的场合就用它，例如数字和日期格式化、字符串比较。</li>
+</ul>
+<p>在许多计算机上，线程的<font color="red">CurrentUICulture属性</font> 与 <font color="red">CurrentCulture属性</font>都被设为同一个CultureInfo对象。但是也可以不同。</p>
+<p>下面根据语言文化进行比较的示例：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">string</span> s1 = <span class="string">&quot;Strasse&quot;</span>;</span><br><span class="line">	<span class="built_in">string</span> s2 = <span class="string">&quot;Straβe&quot;</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// eq1 = false</span></span><br><span class="line">	<span class="built_in">bool</span> eq1 = String.Compare(s1, s2, StringComparison.Ordinal) == <span class="number">0</span>;</span><br><span class="line">	<span class="comment">// StringComparison 一个枚举值，用于指定比较中要使用的规则</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// eq2 = true</span></span><br><span class="line">	CultureInfo ci = <span class="keyword">new</span> CultureInfo(<span class="string">&quot;de-DE&quot;</span>);</span><br><span class="line">	<span class="built_in">bool</span> eq2 = String.Compare(s1, s2, <span class="literal">true</span>, ci) == <span class="number">0</span>;</span><br><span class="line">	<span class="comment">// Compare(String, String, Boolean, CultureInfo)</span></span><br><span class="line">	<span class="comment">// Boolean 是否在比较过程中忽略大小写</span></span><br><span class="line">	<span class="comment">// CultureInfo 一个对象，提供区域性特定的比较信息</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="高效率构造字符串StringBuilder类型"><a href="#高效率构造字符串StringBuilder类型" class="headerlink" title="高效率构造字符串StringBuilder类型"></a>高效率构造字符串StringBuilder类型</h3><p><strong>StringBuilder是什么</strong></p>
+<p>StringBuilder代表可变(mutable)字符串。也就是说StringBuilder的大多数成员都能更改字符数组的内容，同时不会造成在托管堆上分配新对象。<br>只有以下2种情况会分配新对象：</p>
+<ul>
+<li>动态构造字符串，其长度超过了设置的“容量”。</li>
+<li>调用StringBuilder的ToString方法。</li>
+</ul>
+<p><strong>StringBuilder是怎么做的</strong></p>
+<ol>
+<li><p>StringBuilder对象包含一个字段，这个字段引用了由Char结构构成的数组。可以利用StringBuilder的各个成员来操纵该字符数组，高效缩短字符串或更改字符串中的字符，而不是和String一样只能新建。</p>
+</li>
+<li><p>如果字符串变大，超过了事先分配的字符数组大小，StringBuilder会自动分配一个新的、更大的数组，复制字符并开始使用新数组。前一个数组被GC。</p>
+</li>
+<li><p>使用ToString转换为String对象。</p>
+</li>
+</ol>
+<p><strong>StringBuilder构造概念</strong></p>
+<p>StringBuilder就是个普通的类，不会把他当作基元类型。</p>
+<p>下面介绍一些StringBuilder的核心元素：</p>
+<p>1.<strong>最大容量</strong>：一个Int32值，指定了能放到字符串中的最大字符数。默认值是Int.MaxValue（约20亿）。<br>创建完之后，这个最大容量就不能修改了。</p>
+<p>2.<strong>容量</strong>：一个Int32值，指定了由StringBuilder维护的字符数组的长度。默认为16，可以在构造时自己设置。<br><font color="red">向字符数组追加字符时，StringBuilder会检测数组会不会超过设定的容量。如果会，StringBuilder会自动倍增容量字段，用新容量来分配新数组，并将原始数组的字符复制到新数组中。随后，原始数组可以被GC。</font>尽量避免分配不合适导致的动态扩容，会影响性能。</p>
+<p>3.<strong>字符数组</strong>：一个由Char结构构成的数组，负责维护“字符串”的字符内容。字符数可用StringBuilder的Length属性来获取，它总是 &lt;= “容量”、“最大容量”。</p>
+<p>4.<strong>构造器</strong>：可以在构造StringBuilder时传递一个String来初始化字符数组。不传递字符串，数组刚开始就不会包含任何字符，Length=0。</p>
+<p><strong>StringBuilder构造实际</strong></p>
+<p>上面介绍了核心概念，下面讲一下StringBuilder核心、常用的成员：</p>
+<table>
+<thead>
+<tr>
+<th>成员名称</th>
+<th>成员类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MaxCapacity</td>
+<td>只读属性</td>
+<td>返回字符数组能容纳的最大字符数(最大容量)。</td>
+</tr>
+<tr>
+<td>Capacity</td>
+<td>可读可写属性</td>
+<td>字符数组的长度(容量)。比MaxCapacity大会抛错。</td>
+</tr>
+<tr>
+<td>EnsureCapacity(Int32)</td>
+<td>方法</td>
+<td>如果传给方法的值大于当前容量，当前容量就会自动增大；如果小于当前容量，就不做。</td>
+</tr>
+<tr>
+<td>Length</td>
+<td>可读可写属性</td>
+<td>存储着的字符数组的实际长度(使用)。设置为0就会重置StringBuilder为空字符串。</td>
+</tr>
+<tr>
+<td>Chars[]</td>
+<td>可读可写索引器属性</td>
+<td>用于操作指定索引位置的字符。</td>
+</tr>
+<tr>
+<td>ToString</td>
+<td>方法</td>
+<td>返回代表StringBuilder的字符数组的一个String。</td>
+</tr>
+<tr>
+<td>Equals</td>
+<td>方法</td>
+<td>只有2个StringBuilder对象具有相同的 最大容量、字符数组容量和字符内容才返回true。</td>
+</tr>
+<tr>
+<td>CopyTo</td>
+<td>方法</td>
+<td>将StringBuilder的字符内容的一个子集复制到一个Char数组中。</td>
+</tr>
+<tr>
+<td>Append、Insert等插入方法</td>
+<td>方法</td>
+<td>向字符数组中插入一个对象。如由必要，数组会进行扩容。</td>
+</tr>
+</tbody></table>
+<p>个人觉得，主要就是看MaxCapacity、Capacity、Length这三个容量相关的核心属性，以及EnsureCapacity(Int32)方法的机制。</p>
+<h3 id="ToString方法"><a href="#ToString方法" class="headerlink" title="ToString方法"></a>ToString方法</h3><p><strong>默认实现</strong></p>
+<p>面对对象理念下，所有类型都有责任提供转换为字符串表示的方法。</p>
+<p>System.Object提供了一个public、virtual的ToString默认实现，它只返回对象所属类型的全名。</p>
+<p>C#的许多核心类型（Byte、int、uint、double等）都进行了ToString方法重写。</p>
+<p><strong>IFormattable接口</strong></p>
+<p>用于指定 格式(比如x进制、日期) 和 语言文化：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IFormattable</span> &#123;</span><br><span class="line">	<span class="function">String <span class="title">ToString</span>(<span class="params">String format, System.IFormatProvider formatProvider</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所有基元类型、所有枚举类型都定义或自动实现了IFormattable接口。</p>
+<p>介绍下这个签名的2个参数，</p>
+<ol>
+<li>format，告诉方法如何格式化对象。比如DateTime类型支持用“d”表示短日期、“Y”表示年等。</li>
+<li>formatProvider，提供具体文化信息。可以传null，默认调用线程关联的语言文化信息。System.IFormatProvider实现的类型不多，CultureInfo算一个。</li>
+</ol>
+<p><strong>String.Format方法</strong></p>
+<p>就是常用的format方法，在内部Format方法会调用每个对象的ToString方法来获取对象的字符串表示，再依次拼接。<br>StringBuilder.AppendFormat方法也差不多。</p>
+<p>当然，每个对象都要调用ToString意味着他们都要使用他们的常规格式和调用线程的语言文化来格式化，但是你可以像下面这样指定：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String s = String.Format(<span class="string">&quot;On &#123;0:D&#125;,&#123;1&#125; is &#123;2:E&#125; years old.&quot;</span>,</span><br><span class="line"><span class="keyword">new</span> DateTime(<span class="number">2012</span>,<span class="number">4</span>,<span class="number">22</span>,<span class="number">14</span>,<span class="number">35</span>,<span class="number">5</span>), <span class="string">&quot;Aidan&quot;</span>, <span class="number">9</span>);</span><br><span class="line">Console.WriteLine(e);</span><br><span class="line"><span class="comment">// output:</span></span><br><span class="line"><span class="comment">// On SUnday,April 22,2012,Aidan is 9.000000E+000 years old.</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>定制格式化器</strong></p>
+<p>可以通过实现<code>ICustomFormatter接口</code>和<code>IFormatProvider接口</code>实现自定义StringBuilder的AppendFormat方法的行为。它将不再为每个对象调用ToString，而是调用定制的方法。</p>
+<p>具体看书，提供一下调用。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Main &#123;</span><br><span class="line">	StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">	sb.AppendFormat(<span class="keyword">new</span> BoldInt32s(), <span class="string">&quot;&#123;0&#125; &#123;1&#125; &#123;2:M&#125;&quot;</span>, <span class="string">&quot;Jeff&quot;</span>, <span class="number">123</span>, DateTime.Now);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">BoldInt32s</span> : <span class="title">IFormatProvider</span>, <span class="title">ICustomFormatter</span></span><br><span class="line">&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>解析字符串获取对象：Parse</strong></p>
+<p>能解析字符串的任何类型都提供了公共静态方法Parse。它们如下形式：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// String解析为Int32</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Int32 <span class="title">Parse</span>(<span class="params">String s, NumberStyle style, IFormatProvider provider</span>)；</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">// 列举几个解析方法</span></span></span><br><span class="line"><span class="function">NumberStyle</span> &#123;</span><br><span class="line">	None, <span class="comment">// 无特殊</span></span><br><span class="line">	AllowLeadingWhite, <span class="comment">// 解析时跳过最靠前的空行</span></span><br><span class="line">	HexNumber, <span class="comment">// 解析十六进制数</span></span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="编码解码：字符和字节的互转"><a href="#编码解码：字符和字节的互转" class="headerlink" title="编码解码：字符和字节的互转"></a>编码解码：字符和字节的互转</h3><p><strong>不同的字节码</strong></p>
+<p>只说CLR常见的2个：</p>
+<ul>
+<li>UTF-16：每个16位字符编码成2个字节，又称作“Unicode编码”。</li>
+<li>UTF-8：将部分字符编码成1 or 2 or 3 or 4个字节。值在0x0080下用1个字节，适合美国语言；值在0x0080~0x07FF用2个字节，适合中东语言；值在0x07FF以用3个字节，适合东亚语言；代理项对(surrogate pair)表示4个字节。</li>
+</ul>
+<p>其他的诸如UTF-7、UTF-32、ASCII之类的就不展开了。</p>
+<p><strong>编码解码</strong></p>
+<p>用<code>System.IO.BinaryWriter 或者 System.IO.StreamWriter类型</code>将字符串发送给文件或网络流时，通常要进行编码；<br>用<code>System.IO.BinaryReader 或者 System.IO.StreamReader类型</code>从文件或网络流读取字符串时，通常要进行解码。<br>不显式指定一种编码方案，所有这些类型都默认使用UTF-8。</p>
+<p><strong>Sytem.Text.Encoding</strong></p>
+<p>要编码或解码一组字符时，应获取从Sytem.Text.Encoding派生的一个类的实例。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">string</span> s = <span class="string">&quot;Hi there.&quot;</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 1.应获取从Sytem.Text.Encoding派生的一个类的实例</span></span><br><span class="line">	Encoding encodingUTF8 = Encoding.UTF8;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 2.将字符串 编码 成字节数组</span></span><br><span class="line">	Byte[] encodedBytes = encodingUTF8.GetBytes(s);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 3.将字节数组 解码 回字符串</span></span><br><span class="line">	<span class="built_in">string</span> decodedString = encodingUTF8.GetString(encodedBytes);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 输出看结果</span></span><br><span class="line">	Console.WriteLine(encodedBytes);</span><br><span class="line">	Console.WriteLine(decodedString);</span><br><span class="line">	<span class="comment">// output:</span></span><br><span class="line">	<span class="comment">// 48-69-20-74-68-65-72-65-2E</span></span><br><span class="line">	<span class="comment">// Hi there.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>字节流</strong></p>
+<p>字节流通常以<strong>数据块(data chunk)</strong>的形式传输。</p>
+<p>不能以常规方法解码，假设要通过<code>System.Net.Sockets.NetworkStream</code>来读取UTF-16字符串，可能从流中先读取5个字节，再读取7个字节。如果使用UTF-16的Encoding来解码，那么第一次GetString就只能正确解码2个字，第二次GetString就只能正确解码3个字，那样数据就损坏了。</p>
+<p>字节块正确的解码方法是：</p>
+<ol>
+<li>获取一个Encoding派生对象，再调用其GetDecoder方法</li>
+<li>方法返回对一个新构造对象的引用，该对象的类型从System.Text.Decoder类派生。</li>
+<li>执行Decoder对象的<strong>GetChars</strong>或者<strong>GetCharCount</strong>方法：它会尽可能多地解码字节数组，假如字节数组包含的字节不足以完成一个字符，剩余的字节会保存到Decoder对象内部。下次再调用其中一个方法时，Decoder对象会利用之前剩余的字节再加上传给它地新字节数组进行解码。</li>
+</ol>
+<p>上面提到的，<br>GetChars：将一个字节序列解码为一组字符。<br>GetCharCount：计算对一个字节序列进行解码所产生的字符数，不实际进行解码。</p>
+<h3 id="安全字符串SecureString"><a href="#安全字符串SecureString" class="headerlink" title="安全字符串SecureString"></a>安全字符串SecureString</h3><p><strong>System.Security.SecureString</strong></p>
+<p>就是说String对象可能在GC之前，被非托管代码操作或者执行unsafe方法，导致String对象的使用内存无法被重用，导致String一直在进程内存里逗留着。万一这个String式机密数据，那就会泄露。</p>
+<p>为了解决上述问题，推出了<code>System.String,System.Security.SecureString类型</code>。</p>
+<p>SecureString类型的字符串是加密的。会为它分配一块非托管内存块，为了逃避GC。<br>它也有AppendChar、InsertAt、RemoveAt这几个方法，便于增删改查，但是它们都是通过解密后处理再加密实现的。</p>
+<p>访问它的话，需要用unsafe方法，因为要访问到非托管内存。</p>
+<h1 id="大章15：枚举类型和位标志"><a href="#大章15：枚举类型和位标志" class="headerlink" title="大章15：枚举类型和位标志"></a><center>大章15：枚举类型和位标志</center></h1><h3 id="枚举类型"><a href="#枚举类型" class="headerlink" title="枚举类型"></a>枚举类型</h3><p><strong>枚举类型(enumerated type)是值类型</strong></p>
+<p>枚举类型都从System.Enum派生，System.Enum从System.ValueType派生，所以枚举类型是值类型，会有装箱拆箱发生，但是不能定义定义任何方法、属性或事件。</p>
+<p>另外，枚举类型也是基元类型。</p>
+<p><strong>枚举类型内部构造</strong></p>
+<p>比如我们这么定义一个枚举类型：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">enum</span> Color &#123;</span><br><span class="line">	White,</span><br><span class="line">	Red,</span><br><span class="line">	Blue,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>C#编译器会这么看待它（不是真的生成这样的代码，不过效果相同）：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">struct</span> Color : System.Enum &#123;</span><br><span class="line">	<span class="comment">// 内部的枚举就是一些public常量字段，可被反射调用</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">const</span> Color White = (Color)<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">const</span> Color Red = (Color)<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">const</span> Color Blue = (Color)<span class="number">2</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 公共实例字段，无法通过代码引用引用，包含Color变量的值</span></span><br><span class="line">	<span class="keyword">public</span> Int32 value__;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>枚举类型的值</strong></p>
+<p>C#枚举类型的值默认是int类型的。它还可以是byte、sbyte、short、ushort、int、uint、long、ulong。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 值定义成byte类型</span></span><br><span class="line"><span class="built_in">enum</span> Color : <span class="built_in">byte</span> &#123;</span><br><span class="line">	White,</span><br><span class="line">	Red,</span><br><span class="line">	Blue,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以通过Enum类型的静态方法GetUnderlyingType方法获取到基础类型</span></span><br><span class="line">Console.WriteLine(Enum.GetUnderlyingType(<span class="keyword">typeof</span>(Color)));</span><br><span class="line"><span class="comment">// output: System.Byte</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>枚举类型常用方法</strong></p>
+<p>简单说下<strong>枚举类型名称&lt;=&gt;值</strong>之间得转换。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> nameArr = (Color[])Enum.GetValues(<span class="keyword">typeof</span>(Color));</span><br><span class="line">	<span class="comment">// String =&gt; 枚举类型名称</span></span><br><span class="line">	<span class="keyword">var</span> someName = (Color)Enum.Parse(<span class="keyword">typeof</span>(Color), <span class="string">&quot;White&quot;</span>, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 枚举类型名称 =&gt; 值</span></span><br><span class="line">	<span class="keyword">var</span> val1 = (<span class="built_in">int</span>)nameArr[<span class="number">0</span>];	<span class="comment">// val1 = 1</span></span><br><span class="line">	<span class="keyword">var</span> val2 = (<span class="built_in">int</span>)someName;	<span class="comment">// val2 = 1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="built_in">enum</span> Color</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//枚举类型名称</span></span><br><span class="line">	White = <span class="number">1</span>,</span><br><span class="line">	Red = <span class="number">2</span>,</span><br><span class="line">	Blue = <span class="number">3</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="位标志"><a href="#位标志" class="headerlink" title="位标志"></a>位标志</h3><p><a href="#jump">注：如果前面的理解了直接从“位运算”看起。</a></p>
+<p><strong>什么是位标志(bit flag)</strong></p>
+<p>比如要解决这么一个问题：</p>
+<p>假如我从早上到晚上一天有12节课，我希望用一串数来记录每节课我有没有去。</p>
+<p>首先会想到定制规则，1是去0是不去：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20211209103726.png"></p>
+<p>会变成如上一串数字，解决了问题，但这不就是一个二进制数吗？转换成十进制数902。</p>
+<p>这串数字就是一种位标志。</p>
+<p>下面也会提到“0x0001”这样的位标志，“0x”指的是16进制，“0001”是16进制数。</p>
+<p><strong>什么是位运算</strong></p>
+<p>现在，我有新的需求：我发现1、2节课漏记了去上课了，需要补上。</p>
+<p>那只需要用 <code>001110000110 | 110000000000</code> 得运算结果就完成了，转换成十进制它看上去就是 <strong>“902 | 3072”</strong>，计算得出的结果更新就行了。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> x = <span class="number">902</span> | <span class="number">3072</span>;</span><br><span class="line">	Console.WriteLine(Convert.ToString(x,<span class="number">2</span>));<span class="comment">// x = 3974(10进制) 输出为 111110000110(2进制)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者，我想检查1、2节课我去上课了没，那也很容易：</p>
+<p>用 <code>001110000110 &amp; 110000000000</code> ，也就是 <strong>“902 &amp; 3072”</strong> 判断计算得到十进制结果的是不是0，如果是0那就意味着并不重复，可以去。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> x = <span class="number">902</span> &amp; <span class="number">3072</span>;</span><br><span class="line">	Console.WriteLine(x);<span class="comment">// x = 0(10进制)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><span id="jump"><strong>C#位运算</strong></span></p>
+<p>假设如果 A = 60，且 B = 13，现在以二进制格式表示，它们如下所示：</p>
+<p>A = 0011 1100<br>B = 0000 1101</p>
+<table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&amp;</td>
+<td align="left">如果同时存在于两个操作数中，二进制 AND 运算符复制一位到结果中。</td>
+<td align="left">(A &amp; B) 将得到 12，即为 0000 1100</td>
+</tr>
+<tr>
+<td align="left">|</td>
+<td align="left">如果存在于任一操作数中，二进制 OR 运算符复制一位到结果中。</td>
+<td align="left">(A | B) 将得到 61，即为 0011 1101</td>
+</tr>
+<tr>
+<td align="left">^</td>
+<td align="left">如果存在于其中一个操作数中但不同时存在于两个操作数中，二进制异或运算符复制一位到结果中。</td>
+<td align="left">(A ^ B) 将得到 49，即为 0011 0001</td>
+</tr>
+<tr>
+<td align="left">~</td>
+<td align="left">按位取反运算符是一元运算符，具有”翻转”位效果，即0变成1，1变成0，包括符号位。</td>
+<td align="left">(~A ) 将得到 -61，即为 1100 0011，一个有符号二进制数的补码形式。</td>
+</tr>
+<tr>
+<td align="left">&lt;&lt;</td>
+<td align="left">二进制左移运算符。左操作数的值向左移动右操作数指定的位数。</td>
+<td align="left">A &lt;&lt; 2 将得到 240，即为 1111 0000</td>
+</tr>
+<tr>
+<td align="left">&gt;&gt;</td>
+<td align="left">二进制右移运算符。左操作数的值向右移动右操作数指定的位数。</td>
+<td align="left">A &gt;&gt; 2 将得到 15，即为 0000 1111</td>
+</tr>
+</tbody></table>
+<p><strong>C#位标记：[Flags]特性</strong></p>
+<p>C#的位标记离不开[Flags]特性，<br>这个特性的作用就是<code>someEnum.ToString()</code>是”ReadOnly, Hidden”这个枚举名称的字符串。<br>如果没有[Flags]特性，就会为具体的数值。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Flags</span>] <span class="comment">//增加Flags标记便可申明一个位标记</span></span><br><span class="line"><span class="built_in">enum</span> Action</span><br><span class="line">&#123;</span><br><span class="line">    None = <span class="number">0</span>,</span><br><span class="line">    Walk = <span class="number">0x0001</span>,</span><br><span class="line">    Run = <span class="number">0x0002</span>,</span><br><span class="line">    Speak = <span class="number">0x0004</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//位标记的实例应用</span></span><br><span class="line"><span class="function">vod <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="comment">//申明一个行为</span></span><br><span class="line">	<span class="keyword">var</span> action = Action.None;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//查询目前拥有行为</span></span><br><span class="line">	Console.WriteLine(action.ToString()); <span class="comment">// output:None</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//增加行走和奔跑行为</span></span><br><span class="line">	action = action | Action.Walk | Action.Run;</span><br><span class="line">	Console.WriteLine(action.ToString()); <span class="comment">// output:Walk,Run</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>数值转换为标志字符串</strong></p>
+<p>存在<strong>[Flags]特性</strong>时<code>枚举实例.ToString()</code>的工作流程：</p>
+<ol>
+<li>获取枚举类型定义的数值集，并按降序排列。</li>
+<li>每个数值将会与枚举实例的值进行“按位与&amp;”计算，假如结果等于该数值，与该数值关联的字符串便会追加到输入字符串中，对应的位会被认为考虑过了(设置为0)。反复到每一个数值都计算完。</li>
+<li>如果2中计算出的数值结果仍然不为0，说明枚举实例的一些“1”状态的位，在枚举类里压根没定义过，那么ToString<font color="brown">直接返回枚举实例原始值的字符串</font>。</li>
+<li>如果2中计算出的数值结果为0，那么再检查枚举实例原始值：</li>
+<li>如果枚举实例原始值不为0，那么ToString<font color="brown">返回符号名称之间以逗号分隔的字符串</font>。</li>
+<li>如果枚举实例原始值为0，那么再检查枚举类型定义的符号中有没有值为0的，有的话ToString<font color="brown">返回值为0的符号名称</font>；没有的话ToString<font color="brown">返回值“0”</font>。</li>
+</ol>
+<p>为什么能这么做？因为确保过枚举类型中定义的每一个枚举的值，都只代表一位的开关。就是<code>0001</code>、<code>0010</code>、<code>0100</code>这样下去，转换成十进制的话，全是2的整数次方。</p>
+<p>但是也有唯一一个例外不是2的整数次方，比如可以添加一个枚举类<code>Action.All = Action.Walk | Action.Run | Action.Speak</code>，它的值是<code>0x0007</code>。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Flags</span>]</span><br><span class="line"><span class="built_in">enum</span> Action</span><br><span class="line">&#123;</span><br><span class="line">    None = <span class="number">0</span>,</span><br><span class="line">    Walk = <span class="number">0x0001</span>,</span><br><span class="line">    Run = <span class="number">0x0002</span>,</span><br><span class="line">    Speak = <span class="number">0x0004</span>,</span><br><span class="line">    All = <span class="number">0x0007</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>标志字符串转换为数值</strong></p>
+<p>将逗号分割的符号字符串转换为数值，这是通过Enum的静态方法Parse和TryParse来实现的。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Action a = (Action) Enum.Parse(<span class="keyword">typeof</span>(Action),<span class="string">&quot;3&quot;</span>);</span><br><span class="line">Console.WriteLine(a);</span><br><span class="line"><span class="comment">// output: Walk , Run</span></span><br><span class="line"><span class="comment">// &quot;3&quot;对应16位的&quot;0x0003&quot;，转换二进制是&quot;0000000000000011&quot;，所以是Walk、Run</span></span><br></pre></td></tr></table></figure>
+
+<p>Enum的静态方法Parse和TryParse的工作流程：</p>
+<ol>
+<li>删除字符串头尾所有的空白字符。</li>
+<li>如果字符串第一个字符是数字、+、-，该字符串会被认为是一个数字，方法返回会一个枚举类型实例，数值为字符串转换后的数值。</li>
+<li>将2得到的数值转换为2进制，再将每一位的”1”都单独分割成一个2进制数，用<code>,</code>分隔，比如0110 =&gt; 0100,0010。</li>
+<li>把3中得到的每一个数都去枚举类型中匹配，如果有匹配不到的就<font color="brown">抛错ArgumentExpection</font>；如果匹配的到就与动态结果进行“按位或|”计算（动态结果初始值是0），再查找下一个符号。</li>
+<li>查找并找到所有标识后，<font color="brown">以Object形式返回这个动态结果值所表示的枚举类型名称们</font>，格式是“名称1 , 名称2”。</li>
+</ol>
+<p>上面的3-4我是猜的，因为书里写的token我不明白，搜也没搜到。<br>但是像这么做的确可以实现，4的目的，是记录已经找到的枚举类型名称罢了。</p>
+<p><strong>向枚举类型添加方法</strong></p>
+<p>枚举类型中不能定义方法，但是可以通过<strong>拓展方法</strong>来实现模拟向枚举类型添加方法。</p>
+<h1 id="大章16：数组"><a href="#大章16：数组" class="headerlink" title="大章16：数组"></a><center>大章16：数组</center></h1><h3 id="数组是什么"><a href="#数组是什么" class="headerlink" title="数组是什么"></a>数组是什么</h3><p><strong>数组 is a Array</strong></p>
+<p>所有数组类型都隐式从<strong>System.Array抽象类</strong>派生，System.Array又从Object派生，所以数组都是<strong>引用类型</strong>。</p>
+<p>所有数组同时隐式实现IEnumerable、ICollection、IList接口。</p>
+<p><strong>多维数组 ≠ 交错数组</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="comment">// 1.申明、new构造器不同</span></span><br><span class="line">	<span class="built_in">int</span>[,] test1 = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line">	<span class="built_in">int</span>[][] test2 = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">4</span>][];<span class="comment">// 不可指定第二个[]内的数字</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 2.交错数组存着的每个数组可以不等长，多维数组的每个数组必须等长</span></span><br><span class="line">	<span class="comment">// 且交错数组存着的每个数组必须new</span></span><br><span class="line">	test2[<span class="number">0</span>] = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">3</span>];</span><br><span class="line">	test2[<span class="number">1</span>] = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">20</span>];</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 3.存储结构不同，赋值写法不同</span></span><br><span class="line">	test1[<span class="number">1</span>, <span class="number">2</span>] = <span class="number">1</span>;</span><br><span class="line">	test2[<span class="number">1</span>][<span class="number">2</span>] = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="创建一个数组"><a href="#创建一个数组" class="headerlink" title="创建一个数组"></a>创建一个数组</h3><p><strong>new一个数组⭐</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Int32[] myIntegers = new Int32[100];// 包含100个Int32的数组</span><br><span class="line"></span><br><span class="line">Control[] myControls = new Control[50];// 包含50个Control引用的数组</span><br></pre></td></tr></table></figure>
+
+<p>像上面这样new，</p>
+<ol>
+<li>首先，数组是引用类型，所以数组都是在堆里的，分配内存也是在堆里分配。</li>
+<li>其次，数组单个元素的类型，<br>如果是值类型比如上面的Int32，就会在托管堆上分配100个未装箱Int32所需的内存块，并给每个Int32实例都附上default值0；<br>如果是引用类型比如上面的Control，就会在托管堆上分配50个Control引用的内存块，并给每个引用都附上null。</li>
+<li>最后，给一个类型对象指针、一个同步块索引和一些overhead字段(开销字段)分配内存。</li>
+<li>返回上面分配完的内存块地址，保存到array变量中。</li>
+</ol>
+<p>堆上的图大概可以这么理解（这里给myControls数组提前new了几个实例）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20211209155727.png"></p>
+<p><strong>初始化数组元素 语法糖</strong></p>
+<p>C#提供了语法糖方便初始化数组，由编译器帮你推断最佳类型：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建+初始化数组</span></span><br><span class="line"><span class="keyword">var</span> names = <span class="keyword">new</span>[] &#123;<span class="string">&quot;Sim&quot;</span>, <span class="string">&quot;Aidan&quot;</span>, <span class="string">&quot;Grant&quot;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面这么写会编译不过：error 找不到隐式类型数组的最佳类型</span></span><br><span class="line"><span class="keyword">var</span> namesError!!!! = <span class="keyword">new</span>[] &#123;<span class="string">&quot;Sim&quot;</span>, <span class="string">&quot;Aidan&quot;</span>, <span class="string">&quot;Grant&quot;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建+初始化匿名数组</span></span><br><span class="line"><span class="keyword">var</span> kids = <span class="keyword">new</span>[] &#123; <span class="keyword">new</span> &#123;Name=<span class="string">&quot;Aidan&quot;</span>&#125;, <span class="keyword">new</span> &#123;Name=<span class="string">&quot;Grant&quot;</span>&#125; &#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>数组转型</strong></p>
+<p>两种方法：</p>
+<p>1.显式或隐式转型：要求数组维数相同、且必须存在从元素源类型到目标类型的显式或隐式转换。所有的值类型都不允许用这个方式转。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FileStream[,] fsArr = <span class="keyword">new</span> FileStream[<span class="number">5</span>,<span class="number">10</span>];</span><br><span class="line"><span class="comment">// 隐式、显式 可以</span></span><br><span class="line">Object[,] o2Arr_1 = fsArr;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 值类型不能 隐式、显式转</span></span><br><span class="line"><span class="built_in">int</span>[,] intArr = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">5</span>,<span class="number">10</span>];</span><br><span class="line">Object[,] o2Arr_2 = intArr;<span class="comment">// 编译无法通过!</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>2.Array.Copy(fromArr, toArr, length)：浅拷贝，可以拆箱装箱所以能接受值类型。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span>[] intArr = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">5</span>];</span><br><span class="line">Object[] objArr = <span class="keyword">new</span> Object[intArr.Length];</span><br><span class="line"><span class="comment">// 值类型数组 装箱转换到 引用类型数组</span></span><br><span class="line">Array.Copy(intArr, objArr, intArr.Length);</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="所有数组都会偷偷…"><a href="#所有数组都会偷偷…" class="headerlink" title="所有数组都会偷偷…"></a>所有数组都会偷偷…</h3><p><strong>所有数组都隐式派生自System.Array</strong></p>
+<p>随意声明一个数组，它都隐式派生自System.Array类型，</p>
+<p>System.Array类型定义了很多常用的实例方法、静态方法和属性，比如Clone、CopyTo、GetLength、IndexOf等。</p>
+<p><strong>所有数组都隐式实现IEnumerable、ICollection、IList接口</strong></p>
+<p>System.Array类型也实现了IEnumerable、ICollection、IList这几个接口，但是它是把他们都当作Object类型来处理的。</p>
+<p>全当作Object类来处理会很不方便，影响性能，甚至可能患有类型不安全，所以数组重新实现了这几个接口，用泛型：</p>
+<p>当你新创建 一维数组 时，会将其类型传入并实现<code>IEnumerable&lt;T&gt;、ICollection&lt;T&gt;、IList&lt;T&gt;</code>这几个泛型接口。同时为会传入类型的父类也实现这3个接口，直到Array的默认实现。可以看结构展示：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	FileStream[] fsArray;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以上代码会自动实现大量的IEnumerable&lt;T&gt;、ICollection&lt;T&gt;、IList&lt;T&gt;接口，结构如下：</span></span><br><span class="line"><span class="function">Object</span></span><br><span class="line"><span class="function">	<span class="title">Arrary</span> (<span class="params">非泛型IEnumerable, ICollection, IList</span>)</span></span><br><span class="line"><span class="function">		Object[] (<span class="params">IEnumerable&lt;Object&gt;, ICollection&lt;Object&gt;, IList&lt;Object&gt;</span>)</span></span><br><span class="line"><span class="function">			String[] (<span class="params">IEnumerable&lt;String&gt;, ICollection&lt;String&gt;, IList&lt;String&gt;</span>)</span></span><br><span class="line"><span class="function">			Stream[] (<span class="params">IEnumerable&lt;Stream&gt;, ICollection&lt;Stream&gt;, IList&lt;Stream&gt;</span>)</span></span><br><span class="line"><span class="function">				FileStream[] (<span class="params">IEnumerable&lt;FileStream&gt;, ICollection&lt;FileStream&gt;, IList&lt;FileStream&gt;</span>)</span></span><br><span class="line"><span class="function">    </span></span><br><span class="line"><span class="function">			.</span></span><br><span class="line"><span class="function">			.	(<span class="params">其他引用类型数组</span>)</span></span><br><span class="line"><span class="function">			.</span></span><br></pre></td></tr></table></figure>
+
+<p>另外，如果是值类型数组，就只会为值类型数组本身实现这3个泛型接口，其父类不会再自动实现了，和引用类型数组是不一样的。</p>
+<h3 id="数组的传递和返回"><a href="#数组的传递和返回" class="headerlink" title="数组的传递和返回"></a>数组的传递和返回</h3><p>要理清楚，数组是引用类型，数组的元素类型可能是堆上分配的值/引用类型。</p>
+<p>所以，数组作为参数，传的一定是地址。<br>但是数组元素作为参数，传的可能是地址可能是逐位复制的值。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">int</span>[] a = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">3</span>];</span><br><span class="line">	<span class="built_in">int</span>[] b = a;<span class="comment">// 传数组</span></span><br><span class="line">	<span class="built_in">int</span>[] c = <span class="keyword">new</span> <span class="built_in">int</span>[a.Length];</span><br><span class="line">	b[<span class="number">2</span>] = <span class="number">333</span>;</span><br><span class="line">	Array.Copy(a, c, a.Length);<span class="comment">//传元素</span></span><br><span class="line">	c[<span class="number">2</span>] = <span class="number">444</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 运行完打印, a[2]=333,b[2]=333,c[2]=444</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="创建下限非0的数组"><a href="#创建下限非0的数组" class="headerlink" title="创建下限非0的数组"></a>创建下限非0的数组</h3><p>用静态方法 Array.CreatInstance(Type type, int[] lengths, int[] lowerBounds) 来实现。</p>
+<p>该方法为数组分配内存，将参数信息保存到数组的内存块开销(overhead)部分。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 以下实现了创建二维数组：Decimal[2005...2009][1...4]</span></span><br><span class="line"><span class="built_in">int</span>[] lowerBounds = &#123;<span class="number">2005</span>, <span class="number">1</span>&#125;;<span class="comment">// 指定下标下限</span></span><br><span class="line"><span class="built_in">int</span>[] lengths = &#123;<span class="number">5</span>, <span class="number">4</span>&#125;;<span class="comment">// 指定数组长度</span></span><br><span class="line">Decimal[,] decimalArr = (Decimal[,]) Array.CreatInstance(<span class="keyword">typeof</span>(Decimal), lengths, lowerBounds);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下用于获取数组x维下标的上限下限值</span></span><br><span class="line"><span class="built_in">int</span> firstYear = decimalArr.GetLowerBound(<span class="number">0</span>);</span><br><span class="line"><span class="built_in">int</span> lastYear = decimalArr.GetUpperBound(<span class="number">0</span>);</span><br><span class="line"><span class="built_in">int</span> firstNum = decimalArr.GetLowerBound(<span class="number">1</span>);</span><br><span class="line"><span class="built_in">int</span> lastNum = decimalArr.GetUpperBound(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="数组循环的内部检查"><a href="#数组循环的内部检查" class="headerlink" title="数组循环的内部检查"></a>数组循环的内部检查</h3><p><strong>数组循环</strong></p>
+<p>用例子解释，执行以下代码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">int</span>[] a = <span class="keyword">new</span> <span class="built_in">int</span>[<span class="number">5</span>];</span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">int</span> index=<span class="number">0</span>; index&lt;a.Length; index++)&#123;</span><br><span class="line">		<span class="comment">// 对a[index]操作</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>a.Length检查：只做一次</strong></p>
+<p>对于上述循环操作，只会执行一次a.Length属性获取到数组的实际长度，再将其放到一个临时变量中，后续的循环迭代检查都是用这个临时变量了。</p>
+<p><strong>index检查：为什么0基一维更快？</strong></p>
+<p>对于索引值index，JIT也会进行检查。</p>
+<p>JIT编译器知道for循环要访问0到Length-1的数组元素，所以它会生成代码在运行时测试所有数组元素的访问都在数组有效范围内：<strong>检查是否 <code>(0 &gt;= Get.LowerBound(0)) &amp;&amp; ((Length-1) &gt;= a.GetUpperBound(0))</code></strong>，这个检查在循环之前发生。如果在数组有效范围内，JIT不会再循环内部生成代码验证每一次数组访问是否有效。</p>
+<p>但是对于非0基一维数组（多维数组和非0基一维数组）的循环迭代，JIT就没法这么信任，它必须在循环内部进行越界检查，并且它还需要从指定索引中减去数组下限，所以很影响性能。</p>
+<p>对于这种情况，推荐用0基一维数组构成的多维数组，也就是交错数组<code>int[][]</code>代替矩形数组。</p>
+<p><strong>unsafe访问数组：关闭检查</strong></p>
+<p>使用unsafe关键字，可以关闭索引上下限检查，但是要慎用：它直接访问内存，越界不会抛出异常，但是会损坏内存中的数据，破坏类型安全性制造安全漏洞。</p>
+<p>写法如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">const</span> <span class="built_in">int</span> my_length = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="built_in">int</span> <span class="title">SafeArrAccess</span>(<span class="params"><span class="built_in">int</span>[,] a</span>)</span>&#123;</span><br><span class="line">	<span class="built_in">int</span> sum = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">int</span> x = <span class="number">0</span>; x &lt; my_length; x++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="built_in">int</span> y = <span class="number">0</span>; y &lt; my_length; y++)&#123;</span><br><span class="line">			sum += a[x,y];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// =&gt;转换为unsafe版本</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">unsafe</span> <span class="built_in">int</span> <span class="title">SafeArrAccess</span>(<span class="params"><span class="built_in">int</span>[,] a</span>)</span>&#123;</span><br><span class="line">	<span class="built_in">int</span> sum = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">fixed</span> (<span class="built_in">int</span>* pi = a)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="built_in">int</span> x = <span class="number">0</span>; x &lt; my_length; x++)&#123;</span><br><span class="line">		<span class="built_in">int</span> baseOfDim = x * my_length;</span><br><span class="line">			<span class="keyword">for</span>(<span class="built_in">int</span> y = <span class="number">0</span>; y &lt; my_length; y++)&#123;</span><br><span class="line">				sum += pi[baseOfDim + y];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="不安全的数组访问和固定大小的数组"><a href="#不安全的数组访问和固定大小的数组" class="headerlink" title="不安全的数组访问和固定大小的数组"></a>不安全的数组访问和固定大小的数组</h3><p><strong>unsafe数组</strong></p>
+<p>unsafe数组访问非常强大，它允许访问：</p>
+<ul>
+<li>托管堆上的数组中的元素（上面的就是）。</li>
+<li>非托管堆上的数组中的元素（比如用Marshal.SecureStringToCoTaskMemUnicode方法返回一个数组，并用不安全的数组访问）。</li>
+<li>线程栈上的数组中的元素，利用stackalloc，下面介绍。</li>
+</ul>
+<p><strong>线程栈上的数组</strong></p>
+<p>通常结构体内写数组也只是持有数组的引用，但是可以如下将数组嵌入结构实现在栈上分配数组的内存。</p>
+<p>在结构体中嵌入数组需要满足以下条件：</p>
+<ul>
+<li>类型必须是结构（值类型），不能在类（引用类型）中嵌入固定大小缓冲区字段（栈上数组）。</li>
+<li>字段或其定义结构必须用unsafe关键字标记。</li>
+<li>数组字段必须用fixed关键字标记。</li>
+<li>数组必须是一维0基数组。</li>
+<li>数组的元素类型必须是：Boolen，Char，SByte，Byte，Int16，Int32，Int64，UInt16，UInt32，UInt64，Single，Double。</li>
+</ul>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	StackallocDemo();</span><br><span class="line">	InlineArrayDemo();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">StackallocDemo</span>(<span class="params"></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">unsafe</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">const</span> <span class="built_in">int</span> width = <span class="number">20</span>;</span><br><span class="line">		<span class="built_in">char</span>* pc = <span class="keyword">stackalloc</span> <span class="built_in">char</span>[width];<span class="comment">// 栈上分配数组</span></span><br><span class="line"></span><br><span class="line">		<span class="built_in">string</span> s = <span class="string">&quot;Jeffrey Richter&quot;</span>;<span class="comment">// 15个字符</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; width; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			pc[width - i - <span class="number">1</span>] = (i &lt; s.Length) ? s[i] : <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		Console.WriteLine(<span class="keyword">new</span> <span class="built_in">string</span>(pc, <span class="number">0</span>, width));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">InlineArrayDemo</span>(<span class="params"></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">unsafe</span></span><br><span class="line">	&#123;</span><br><span class="line">		CharArray ca;<span class="comment">// 栈上分配数组</span></span><br><span class="line">		<span class="built_in">int</span> widthInBytes = <span class="keyword">sizeof</span>(CharArray);</span><br><span class="line">		<span class="built_in">int</span> width = widthInBytes / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">		<span class="built_in">string</span> s = <span class="string">&quot;Jeffrey Richter&quot;</span>;<span class="comment">// 15个字符 </span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; width; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			ca.Characters[width - i - <span class="number">1</span>] = (i &lt; s.Length) ? s[i] : <span class="string">&#x27;.&#x27;</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		Console.WriteLine(<span class="keyword">new</span> <span class="built_in">string</span>(ca.Characters, <span class="number">0</span>, width));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// output:</span></span><br><span class="line"><span class="comment">//.....rethciR yerffeJ</span></span><br><span class="line"><span class="comment">//.....rethciR yerffeJ</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="大章17：委托"><a href="#大章17：委托" class="headerlink" title="大章17：委托"></a><center>大章17：委托</center></h1><h3 id="初识委托"><a href="#初识委托" class="headerlink" title="初识委托"></a>初识委托</h3><p><strong>委托是什么？</strong></p>
+<p>得先提到<strong>回调函数</strong>，回调函数是一个非常重要的机制，在C/C++中通过qsort函数获取指向一个回调函数的指针，而在.NET中，使用委托来实现回调函数。</p>
+<p>委托比C/C++的回调函数强在它能确保<strong>类型安全</strong>、且提供更多更强大的功能。</p>
+<p><strong>如何使用委托</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 0.声明委托，它的实例引用一个方法。该方法签名：获取一个int参数，返回void</span></span><br><span class="line"><span class="function"><span class="keyword">internal</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">FeedBack</span>(<span class="params"><span class="built_in">int</span> val</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1.实例方法可以委托</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Method_A</span>(<span class="params"><span class="built_in">int</span> val</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.静态方法也可以委托</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Method_B</span>(<span class="params"><span class="built_in">int</span> val</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3.使用委托</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// a.声明委托，其实给null后可以直接 += method()，也不会报错空引用，可能是编译器重写了委托的+=</span></span><br><span class="line">    FeedBack delegateList = <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">// b.给与委托变量一个实例</span></span><br><span class="line">	delegateList = <span class="keyword">new</span> FeedBack(Method_A);</span><br><span class="line">    <span class="comment">// c.下面3个行为结果相同</span></span><br><span class="line">	delegateList += Method_B;</span><br><span class="line">	delegateList += <span class="keyword">new</span> FeedBack(Method_B);<span class="comment">// FeedBack是委托的方法包装器(wapper)</span></span><br><span class="line">	delegateList = (FeedBack)Delegate.Combine(delegateList, <span class="keyword">new</span> FeedBack(Method_B));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="委托类型揭秘"><a href="#委托类型揭秘" class="headerlink" title="委托类型揭秘"></a>委托类型揭秘</h3><p><strong>委托就是类</strong></p>
+<p>声明一个委托，</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">internal</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">Feedback</span>(<span class="params"><span class="built_in">int</span> val</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这一行代码，C#编译器会这么定义一个类：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Feedback</span> : <span class="title">System.MulticastDelegate</span> &#123;</span><br><span class="line">	<span class="comment">//构造器</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Feedback</span>(<span class="params">Object @<span class="built_in">object</span>, IntPtr method</span>)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Invoke</span>(<span class="params"><span class="built_in">int</span> val</span>)</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 异步回调用</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> IAsyncResult <span class="title">BeginInvoke</span>(<span class="params"><span class="built_in">int</span> val, AsyncCallback callback, Object @<span class="built_in">object</span></span>)</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">EndInvoke</span>(<span class="params">IAsyncResult result</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>可见委托其实就是个类，所以委托能定义到类中，也能定义到类外。只要能定义类的地方就能定义委托，可见性随声明委托时用的可见性一样。</li>
+<li>所有的委托都继承自System.MulticastDelegate。</li>
+</ol>
+<p><strong>委托构造器</strong></p>
+<p>上面已经知道委托都继承自System.MulticastDelegate类，那么要构造一个委托肯定离不开这个类，先展示一下这个类内的<strong>重要成员</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>_target</td>
+<td>System.Object</td>
+<td>这个字段引用的是回调方法要操作的对象。当委托对象包装静态方法时，这个字段返回null；当委托对象包装实例方法时，这个字段引用回调方法要操作的对象。</td>
+</tr>
+<tr>
+<td>_methodPtr</td>
+<td>System.IntPtr</td>
+<td>一个内部的整数值，CLR用它标识要回调的方法</td>
+</tr>
+<tr>
+<td>_invocationList</td>
+<td>System.Object</td>
+<td>通常为null。构造委托链时它引用一个委托数组（详见下节）</td>
+</tr>
+</tbody></table>
+<p>再聊<strong>构造器</strong>，所有委托都有一个构造器，它获取2个参数：一个是对象引用，另一个是引用了回调方法的整数。</p>
+<ol>
+<li><p>  C#编译器知道要构造的是委托，在传入诸如<code>new FeedBack(Method_B) </code>这样的参数时，会分析源代码来确定引用的是哪个对象和方法。</p>
+</li>
+<li><p>  对象引用被传给构造器的object参数，标识了方法的一个特殊IntPtr值被传给构造器的method参数。对于静态方法，会给object参数传递null值。构造器方法体内部将这两个实参分别存在_target、_methodPtr这两个私有字段里。</p>
+</li>
+<li><p>  最后将_invocationList字段设置为null，这个字段后面讨论。</p>
+</li>
+</ol>
+<p>所以，每个委托对象实际都是一个**包装器(wapper)**，其中包装了一个方法和调用该方法时要操作的对象。结构图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20211210173655.png"></p>
+<h3 id="委托使用揭秘"><a href="#委托使用揭秘" class="headerlink" title="委托使用揭秘"></a>委托使用揭秘</h3><p><strong>委托调用</strong></p>
+<p>C#编译器会自动将委托的调用转换为Invoke：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FeedBack fb = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">fb(<span class="number">1</span>);</span><br><span class="line"><span class="comment">// 在C#编译器眼里，上面的调用自动转换为：</span></span><br><span class="line">fb.Invoke(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>可以查看IL代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IL_0009:callvirt instance void Feedback::Invoke(int32)</span><br></pre></td></tr></table></figure>
+
+<p><strong>委托链</strong></p>
+<p>委托链，也就是用委托回调多个方法。<br>下面制造一个委托链并调用，堆流程刨析：</p>
+<p>1.初始化委托链(委托)</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">internal</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">FeedBack</span>(<span class="params"><span class="built_in">int</span> val</span>)</span>;</span><br><span class="line">...</span><br><span class="line">FeedBack fbChain = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+
+<p>2.将委托添加到链中</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fbChain = (Feedback) Delegate.Combine(fbChain, fb1);</span><br></pre></td></tr></table></figure>
+
+<p>此时Combine方法内部，发现fbChain是null，所以直接返回fb1中的值。</p>
+<p>3.再将委托添加到链中</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fbChain = (Feedback) Delegate.Combine(fbChain, fb2);</span><br></pre></td></tr></table></figure>
+
+<p>此时Combine方法内部，发现fbChain内部已经包含了一个委托(fb1)，所以会构造一个新的委托对象。初始化这个新委托对象时，**_invocationList字段**被初始化为引用一个委托对象数组。</p>
+<p>数组的第一个元素(索引0)被初始化为重包装了fbChain内部方法的委托，数组的第二个元素(索引1)被初始化为重包装了fb2内部方法的委。</p>
+<p>最后，fbChain被设为引用新建的委托对象。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20211213095622.png"></p>
+<p>后续如果继续向委托链+=新委托，每次都会新建一个委托数组放入**_invocationList字段<strong>中，让原先的数组进入GC，我称之为</strong>委托链的不可变性**。至于为什么要新建而不是扩容，我估计是因为数组长度不可变，比起扩容，new比较省事安全吧。</p>
+<p>4.对委托链进行调用</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fbChain(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+
+<p>首先知道，fbChain会被转换为 fbChain.Invoke。</p>
+<p>Invoke时发现内部字段_invocationList不为null，就能判断为一个委托链，对其进行循环遍历数组并依次调用各个委托中的方法。</p>
+<p>5.对委托链进行Remove</p>
+<p>倒序循环遍历_invocationList数组，匹配_target和_methodPtr字段相同的元素进行删除，只删除一个元素。</p>
+<p><strong>显式调用委托链</strong></p>
+<p>起因是委托链遍历调用，返回值只能有一个，且某一元素出错会导致后续的委托都出错，就很不健壮。</p>
+<p>所以MulticastDelegate类提供了<strong>实例方法GetInvocationList</strong>，用于显式调用链中的每一个委托：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> abstarct clas MulticastDelegate : Delegate &#123;</span><br><span class="line">    <span class="comment">// 创建一个委托数组，其中每个元素都指向委托链的一个委托</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">override</span> Delegate[] <span class="title">GetInvocationList</span>(<span class="params"></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用这个方法，就可以自己显式调用每一个委托，加上诸如 try catch 的定制化处理。</p>
+<h3 id="C-泛型委托"><a href="#C-泛型委托" class="headerlink" title="C#泛型委托"></a>C#泛型委托</h3><p><strong>尽量少定义委托</strong></p>
+<p>主要是就定义的太多了，比如微软定义的：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">TryCode</span>(<span class="params">Object userData</span>)</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">WaitCallback</span>(<span class="params">Object state</span>)</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">TimerCallback</span>(<span class="params">Object state</span>)</span>;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>压根就是重复的签名，根本没必要定义的这么杂乱，所以推荐用泛型委托。</p>
+<p><strong>Action和Func</strong></p>
+<p>微软定义好的泛型委托就是Action和Func，Action有16个Func有17个。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">Action</span>(<span class="params"></span>)</span>;<span class="comment">// 这个不是泛型，所以不算</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">Action</span>&lt;<span class="title">T</span>&gt;(<span class="params">T obj</span>)</span>;<span class="comment">// 1个参数的</span></span><br><span class="line">...</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">Action</span>&lt;<span class="title">T1</span>, ..., <span class="title">T16</span>&gt;(<span class="params">T1 arg1, ..., T16 arg16</span>)</span>;<span class="comment">// 最多16个参数的</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> TResult <span class="title">Func</span>&lt;<span class="title">TResult</span>&gt;(<span class="params"></span>)</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> TResult <span class="title">Func</span>&lt;<span class="title">T</span>, <span class="title">TResult</span>&gt;(<span class="params">T obj</span>)</span>;<span class="comment">// 1个参数的</span></span><br><span class="line">...</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> TResult <span class="title">Func</span>&lt;<span class="title">T1</span>, ..., <span class="title">T16</span>, <span class="title">TResult</span>&gt;(<span class="params">T1 arg1, ..., T16 arg16</span>)</span>;<span class="comment">// 最多16个参数的</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="C-委托语法糖"><a href="#C-委托语法糖" class="headerlink" title="C#委托语法糖"></a>C#委托语法糖</h3><p><strong>不必新建委托对象</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义签名以及调用方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">FeedBack</span>(<span class="params"><span class="built_in">int</span> val</span>)</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SomeMethod</span>(<span class="params">FeedBack fb</span>)</span> &#123; &#125;</span><br><span class="line">...</span><br><span class="line">SomeMethod(<span class="keyword">new</span> FeedBack(Method_A));</span><br><span class="line"><span class="comment">// 可以简化为直接传方法名</span></span><br><span class="line">SomeMethod(Method_A);</span><br></pre></td></tr></table></figure>
+
+<p>省去new，当然IL代码还是会一样生成的。</p>
+<p><strong>不必定义方法(lambda)</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SomeMethod(num =&gt; &#123;</span><br><span class="line">    <span class="comment">//do sth </span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>其实就是匿名函数，IL代码也一样会生成一个同签名的方法，不过方法名不确定(编译时才知道)且为private。</p>
+<p><strong>直接使用局部变量(lambda)</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OtherMethod</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    FeedBack fb = <span class="literal">null</span>;</span><br><span class="line">    <span class="built_in">int</span> x = <span class="number">3</span>;</span><br><span class="line">    fb += (num =&gt; &#123;</span><br><span class="line">    	x++;</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实在IL的生成代码里看，这个匿名方法之所以能直接用局部变量、实例变量，是因为它定义为一个方法内的嵌套类。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OtherMethod</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	</span><br><span class="line">    FeedBack fb = <span class="literal">null</span>;<span class="comment">// 伪代码</span></span><br><span class="line">    <span class="built_in">int</span> x = <span class="number">3</span>;<span class="comment">// 伪代码</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 构造辅助类实例并初始化</span></span><br><span class="line">    &lt;&gt;c__DisplayClass1 class1 = <span class="keyword">new</span> c__DisplayClass1();</span><br><span class="line">    class1.x = x;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 绑定委托</span></span><br><span class="line">    fb = <span class="keyword">new</span> FeedBack(class1.&lt;OtherMethod&gt;b__0);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// IL代码</span></span><br><span class="line">	[<span class="meta">CompilerGenerated</span>]</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">sealed</span> <span class="keyword">class</span>&lt;&gt;<span class="title">c__DisplayClass1</span> : <span class="title">Object</span>&#123;</span><br><span class="line">		<span class="comment">// 回调函数要使用的每个局部变量都有一个对应的公共字段</span></span><br><span class="line">		<span class="keyword">public</span> <span class="built_in">int</span> x;</span><br><span class="line">		<span class="comment">// 公共无参构造器</span></span><br><span class="line">		<span class="keyword">public</span> &lt;&gt;c__DisplayClass1 &#123; &#125;</span><br><span class="line">		<span class="comment">// 公共实例方法</span></span><br><span class="line">		<span class="keyword">public</span> <span class="keyword">void</span> &lt;OtherMethod&gt;b__0(<span class="built_in">int</span> num)&#123;</span><br><span class="line">			x++;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>+=和-=操作符</strong></p>
+<p>被重载了，分别是Delegate.Combine、Delegate.Remove。IL代码完全一致。</p>
+<h3 id="委托和反射"><a href="#委托和反射" class="headerlink" title="委托和反射"></a>委托和反射</h3><ol>
+<li>  获取委托，使用<code>MethodInfo.CreateDelegate(委托Type, 实例对象Object)</code>方法。</li>
+<li>  调用委托，使用<code>Delegate.DynamicInvoke</code>方法。</li>
+</ol>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="function"><span class="keyword">internal</span> <span class="built_in">delegate</span> <span class="keyword">void</span> <span class="title">FeedBack</span>(<span class="params"><span class="built_in">int</span> val</span>)</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		MethodInfo mi = <span class="keyword">typeof</span>(Person).GetMethod(<span class="string">&quot;TellAge&quot;</span>, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);</span><br><span class="line">		<span class="keyword">var</span> instance = Activator.CreateInstance(<span class="keyword">typeof</span>(Person)) <span class="keyword">as</span> Person;</span><br><span class="line">		Delegate d = mi.CreateDelegate(<span class="keyword">typeof</span>(FeedBack), instance);</span><br><span class="line">		d.DynamicInvoke(<span class="number">10</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Person</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">TellAge</span>(<span class="params"><span class="built_in">int</span> age</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		Console.WriteLine(<span class="string">&quot;我&#123;0&#125;岁了&quot;</span>,age);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="大章18：定制特性"><a href="#大章18：定制特性" class="headerlink" title="大章18：定制特性"></a><center>大章18：定制特性</center></h1><h3 id="定制特性-custom-attribute"><a href="#定制特性-custom-attribute" class="headerlink" title="定制特性(custom attribute)"></a>定制特性(custom attribute)</h3><p><strong>什么是特性</strong></p>
+<p>比如public、private、static这些就算是特性。</p>
+<p>但是如果能定义自己的特性，比如定义一个类型，指出该类型能够通过序列化来进行远程处理。</p>
+<p><strong>什么是定制特性</strong></p>
+<p>定制特性其实是一个类型的实例。它必须从类<strong>System.Attribute</strong>派生。</p>
+<p><strong>如何使用特性</strong></p>
+<p>1.使用特性的语法和构造方法非常相似，是因为其实就是对Attribute类进行实例化。但也有点不同，构造器用到的参数叫**定位参数(positional parameter)<strong>，用于设置字段或属性的参数成为</strong>命名参数(named parameter)**。</p>
+<p>比如：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">DllImport(<span class="meta-string">&quot;Kernel32&quot;</span>, CharSet = CharSet.Auto, SetLastError = true)</span>]</span><br></pre></td></tr></table></figure>
+
+<p>这一句里，”Kernel32”是构造器需要的参数，也就是定位参数，它是必要的；“CharSet”和“SetLastError”是设置内部属性的，也就是命名参数，是非必要的。</p>
+<p>2.此外，特性写法也很多种，Attribute后缀可以写可以不写，以下4条是等效的：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Serializable</span>][Flags]</span><br><span class="line">[<span class="meta">Serializable, Flags</span>]</span><br><span class="line">[<span class="meta">FlagsAttribute, SerializableAttribute</span>]</span><br><span class="line">[<span class="meta">Serializable()</span>][FlagsAttribute()]</span><br></pre></td></tr></table></figure>
+
+<p><strong>定制特性例子</strong></p>
+<p>.NET类库定义了几百个定制特性，可将他们应用于自己源代码中：</p>
+<ul>
+<li>DllImport特性应用于方法，告诉CLR该方法的实现位于指定dll的非托管代码中。</li>
+<li>Serializable特性应用于类型，告诉序列化格式化器一个实例的字段可以序列化和反序列化。</li>
+<li>AssemblyVersion特性应用于程序集，设置程序集的版本号。</li>
+<li>Flags特性应用于枚举类型，枚举类型就成了位标志(bit flag)集合。</li>
+</ul>
+<p><strong>特性应用范围</strong></p>
+<p>CLR允许将特性应用于可在文件的元数据中表示的几乎任何东西。比如：</p>
+<ul>
+<li>  TypeDef 类、结构、枚举、接口和委托</li>
+<li>  MethodDef 构造器、方法</li>
+<li>  ParamDef 参数</li>
+<li>  …</li>
+</ul>
+<h3 id="定义自己的特性类"><a href="#定义自己的特性类" class="headerlink" title="定义自己的特性类"></a>定义自己的特性类</h3><p><strong>1.定义一个Attribute类</strong></p>
+<p>模仿写一个FlagsAttribute位标识特性。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">FlagsAttribute</span> : <span class="title">System.Attribute</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FlagsAttribute</span>(<span class="params"></span>)</span> &#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.限制特性的应用范围</strong></p>
+<p>希望特性只能用于枚举类型，需要用到System.AttributeUsage类的实例，该类是微软定义的用于限制特性定义范围的特性。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">AttributeUsage(AttributeUsage.Enum, Inherited = false)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">FlagsAttribute</span> : <span class="title">System.Attribute</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FlagsAttribute</span>(<span class="params"></span>)</span> &#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.5.了解一下System.AttributeUsage</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 类大致定义</span></span><br><span class="line">[<span class="meta">Serializable</span>]</span><br><span class="line">[<span class="meta">AttributeUsage(AttributeTargets.Class, Inherited = true)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">AttributeUsageAttribute</span> : <span class="title">Attribute</span> &#123;</span><br><span class="line">    <span class="comment">// 静态字段</span></span><br><span class="line">    <span class="keyword">internal</span> <span class="keyword">static</span> AttributeUsageAttribute Default = <span class="keyword">new</span> AttributeUsageAttribute(AttrubuteTargets.All);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 属性(这里简写为字段了)</span></span><br><span class="line">    <span class="keyword">internal</span> <span class="built_in">bool</span> AllowMultiple = <span class="literal">false</span>;<span class="comment">// 是否可以让该特性实例多次应用于同一个目标</span></span><br><span class="line">    <span class="keyword">internal</span> AttributeTargets AttributeTarget = AttributeTargets.All;<span class="comment">// 特性应用范围</span></span><br><span class="line">    <span class="keyword">internal</span> <span class="built_in">bool</span> Inherited = <span class="literal">true</span>;<span class="comment">// 特性是否可被继承</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//公共构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AttributeUsageAttribute</span>(<span class="params">AttributeTargets validOn</span>)</span> &#123;</span><br><span class="line">        AttributeTarget = validOn;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AttributeUsageAttribute</span>(<span class="params">AttributeTargets validOn, <span class="built_in">bool</span> allowMulit, <span class="built_in">bool</span> inherited</span>)</span> &#123;</span><br><span class="line">        AttributeTarget = validOn;</span><br><span class="line">        AllowMultiple = allowMulit;</span><br><span class="line">        Inherited = inherited;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// AttributeTargets枚举类</span></span><br><span class="line">[<span class="meta">Flags, Serializable</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="built_in">enum</span> AttributeTargets &#123;</span><br><span class="line">    Assembly,</span><br><span class="line">    Module,</span><br><span class="line">    Class,</span><br><span class="line">    Struct,</span><br><span class="line">    Enum,</span><br><span class="line">    Construector,</span><br><span class="line">    Method,</span><br><span class="line">    Property,</span><br><span class="line">    Field,</span><br><span class="line">    Event,</span><br><span class="line">    Interface,</span><br><span class="line">    Parameter,</span><br><span class="line">    Delegate,</span><br><span class="line">    ReturnValue,</span><br><span class="line">    GenericParamter,<span class="comment">// 泛型参数</span></span><br><span class="line">    All</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用例</span></span><br><span class="line">[<span class="meta">AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true)</span>]</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">TastyAttribute</span> : <span class="title">Attribute</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line">[<span class="meta">Tasty</span>][Serializable]</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">BaseType</span> &#123;</span><br><span class="line">    [<span class="meta">Tasty</span>] <span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">DoSomething</span>(<span class="params"></span>)</span> &#123; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">DerivedType</span> : <span class="title">BaseType</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">DoSomething</span>(<span class="params"></span>)</span> &#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于使用例，稍微讲一下：</p>
+<p>DerivedType类 和它的 DoSomething方法 都被视为 [Tasty]，因为他们都在应用范围内且<code>Inherited = true</code>，意味着可被继承。但是Serializable设置为不可被继承，所以DerivedType没有继承到父类的[Serializable]。</p>
+<p><strong>3.构造器</strong></p>
+<p>一般来说特性类就当正常类定义就行了，不过构造器比较特殊：</p>
+<p>a.特性类<strong>构造器的入参</strong>可供选择的数据类型并不多：bool，char，byte，SByte，Int16，UInt16，Int32，UInt32，Int64，UInt64，Single，Double，String，Type，Object或枚举类型。以及上述类型的一维0基数组。如果不遵守，是通不过编译的 “不是有效的特性参数类型”。</p>
+<p>b.特性类构造器有2种参数，一种是构造方法定义的指定参数，还有一种是<strong>增强型构造器语法</strong>所指定的值。当然无论哪种都得遵守1中的要求，演示如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">TastyAttribute</span> : <span class="title">Attribute</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> X;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">int</span> Y;</span><br><span class="line">	<span class="keyword">public</span> Test Z;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">TastyAttribute</span>(<span class="params"><span class="built_in">int</span> x</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		X = x;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="meta">Tasty(10, Y = 100)</span>] <span class="comment">// 可见可以直接指定Y，但是Z无法指定！会报错 “不是有效的特性参数类型”</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Test</span> &#123; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>c.我们怎么理解定制特性？它是类的实例，被序列化成驻留在元数据中的字节流。运行时可对元数据中的字节进行反序列化，从而构造出类的实例。真实情况中的元数据会稍微复杂点，构造器的参数会序列化成 “字段1 字段1类型ID 字段2 字段2类型ID…” 这样的字符串。</p>
+<h3 id="运用自己的特性类"><a href="#运用自己的特性类" class="headerlink" title="运用自己的特性类"></a>运用自己的特性类</h3><p><strong>光应用特性类没用</strong></p>
+<p>仅仅定义+应用自制的特性类没有用，只能在元数据中生成一堆额外数据罢了。</p>
+<p>那怎么有用呢？比如特性[Flags]用于枚举类型，之所以能让ToString的方法产生行为变化，是因为ToString方法会在运行时检查自己操作的枚举类型是否关联了[Flags]特性元数据。</p>
+<p>所以，方法会在运行时检查操作的数据是否关联了特性元数据，至于检测用的是<strong>反射</strong>技术。</p>
+<p><strong>检测定制特性</strong></p>
+<p>微软在反射插件<code>System.Reflection.CustomAttributeExtensions</code>提供了3个静态拓展方法来<strong>扫描</strong>托管模块的元数据，执行字符串比较来定位指定的定制特性类的位置：</p>
+<table>
+<thead>
+<tr>
+<th>方法名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IsDefined</td>
+<td>如果至少有一个指定的Attribute派生类的实例与目标关联就返回true。效率很高因为不需要反序列化构造特性类的实例。</td>
+</tr>
+<tr>
+<td>GetCustomAttributes</td>
+<td>返回应用于目标的指定特性实例的集合；如果没有，就返回null。一般该方法用于AllowMultiple为true的特性。</td>
+</tr>
+<tr>
+<td>GetCustomAttribute</td>
+<td>返回应用于目标的指定特性的实例。实例使用编译时指定的参数、字段和属性，反序列化元数据获得并构造；如果没有，就返回null；如果有目标应用指定特性的多个实例，就抛出System.Reflection.AmbiguousMatchException异常。一般该方法用于AllowMultiple为false的特性。</td>
+</tr>
+</tbody></table>
+<p>在<code>System.Reflection</code>命名空间提供了很多类允许检查模块的元数据（也就是上述方法），包括Assembly、Module、ParameterInfo、MemberInfo、Type、MethodInfo、ConstructorInfo、FieldInfo、EventInfo、PropertyInfo及其各自的*Builder类。</p>
+<p><strong>用起特性类</strong></p>
+<p>了解前面理论之后，特性[Flags]的用法大概就会这么写：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Enum的ToString实现</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> String <span class="title">ToString</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.GetType().IsDefined(<span class="keyword">typeof</span>(FlagAttribute), <span class="literal">false</span>)) &#123;</span><br><span class="line">        <span class="comment">// 如果是，就当作一个位标志枚举类型</span></span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">// 如果不是，就当作一个普通枚举类型</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>比较特性类</strong></p>
+<p>特性类之间的比较通过<strong>Equals和Match两个虚方法</strong>。</p>
+<p>System.Attribute重写了Object的Equals方法，Match默认实现就是直接调用Equals，具体比较逻辑如下：</p>
+<ol>
+<li>  先比较两个实例的类型，不一致返回false。</li>
+<li>  再用反射比较两个特性实例中的字段值（为每个字段都调用Equals），所有字段匹配返回true；否则false。</li>
+</ol>
+<p>但是既然是虚方法，自然可以重写自定义，这里重写一个Match的实现为判断是否是子集。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 特性用标志位枚举类</span></span><br><span class="line">[<span class="meta">Flags</span>]</span><br><span class="line"><span class="keyword">internal</span> <span class="built_in">enum</span> Accounts &#123;</span><br><span class="line">    Saving = <span class="number">0x0001</span>,</span><br><span class="line">    Checking = <span class="number">0x0002</span>,</span><br><span class="line">    Brokerage = <span class="number">0x0004</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 自定义特性</span></span><br><span class="line">[<span class="meta">AttributeUsage(AttributeTargets.Class)</span>]</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">AccountsAttribute</span> : <span class="title">Attribute</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Accounts accounts;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> age;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AccountsAttribute</span>(<span class="params">Accounts accounts</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.accounts = accounts;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> Boolean <span class="title">Match</span>(<span class="params">Object obj</span>)</span>&#123;</span><br><span class="line">        <span class="comment">// 如果父类实现了Match if(!base.Match(obj)) return false</span></span><br><span class="line">        <span class="keyword">if</span>(obj == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// 确保不为null</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.GetType() != obj.GetType()) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// 确保类型一致</span></span><br><span class="line">        AccountsAttribute other = (AccountsAttribute)obj; <span class="comment">// 既然类型一致转型必成功</span></span><br><span class="line">        <span class="keyword">if</span>((other.accounts &amp; accounts) != accounts)&#123;</span><br><span class="line">            <span class="comment">// 如果不是子集</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 测试</span></span><br><span class="line">[<span class="meta">Accounts(Accounts.Saving)</span>]</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">ChildAccount</span> &#123; &#125;</span><br><span class="line">[<span class="meta">Accounts(Accounts.Saving | Accounts.Checking | Accounts.Brokerage)</span>]</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">AdultAccount</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> child = <span class="keyword">new</span> ChildAccount();</span><br><span class="line">	<span class="keyword">var</span> adult = <span class="keyword">new</span> AdultAccount();</span><br><span class="line">    Attribute checking = <span class="keyword">new</span> AccountsAttribute(Accounts.Checking); <span class="comment">// 指定Accounts.Checking来测试Match方法</span></span><br><span class="line">    </span><br><span class="line">    Attribute validChildAccounts = Attribute.GetCustomAttribute(child.GetType(),<span class="keyword">typeof</span>(AccountsAttribute),<span class="literal">false</span>);</span><br><span class="line">	<span class="keyword">if</span> (validChildAccounts != <span class="literal">null</span> &amp;&amp; checking.Match(validChildAccounts))</span><br><span class="line">	&#123;</span><br><span class="line">		Console.WriteLine(<span class="string">&quot;child matched!&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    </span><br><span class="line">	Attribute validAdultAccounts = Attribute.GetCustomAttribute(adult.GetType(), <span class="keyword">typeof</span>(AccountsAttribute), <span class="literal">false</span>);</span><br><span class="line">	<span class="keyword">if</span> (validAdultAccounts != <span class="literal">null</span> &amp;&amp; checking.Match(validAdultAccounts))</span><br><span class="line">	&#123;</span><br><span class="line">		Console.WriteLine(<span class="string">&quot;adult matched!&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// output: adult matched!</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="不创建实例的检测定制特性方法"><a href="#不创建实例的检测定制特性方法" class="headerlink" title="不创建实例的检测定制特性方法"></a>不创建实例的检测定制特性方法</h3><p>前面是调用了<code>Attribute.GetCustomAttributes</code>方法，这些方法会在内部调用特性类的构造器并set属性。</p>
+<p>利用CustomAttributeData类，比如<code>CustomAttributeData.GetCustomAttributes</code>方法，可以不实际调用构造器与set属性，来安全获得预想状态的实例属性等，而实际上并没有真的创建实例。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Accounts(Accounts.Saving | Accounts.Checking | Accounts.Brokerage, age=33)</span>]</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">AdultAccount</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> adult = <span class="keyword">new</span> AdultAccount();</span><br><span class="line">	<span class="keyword">var</span> attributeDatas = CustomAttributeData.GetCustomAttributes(adult.GetType());</span><br><span class="line"></span><br><span class="line">	<span class="keyword">foreach</span> (<span class="keyword">var</span> attributeData <span class="keyword">in</span> attributeDatas)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// AttributeType 属性的类型, Constructor 表示应已初始化自定义属性的构造函数</span></span><br><span class="line">		Console.WriteLine(attributeData.AttributeType);</span><br><span class="line">		Console.WriteLine(attributeData.Constructor.DeclaringType);</span><br><span class="line">		<span class="comment">// output1: ConsoleApp5.AccountsAttribute</span></span><br><span class="line">		<span class="comment">// output2: ConsoleApp5.AccountsAttribute</span></span><br><span class="line">        </span><br><span class="line">		<span class="comment">// attributeData.ConstructorArguments 表示特性实例指定的位置参数列表</span></span><br><span class="line">         <span class="comment">// output3: constructorArgs:ConsoleApp5.Accounts 7</span></span><br><span class="line">		<span class="keyword">foreach</span> (<span class="keyword">var</span> conArg <span class="keyword">in</span> attributeData.ConstructorArguments)</span><br><span class="line">		&#123;</span><br><span class="line">			Console.WriteLine(<span class="string">&quot;constructorArgs:&quot;</span> + conArg.ArgumentType + <span class="string">&quot; &quot;</span> + conArg.Value);</span><br><span class="line">		&#125;</span><br><span class="line">        </span><br><span class="line">		<span class="comment">// attributeData.NamedArguments 表示的特性实例指定的命名参数列表</span></span><br><span class="line">         <span class="comment">// output4: namedArgs:Int32 age age (Int32)33 True</span></span><br><span class="line">		<span class="keyword">foreach</span> (<span class="keyword">var</span> conArg <span class="keyword">in</span> attributeData.NamedArguments)</span><br><span class="line">		&#123;</span><br><span class="line">			Console.WriteLine(<span class="string">&quot;namedArgs:&quot;</span> + conArg.MemberInfo + <span class="string">&quot; &quot;</span> + conArg.MemberName + <span class="string">&quot; &quot;</span> + conArg.TypedValue +<span class="string">&quot; &quot;</span>+ conArg.IsField);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>介绍一下<code>GetCustomAttributes</code>方法，它返回包裹了所有特性数据的列表，特性用类<code>CustomAttributeData</code>来包裹，它的属性：</p>
+<ul>
+<li>  AttributeType：该特性的类型</li>
+<li>  Constructor：已初始化过的自定义属性的构造函数</li>
+<li>  ConstructorArguments：所使用 构造器 中的参数们（注意无法获取参数名字）</li>
+<li>  NamedArguments：所使用 特性增强构造器 的参数们（就是命名指定的那些参数，可以获取到参数名字）</li>
+</ul>
+<h3 id="条件特性类"><a href="#条件特性类" class="headerlink" title="条件特性类"></a>条件特性类</h3><p><strong>ConditionalAttribute</strong></p>
+<p>条件特性类，说的就是特性<code>System.Disgnostics.ConditionalAttribute</code>。将此特性应用于自定义的定制特性，该定制特性就能根据环境宏来判断是否真正应用特性类并生成其元数据。当然不止是运用于定制特性，应用于方法等也是一样有效的。使用起来有点类似于**#if**。</p>
+<p>调用方法是，<strong>宏定义 或者 #define</strong>，两者是一样的含义，都是在定义编译时常量。</p>
+<p>#define方法展示：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CodingCodingK</span></span><br><span class="line"><span class="comment">// 上面启用了Test()和Test2()两个方法，当然宏定义也是一样的</span></span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"><span class="keyword">using</span> System.Diagnostics;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">Program</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"></span>)</span> </span><br><span class="line">    &#123;</span><br><span class="line">    	Test();</span><br><span class="line">    	Test2();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	[<span class="meta">Conditional(<span class="meta-string">&quot;CodingCodingK&quot;</span>)</span>]</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Test</span>(<span class="params"></span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		Console.WriteLine(<span class="string">&quot;I can do that !&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 以上作用类似于</span></span><br><span class="line">	[<span class="meta">Conditional(<span class="meta-string">&quot;CodingCodingK&quot;</span>)</span>]</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Test2</span>(<span class="params"></span>)</span></span><br><span class="line">	&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> CodingCodingK</span></span><br><span class="line">		Console.WriteLine(<span class="string">&quot;I can do that !&quot;</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>宏定义方法展示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20211215154042.png"></p>
+<p>最后，网上有篇文章说ConditionalAttribute和#if方法使用只是类似而不是完全一致，是因为方法定义和方法调用如果在2个不同的程序集内，那么就点不同了：ConditionalAttribute是根据调用地点的程序集内有没有定义宏来选择生成代码的，而#if像上面这样写是根据方法定义地点的程序集内有没有定义宏来判断的。</p>
+<p>我个人是觉得…其实也可以把#if写到调用方法的地方，那样两者使用的效果可以说一样了。嘛…</p>
+<h1 id="大章19：可null值类型"><a href="#大章19：可null值类型" class="headerlink" title="大章19：可null值类型"></a><center>大章19：可null值类型</center></h1><h3 id="可null值类型-结构"><a href="#可null值类型-结构" class="headerlink" title="可null值类型 结构"></a>可null值类型 结构</h3><p><strong>问题由来</strong></p>
+<p>由于各类系统或软件之间定义的类型并不能一一配对，比如java中的java.util.Date类是引用类型，所以该类型的变量能为null；但CLR的System.DateTime是值类型，永远不能为null。</p>
+<p>为了解决这个问题，微软在CLR中引入了可空值类型的概念，先看一下<code>System.Nullable&lt;T&gt;</code>结构来理解。</p>
+<p><strong>System.Nullable<T></strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Serializable, StructLayout(LayoutKind.Sequential)</span>]</span><br><span class="line"><span class="comment">// Nullable约束为struct，T也约束为struct，所以实例仍然是在栈上的</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">struct</span> Nullable&lt;T&gt; <span class="keyword">where</span> T : <span class="keyword">struct</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// 这两个字段表示状态</span></span><br><span class="line">	<span class="keyword">private</span> <span class="built_in">bool</span> hasValue; <span class="comment">// 假定null</span></span><br><span class="line">	<span class="keyword">internal</span> T <span class="keyword">value</span>; <span class="comment">// 假定所有位都为0</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Nullable</span>(<span class="params">T val</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">this</span>.<span class="keyword">value</span> = val;</span><br><span class="line">		<span class="keyword">this</span>.hasValue = <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">bool</span> HasValue</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">get</span> &#123; <span class="keyword">return</span> hasValue; &#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> T Value</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">get</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (!hasValue)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> InvalidOperationException(<span class="string">&quot;Nullable object must have a value.&quot;</span>);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">value</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> T <span class="title">GetValueOrDefault</span>(<span class="params"></span>)</span> &#123; <span class="keyword">return</span> <span class="keyword">value</span>; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> T <span class="title">GetValueOrDefault</span>(<span class="params">T defaultValue</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!HasValue) <span class="keyword">return</span> defaultValue;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">value</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 下面重写 Equals、GetHashCode、ToString，避免报值类型的错</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">bool</span> <span class="title">Equals</span>(<span class="params"><span class="built_in">object</span> other</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!HasValue) <span class="keyword">return</span> (other == <span class="literal">null</span>);</span><br><span class="line">		<span class="keyword">if</span> (other == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">value</span>.Equals(other);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">int</span> <span class="title">GetHashCode</span>(<span class="params"></span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!HasValue) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">value</span>.GetHashCode();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="built_in">string</span> <span class="title">ToString</span>(<span class="params"></span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!HasValue) <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">value</span>.ToString();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 定义 值类型=&gt;可null值类型 隐式转换</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">implicit</span> <span class="keyword">operator</span> <span class="title">Nullable</span>&lt;<span class="title">T</span>&gt;(<span class="params">T val</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Nullable&lt;T&gt;();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 定义 可null值类型=&gt;值类型 隐式转换</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">explicit</span> <span class="keyword">operator</span> <span class="title">T</span>(<span class="params">Nullable&lt;T&gt; val</span>)</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> val.Value;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">main <span class="title">void</span>(<span class="params"></span>)</span> &#123;</span><br><span class="line">    Nullable&lt;<span class="built_in">int</span>&gt; a = <span class="number">1</span>; <span class="comment">// 模仿 int? a = 1;</span></span><br><span class="line">    <span class="comment">// 最尴尬的来了，按照书里的敲，下面的这个是编译不过的：无法将null转换为“Nullable&lt;int&gt;”，因为后者是不可以为null的值类型</span></span><br><span class="line">	Nullable&lt;<span class="built_in">int</span>&gt; b = <span class="literal">null</span>; <span class="comment">// 模仿 int? b = null;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段用来理解是够了，看.NET源码也确实是这么写的，自己实例化却发现null不了，很尴尬。TODO 估计是哪里漏了理解，以后再补上。</p>
+<h3 id="C-对可空值类型的支持"><a href="#C-对可空值类型的支持" class="headerlink" title="C#对可空值类型的支持"></a>C#对可空值类型的支持</h3><p><strong>语法简化</strong></p>
+<p>C#允许使用<code>T?</code>来等价替代<code>Nullable&lt;T&gt;</code>。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span>? x = <span class="literal">null</span>;</span><br><span class="line"><span class="comment">// 完全等价于</span></span><br><span class="line">Nullable&lt;<span class="built_in">int</span>&gt; y = <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>操作符</strong></p>
+<p>基本上有一个操作数是null，就直接返回null。如果操作数都不为null，那操作符计算方式与非null值类型相同。</p>
+<h3 id="CLR对可null类型的特殊处理"><a href="#CLR对可null类型的特殊处理" class="headerlink" title="CLR对可null类型的特殊处理"></a>CLR对可null类型的特殊处理</h3><p><strong>可null类型的装箱</strong></p>
+<p><code>Nullable&lt;T&gt;</code>毕竟还是值类型，所以将其传给一个接收Object的方法时就得为其装箱。但是其为null时为一个null装箱很奇怪。所以CLR对可null类型的装箱多作了些手段：</p>
+<ol>
+<li>  判断是否是null，如果是，就不装箱直接返回null。</li>
+<li>  如果不是null，就取出值，并装箱返回。</li>
+</ol>
+<p><strong>可null类型的拆箱</strong></p>
+<p>如果已装箱值类型的引用是null，那么CLR会将<code>Nullable&lt;T&gt;</code>的值设为null。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Object o = <span class="number">5</span>; <span class="comment">// 创建已装箱的int</span></span><br><span class="line">o = <span class="literal">null</span>;</span><br><span class="line">int32? a = (int32?) o; <span class="comment">// 拆箱，a = null</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Nullable.GetType</strong></p>
+<p>对<code>Nullable&lt;T&gt;</code>执行<code>GetType()</code>，CLR会“撒谎”说类型是T，而不是<code>Nullable&lt;T&gt;</code>。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int32? x = <span class="number">6</span>;</span><br><span class="line">Console.WriteLine(x.GetType()); <span class="comment">// output:&quot;System.Int32&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>调用接口方法</strong></p>
+<p>编译器提供了更简洁的语法：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span>? n = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果CLR没有提供，写起来很繁琐</span></span><br><span class="line"><span class="built_in">int</span> result1 = ((IComparable) (<span class="built_in">int</span>) n).CompareTo(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// CLR提供特殊支持后的简便写法</span></span><br><span class="line"><span class="built_in">int</span> result2 = ((IComparable) n).CompareTo(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="其他：空接合操作符"><a href="#其他：空接合操作符" class="headerlink" title="其他：空接合操作符"></a>其他：空接合操作符</h3><p><strong>null-coalescing operator</strong></p>
+<p>空接合操作符(null-coalescing operator)，即**??操作符**。它要获取两个操作数，如果左边的操作数不为null，就返回左，否则就返回右。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">CodingCodingK</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://codingcodingk.github.io/Tech/CSharp/CLR-Via-CSharp/cp5/">https://codingcodingk.github.io/Tech/CSharp/CLR-Via-CSharp/cp5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://CodingCodingK.github.io" target="_blank">CodingCodingK Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF/">技术</a><a class="post-meta__tags" href="/tags/C/">C#</a><a class="post-meta__tags" href="/tags/%E5%8F%AF%E8%AE%BF%E9%97%AE%E6%80%A7/">可访问性</a><a class="post-meta__tags" href="/tags/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/">基本类型</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Tech/Game/AStar/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20211208131158.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">A*算法</div></div></a></div><div class="next-post pull-right"><a href="/Project/Unity/Moba/HOK/skill/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/hok.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">王者荣耀复刻项目 技能篇</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp6/" title="CLR Via C#个人笔记6 - 核心机制"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-26</div><div class="title">CLR Via C#个人笔记6 - 核心机制</div></div></a></div><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp4/" title="CLR Via C#个人笔记4 - 类型和成员基础"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-20</div><div class="title">CLR Via C#个人笔记4 - 类型和成员基础</div></div></a></div><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp1/" title="CLR Via C#个人笔记1 - CLR基础"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-29</div><div class="title">CLR Via C#个人笔记1 - CLR基础</div></div></a></div><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp2/" title="CLR Via C#个人笔记2 - 类与分配"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-06</div><div class="title">CLR Via C#个人笔记2 - 类与分配</div></div></a></div><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp3/" title="CLR Via C#个人笔记3 - 基元类型、引用类型和值类型"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-13</div><div class="title">CLR Via C#个人笔记3 - 基元类型、引用类型和值类型</div></div></a></div><div><a href="/Tech/CSharp/CLR-Via-CSharp/cp7/" title="CLR Via C#个人笔记7 - 线程处理"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/clr-via-csharp.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-14</div><div class="title">CLR Via C#个人笔记7 - 线程处理</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CodingCodingK</div><div class="author-info__description">一个正在成为游戏开发者的人</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">29</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">22</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CodingCodingK"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CodingCodingK" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">2022年的目标是：ET框架 + 烟雨Moba | Lua程序设计 + C++Primer</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A014%EF%BC%9A%E5%AD%97%E7%AC%A6%E3%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">大章14：字符、字符串和文本处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6Char%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.0.1.</span> <span class="toc-text">字符Char类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2String%E7%B1%BB%E5%9E%8B%E2%AD%90"><span class="toc-number">1.0.2.</span> <span class="toc-text">字符串String类型⭐</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E6%95%88%E7%8E%87%E6%9E%84%E9%80%A0%E5%AD%97%E7%AC%A6%E4%B8%B2StringBuilder%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.0.3.</span> <span class="toc-text">高效率构造字符串StringBuilder类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ToString%E6%96%B9%E6%B3%95"><span class="toc-number">1.0.4.</span> <span class="toc-text">ToString方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E8%A7%A3%E7%A0%81%EF%BC%9A%E5%AD%97%E7%AC%A6%E5%92%8C%E5%AD%97%E8%8A%82%E7%9A%84%E4%BA%92%E8%BD%AC"><span class="toc-number">1.0.5.</span> <span class="toc-text">编码解码：字符和字节的互转</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%AD%97%E7%AC%A6%E4%B8%B2SecureString"><span class="toc-number">1.0.6.</span> <span class="toc-text">安全字符串SecureString</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A015%EF%BC%9A%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%E5%92%8C%E4%BD%8D%E6%A0%87%E5%BF%97"><span class="toc-number">2.</span> <span class="toc-text">大章15：枚举类型和位标志</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.0.1.</span> <span class="toc-text">枚举类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%8D%E6%A0%87%E5%BF%97"><span class="toc-number">2.0.2.</span> <span class="toc-text">位标志</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A016%EF%BC%9A%E6%95%B0%E7%BB%84"><span class="toc-number">3.</span> <span class="toc-text">大章16：数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">3.0.1.</span> <span class="toc-text">数组是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84"><span class="toc-number">3.0.2.</span> <span class="toc-text">创建一个数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%80%E6%9C%89%E6%95%B0%E7%BB%84%E9%83%BD%E4%BC%9A%E5%81%B7%E5%81%B7%E2%80%A6"><span class="toc-number">3.0.3.</span> <span class="toc-text">所有数组都会偷偷…</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E4%BC%A0%E9%80%92%E5%92%8C%E8%BF%94%E5%9B%9E"><span class="toc-number">3.0.4.</span> <span class="toc-text">数组的传递和返回</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%8B%E9%99%90%E9%9D%9E0%E7%9A%84%E6%95%B0%E7%BB%84"><span class="toc-number">3.0.5.</span> <span class="toc-text">创建下限非0的数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E5%BE%AA%E7%8E%AF%E7%9A%84%E5%86%85%E9%83%A8%E6%A3%80%E6%9F%A5"><span class="toc-number">3.0.6.</span> <span class="toc-text">数组循环的内部检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%95%B0%E7%BB%84%E8%AE%BF%E9%97%AE%E5%92%8C%E5%9B%BA%E5%AE%9A%E5%A4%A7%E5%B0%8F%E7%9A%84%E6%95%B0%E7%BB%84"><span class="toc-number">3.0.7.</span> <span class="toc-text">不安全的数组访问和固定大小的数组</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A017%EF%BC%9A%E5%A7%94%E6%89%98"><span class="toc-number">4.</span> <span class="toc-text">大章17：委托</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E8%AF%86%E5%A7%94%E6%89%98"><span class="toc-number">4.0.1.</span> <span class="toc-text">初识委托</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A7%94%E6%89%98%E7%B1%BB%E5%9E%8B%E6%8F%AD%E7%A7%98"><span class="toc-number">4.0.2.</span> <span class="toc-text">委托类型揭秘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A7%94%E6%89%98%E4%BD%BF%E7%94%A8%E6%8F%AD%E7%A7%98"><span class="toc-number">4.0.3.</span> <span class="toc-text">委托使用揭秘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-%E6%B3%9B%E5%9E%8B%E5%A7%94%E6%89%98"><span class="toc-number">4.0.4.</span> <span class="toc-text">C#泛型委托</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-%E5%A7%94%E6%89%98%E8%AF%AD%E6%B3%95%E7%B3%96"><span class="toc-number">4.0.5.</span> <span class="toc-text">C#委托语法糖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A7%94%E6%89%98%E5%92%8C%E5%8F%8D%E5%B0%84"><span class="toc-number">4.0.6.</span> <span class="toc-text">委托和反射</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A018%EF%BC%9A%E5%AE%9A%E5%88%B6%E7%89%B9%E6%80%A7"><span class="toc-number">5.</span> <span class="toc-text">大章18：定制特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E5%88%B6%E7%89%B9%E6%80%A7-custom-attribute"><span class="toc-number">5.0.1.</span> <span class="toc-text">定制特性(custom attribute)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E8%87%AA%E5%B7%B1%E7%9A%84%E7%89%B9%E6%80%A7%E7%B1%BB"><span class="toc-number">5.0.2.</span> <span class="toc-text">定义自己的特性类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E7%94%A8%E8%87%AA%E5%B7%B1%E7%9A%84%E7%89%B9%E6%80%A7%E7%B1%BB"><span class="toc-number">5.0.3.</span> <span class="toc-text">运用自己的特性类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%88%9B%E5%BB%BA%E5%AE%9E%E4%BE%8B%E7%9A%84%E6%A3%80%E6%B5%8B%E5%AE%9A%E5%88%B6%E7%89%B9%E6%80%A7%E6%96%B9%E6%B3%95"><span class="toc-number">5.0.4.</span> <span class="toc-text">不创建实例的检测定制特性方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E7%89%B9%E6%80%A7%E7%B1%BB"><span class="toc-number">5.0.5.</span> <span class="toc-text">条件特性类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E7%AB%A019%EF%BC%9A%E5%8F%AFnull%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.</span> <span class="toc-text">大章19：可null值类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AFnull%E5%80%BC%E7%B1%BB%E5%9E%8B-%E7%BB%93%E6%9E%84"><span class="toc-number">6.0.1.</span> <span class="toc-text">可null值类型 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-%E5%AF%B9%E5%8F%AF%E7%A9%BA%E5%80%BC%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%94%AF%E6%8C%81"><span class="toc-number">6.0.2.</span> <span class="toc-text">C#对可空值类型的支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CLR%E5%AF%B9%E5%8F%AFnull%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%89%B9%E6%AE%8A%E5%A4%84%E7%90%86"><span class="toc-number">6.0.3.</span> <span class="toc-text">CLR对可null类型的特殊处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9A%E7%A9%BA%E6%8E%A5%E5%90%88%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">6.0.4.</span> <span class="toc-text">其他：空接合操作符</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Tech/Game/UI/ugui_5/" title="UGUI学习 - Graphic"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UGUI学习 - Graphic"/></a><div class="content"><a class="title" href="/Tech/Game/UI/ugui_5/" title="UGUI学习 - Graphic">UGUI学习 - Graphic</a><time datetime="2022-03-28T14:28:54.982Z" title="发表于 2022-03-28 22:28:54">2022-03-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Game/UI/ugui_4/" title="UGUI学习 - LayoutSystem布局系统"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UGUI学习 - LayoutSystem布局系统"/></a><div class="content"><a class="title" href="/Tech/Game/UI/ugui_4/" title="UGUI学习 - LayoutSystem布局系统">UGUI学习 - LayoutSystem布局系统</a><time datetime="2022-03-25T12:02:18.563Z" title="发表于 2022-03-25 20:02:18">2022-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Game/UI/ugui_3/" title="UGUI学习 - 画布刷新系统"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UGUI学习 - 画布刷新系统"/></a><div class="content"><a class="title" href="/Tech/Game/UI/ugui_3/" title="UGUI学习 - 画布刷新系统">UGUI学习 - 画布刷新系统</a><time datetime="2022-03-25T12:02:18.562Z" title="发表于 2022-03-25 20:02:18">2022-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Intro/display/" title="王者荣耀复刻项目 展示"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/hok.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="王者荣耀复刻项目 展示"/></a><div class="content"><a class="title" href="/Intro/display/" title="王者荣耀复刻项目 展示">王者荣耀复刻项目 展示</a><time datetime="2022-03-25T12:02:18.559Z" title="发表于 2022-03-25 20:02:18">2022-03-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Game/tools/serialize/" title="什么叫“二进制”配置方案？"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="什么叫“二进制”配置方案？"/></a><div class="content"><a class="title" href="/Tech/Game/tools/serialize/" title="什么叫“二进制”配置方案？">什么叫“二进制”配置方案？</a><time datetime="2022-03-18T13:18:05.707Z" title="发表于 2022-03-18 21:18:05">2022-03-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> CodingCodingK</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/chocolate.js"></script><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/cursor.js"></script><script src="/live2d-widget/autoload.js"></script><script src="/js/mine.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?CodingCodingK";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="CodingCodingK";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><!-- hexo injector body_end end --></body></html>
