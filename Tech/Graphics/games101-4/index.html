@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Games101 - 光栅化 | CodingCodingK Blog</title><meta name="keywords" content="图形学,Graphics,games101"><meta name="author" content="CodingCodingK"><meta name="copyright" content="CodingCodingK"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="学之前你必须知道视锥这是透视相机的概念，用来衡量视距的大小。一般用2种属性来描述一个视锥：    near面的宽高比   垂直视角 Vertical Field of View   有了上面2个确定值，然后再自己定义一个near的值（近平面与相机的距离），就能确定成像了，视锥完成。 屏幕上的概念分辨率，也就是1080p、2k等，就是像素的多少。 屏幕 Raster，德语中的屏幕的意思，而屏幕是一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Games101 - 光栅化">
+<meta property="og:url" content="https://codingcodingk.github.io/Tech/Graphics/games101-4/index.html">
+<meta property="og:site_name" content="CodingCodingK Blog">
+<meta property="og:description" content="学之前你必须知道视锥这是透视相机的概念，用来衡量视距的大小。一般用2种属性来描述一个视锥：    near面的宽高比   垂直视角 Vertical Field of View   有了上面2个确定值，然后再自己定义一个near的值（近平面与相机的距离），就能确定成像了，视锥完成。 屏幕上的概念分辨率，也就是1080p、2k等，就是像素的多少。 屏幕 Raster，德语中的屏幕的意思，而屏幕是一个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg">
+<meta property="article:published_time" content="2022-06-22T14:32:28.591Z">
+<meta property="article:modified_time" content="2022-06-22T14:32:28.591Z">
+<meta property="article:author" content="CodingCodingK">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="Graphics">
+<meta property="article:tag" content="games101">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png"><link rel="canonical" href="https://codingcodingk.github.io/Tech/Graphics/games101-4/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Games101 - 光栅化',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-06-22 22:32:28'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/css/mine.css"><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="CodingCodingK Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">32</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">25</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">CodingCodingK Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Games101 - 光栅化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-06-22T14:32:28.591Z" title="发表于 2022-06-22 22:32:28">2022-06-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-06-22T14:32:28.591Z" title="更新于 2022-06-22 22:32:28">2022-06-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Game/">Game</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Game/Graphics/">Graphics</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Games101 - 光栅化"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="学之前你必须知道"><a href="#学之前你必须知道" class="headerlink" title="学之前你必须知道"></a>学之前你必须知道</h1><h2 id="视锥"><a href="#视锥" class="headerlink" title="视锥"></a>视锥</h2><p>这是透视相机的概念，用来衡量视距的大小。一般用2种属性来描述一个视锥：</p>
+<ol>
+<li>  near面的宽高比</li>
+<li>  垂直视角 Vertical Field of View</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621104507.png"></p>
+<p>有了上面2个确定值，然后再自己定义一个near的值（近平面与相机的距离），就能确定成像了，视锥完成。</p>
+<h2 id="屏幕上的概念"><a href="#屏幕上的概念" class="headerlink" title="屏幕上的概念"></a>屏幕上的概念</h2><p><strong>分辨率</strong>，也就是1080p、2k等，就是像素的多少。</p>
+<p><strong>屏幕 Raster</strong>，德语中的屏幕的意思，而屏幕是一个光栅成像设备。</p>
+<p><strong>光栅化 Rasterize</strong>，把东西画在屏幕上的过程。</p>
+<p><strong>像素 Pixel</strong>，全名picture element，是最小单位的小正方形，它的颜色由Red、Green、Blue三个色(0~255)来混和成。</p>
+<h2 id="屏幕发展过程"><a href="#屏幕发展过程" class="headerlink" title="屏幕发展过程"></a>屏幕发展过程</h2><p><strong>过去方式</strong></p>
+<ol>
+<li>  示波器</li>
+<li>  阴极射线管 Cathode Ray Tube：和示波器原理相同，用很多电子打在屏幕上。通过扫描一样的方式，一条一条画横线，组成图像。</li>
+</ol>
+<p>隔行扫描 Raster Scan：上面的画横线，优化的话还会在一帧只画1、3、5…奇数行，下一帧再只画偶数行。这样省去了一半的工作量，也能一定程度欺骗到肉眼。</p>
+<p><strong>现代方式</strong></p>
+<ol>
+<li>  液晶显示器 LCD（Liquid Crystal Display）：通过液晶扭曲光的方向，让其可以通过对应的光栅。</li>
+<li>  控制发光二极管的显示器 LED（Light Emitting diode array）</li>
+<li>  电墨水：通过电子控制只有黑、白像素的电墨水，实现电纸书的页面刷新。</li>
+</ol>
+<p>帧缓存技术 Frame Buffer（Memory for a Raster Display）：将显卡中的一块内存区域中，存储的内容反映到屏幕上。</p>
+<h1 id="光栅化一个Cube"><a href="#光栅化一个Cube" class="headerlink" title="光栅化一个Cube"></a>光栅化一个Cube</h1><h2 id="视口变换-Viewport"><a href="#视口变换-Viewport" class="headerlink" title="视口变换 Viewport"></a>视口变换 Viewport</h2><p>光栅化之前要做的事。将一个 <code>[-1,1] x [-1,1]</code> 的2维平面，转换成<code>[width,0] x [0,height]</code>的笛卡尔坐标系内来表示。这叫做视口变换，看下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621115856.png"></p>
+<p>最后算出，变换矩阵如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621121741.png"></p>
+<h2 id="光栅化"><a href="#光栅化" class="headerlink" title="光栅化"></a>光栅化</h2><p>我们将原图形分解成很多个三角面，投影到屏幕的像素点上。</p>
+<h3 id="首先，怎么判断一个像素点与三角形的位置关系？"><a href="#首先，怎么判断一个像素点与三角形的位置关系？" class="headerlink" title="首先，怎么判断一个像素点与三角形的位置关系？"></a>首先，怎么判断一个像素点与三角形的位置关系？</h3><p>靠前面的知识，已经可以做到任何一个点都确定性地投影到屏幕上了。</p>
+<p>那么如果想判断一个像素点是否在一个三角面内呢？也就是问，<strong>如何确定这个像素的着色？</strong></p>
+<p>可以通过判断这个像素点的中心点与三角形的位置关系来确定，为了方便，就定义一个判断函数<code>Inside()</code>。而这个函数就是进行3次叉积。</p>
+<h3 id="然后，哪些像素点需要判断呢？"><a href="#然后，哪些像素点需要判断呢？" class="headerlink" title="然后，哪些像素点需要判断呢？"></a>然后，哪些像素点需要判断呢？</h3><p>如果需要把整个屏幕的点都进行一次<code>Inside()</code>判断，实在是没有必要，那么哪些需要、哪些不需要，这就涉及到<strong>包围盒</strong>了。</p>
+<p>简单介绍一个AABB包围盒，它就是取三角面3个顶点的<code>Min(x), Min(y), Max(x), Max(y),</code>作为他的盒子。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621151747.png"></p>
+<h3 id="最后，成像完有锯齿-Jaggies-怎么解决？"><a href="#最后，成像完有锯齿-Jaggies-怎么解决？" class="headerlink" title="最后，成像完有锯齿 (Jaggies) 怎么解决？"></a>最后，成像完有锯齿 (Jaggies) 怎么解决？</h3><p>又叫做反走样（Aliasing ）、抗锯齿。</p>
+<p>在解决之前先理解为什么会有这类问题？取哪些像素点来表示这个三角面，叫做<strong>采样（Sample）</strong>。而采样会有3种<strong>瑕疵（Artifacts）</strong></p>
+<ol>
+<li>  锯齿 Jaggies</li>
+<li>  摩尔纹 Moire</li>
+<li>  运动速度过快 Wagon wheel effect</li>
+</ol>
+<p>产生原因是信号变化的速度太快，而采样速度跟不上了。</p>
+<p><strong>那么怎么抗锯齿？</strong></p>
+<p>可以对三角面做预处理，比如滤波、模糊，之后再进行采样。</p>
+<h1 id="抗锯齿-Anti-Aliasing"><a href="#抗锯齿-Anti-Aliasing" class="headerlink" title="抗锯齿 Anti-Aliasing"></a>抗锯齿 Anti-Aliasing</h1><p>前面了解了为什么会产生锯齿，以及大致的抗锯齿技术（滤波、模糊）。这里细说。</p>
+<p><strong>频域 Frequency Domain</strong>：描述信号在频率方面特性时用到的一种坐标系。想象一下cos2Π的图。</p>
+<p><strong>滤波 Filtering</strong>：把某个时段内，特殊的频率给过滤掉。</p>
+<p><strong>傅里叶变换</strong>：变幻的具体内容不要深究，只要知道，可以通过傅里叶变换把一张图变换为频域图，这样就能知道哪些地方的信号量多、少。中心定义为低频、周围定义为高频。最后，得到的频域图，是可逆的！</p>
+<p>// TODO 下面的都只简单理解，更为深入要去学习 数字图像处理</p>
+<h2 id="先傅里叶变换，再过滤一张图-FFP"><a href="#先傅里叶变换，再过滤一张图-FFP" class="headerlink" title="先傅里叶变换，再过滤一张图 FFP"></a>先傅里叶变换，再过滤一张图 FFP</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621180700.png"></p>
+<p>中心定义为低频、周围定义为高频。当颜色变化差异巨大的时候（比如人物边缘），会产生高频信息。</p>
+<p>为什么会有十字线？没有学过信号学不能看懂这张频谱图，只能理解为傅里叶变换前会把这一张图复制很多份拼起来，来取样。拼起来之后每张图的4个边的边界之间的信息差异巨大，就有巨大的高频信息，而这十字线的高亮就是边界的映射。</p>
+<h3 id="高通率波"><a href="#高通率波" class="headerlink" title="高通率波"></a>高通率波</h3><p>High-pass，就是只有高频能通过，低频直接忽略的滤波方式。可以看到，逆变换回来的图几乎只保留了边界信息（人物描边），这是因为<strong>边界处的信号量差异很大，这就是高频的信息</strong>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621182236.png"></p>
+<h3 id="低通滤波"><a href="#低通滤波" class="headerlink" title="低通滤波"></a>低通滤波</h3><p>滤掉高频，也就是滤掉边界信息，那么就会像下面这样。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621182524.png"></p>
+<h3 id="高低滤波"><a href="#高低滤波" class="headerlink" title="高低滤波"></a>高低滤波</h3><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622105657.png"></p>
+<h2 id="卷积定理"><a href="#卷积定理" class="headerlink" title="卷积定理"></a>卷积定理</h2><p>只简单概述结论：</p>
+<p>在空间域中，对一张图进行卷积滤波 = 对一张图进行傅里叶变换、再对其乘以卷积核的傅里叶变换、最后逆傅里叶变换回去</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622111008.png"></p>
+<h1 id="采样-Sample"><a href="#采样-Sample" class="headerlink" title="采样 Sample"></a>采样 Sample</h1><p>稀疏采样会产生更多混叠，导致走样；密集采样更少混叠，所以映射结果更好一些。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622114336.png"></p>
+<h2 id="怎么较少走样，也就是如何反走样？"><a href="#怎么较少走样，也就是如何反走样？" class="headerlink" title="怎么较少走样，也就是如何反走样？"></a>怎么较少走样，也就是如何反走样？</h2><p>本质上，就是想办法增大傅里叶副本之间的距离来减少混叠。</p>
+<p><strong>1.增加采样率</strong>（更高分辨率的屏幕）</p>
+<p><strong>2.抗锯齿</strong>，通过对图像模糊预处理（使用傅里叶来低通滤波）再采样</p>
+<h2 id="常规采样流程"><a href="#常规采样流程" class="headerlink" title="常规采样流程"></a>常规采样流程</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622115530.png"></p>
+<p>先用低通滤波器模糊原图，然后再采样。</p>
+<h3 id="抗锯齿：模糊操作"><a href="#抗锯齿：模糊操作" class="headerlink" title="抗锯齿：模糊操作"></a>抗锯齿：模糊操作</h3><p>取像素颜色时，根据三角面的在该像素块中覆盖的面积，来设置灰度。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622120331.png"></p>
+<p>这个理论很简单，但是实现比较困难，于是采用一种类似的方法，对一个像素块再进行划分、进行更多的采样，也就是**多重采样抗锯齿 MSAA (MultiSampling Anti-Aliasing) **来实现。</p>
+<p>下图就是一个MSAA的例子：把一个像素格分成了2x2，来确定0%、25%、50%、75%、100%。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622121659.png"></p>
+<p>工业界会优化，想要2x2的效果不会这么单纯的分割成4个正方形，而是一些其他不规则图形，甚至可能多个像素块复用一个点，这么做都是为了减少需要检测的点数量。</p>
+<h3 id="其他抗锯齿方法"><a href="#其他抗锯齿方法" class="headerlink" title="其他抗锯齿方法"></a>其他抗锯齿方法</h3><p>FXAA（Fast Approximate AA）：快速近似抗锯齿，是一种后处理，会对有锯齿的地方进行修正。</p>
+<p>TAA（Temporal AA）：利用时间而不是空间采样，对于静止的连续帧，上一帧有效的采样点才继续采样。</p>
+<p>DLSS（DeepLearning SuperSimple）：当低分辨率拉伸成高分辨率时，会有很多锯齿，此时用深度学习来猜测描绘。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">CodingCodingK</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://codingcodingk.github.io/Tech/Graphics/games101-4/">https://codingcodingk.github.io/Tech/Graphics/games101-4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://CodingCodingK.github.io" target="_blank">CodingCodingK Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/">图形学</a><a class="post-meta__tags" href="/tags/Graphics/">Graphics</a><a class="post-meta__tags" href="/tags/games101/">games101</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Tech/Graphics/games101-5/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Games101 - 遮挡与深度</div></div></a></div><div class="next-post pull-right"><a href="/Tech/Graphics/games101-3/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Games101 - MVP变换</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Tech/Graphics/games101-1/" title="Games101 - 导学"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-17</div><div class="title">Games101 - 导学</div></div></a></div><div><a href="/Tech/Graphics/games101-2/" title="Games101 - 矩阵变换入门"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-17</div><div class="title">Games101 - 矩阵变换入门</div></div></a></div><div><a href="/Tech/Graphics/games101-3/" title="Games101 - MVP变换"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-17</div><div class="title">Games101 - MVP变换</div></div></a></div><div><a href="/Tech/Graphics/games101-5/" title="Games101 - 遮挡与深度"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-22</div><div class="title">Games101 - 遮挡与深度</div></div></a></div><div><a href="/Tech/Graphics/games101-6/" title="Games101 - 着色"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-22</div><div class="title">Games101 - 着色</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CodingCodingK</div><div class="author-info__description">一个正在成为游戏开发者的人</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">32</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">25</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CodingCodingK"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CodingCodingK" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">2022年的目标是：ET框架 + 烟雨Moba | Lua程序设计 + C++Primer</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%8B%E5%89%8D%E4%BD%A0%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93"><span class="toc-number">1.</span> <span class="toc-text">学之前你必须知道</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E9%94%A5"><span class="toc-number">1.1.</span> <span class="toc-text">视锥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%8F%E5%B9%95%E4%B8%8A%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.2.</span> <span class="toc-text">屏幕上的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%8F%E5%B9%95%E5%8F%91%E5%B1%95%E8%BF%87%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">屏幕发展过程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%89%E6%A0%85%E5%8C%96%E4%B8%80%E4%B8%AACube"><span class="toc-number">2.</span> <span class="toc-text">光栅化一个Cube</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E5%8F%A3%E5%8F%98%E6%8D%A2-Viewport"><span class="toc-number">2.1.</span> <span class="toc-text">视口变换 Viewport</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%89%E6%A0%85%E5%8C%96"><span class="toc-number">2.2.</span> <span class="toc-text">光栅化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96%E5%85%88%EF%BC%8C%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E5%83%8F%E7%B4%A0%E7%82%B9%E4%B8%8E%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9A%84%E4%BD%8D%E7%BD%AE%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="toc-number">2.2.1.</span> <span class="toc-text">首先，怎么判断一个像素点与三角形的位置关系？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%84%B6%E5%90%8E%EF%BC%8C%E5%93%AA%E4%BA%9B%E5%83%8F%E7%B4%A0%E7%82%B9%E9%9C%80%E8%A6%81%E5%88%A4%E6%96%AD%E5%91%A2%EF%BC%9F"><span class="toc-number">2.2.2.</span> <span class="toc-text">然后，哪些像素点需要判断呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%EF%BC%8C%E6%88%90%E5%83%8F%E5%AE%8C%E6%9C%89%E9%94%AF%E9%BD%BF-Jaggies-%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%EF%BC%9F"><span class="toc-number">2.2.3.</span> <span class="toc-text">最后，成像完有锯齿 (Jaggies) 怎么解决？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%97%E9%94%AF%E9%BD%BF-Anti-Aliasing"><span class="toc-number">3.</span> <span class="toc-text">抗锯齿 Anti-Aliasing</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2%EF%BC%8C%E5%86%8D%E8%BF%87%E6%BB%A4%E4%B8%80%E5%BC%A0%E5%9B%BE-FFP"><span class="toc-number">3.1.</span> <span class="toc-text">先傅里叶变换，再过滤一张图 FFP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E9%80%9A%E7%8E%87%E6%B3%A2"><span class="toc-number">3.1.1.</span> <span class="toc-text">高通率波</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%8E%E9%80%9A%E6%BB%A4%E6%B3%A2"><span class="toc-number">3.1.2.</span> <span class="toc-text">低通滤波</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E4%BD%8E%E6%BB%A4%E6%B3%A2"><span class="toc-number">3.1.3.</span> <span class="toc-text">高低滤波</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%B7%E7%A7%AF%E5%AE%9A%E7%90%86"><span class="toc-number">3.2.</span> <span class="toc-text">卷积定理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%87%E6%A0%B7-Sample"><span class="toc-number">4.</span> <span class="toc-text">采样 Sample</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E8%BE%83%E5%B0%91%E8%B5%B0%E6%A0%B7%EF%BC%8C%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%A6%82%E4%BD%95%E5%8F%8D%E8%B5%B0%E6%A0%B7%EF%BC%9F"><span class="toc-number">4.1.</span> <span class="toc-text">怎么较少走样，也就是如何反走样？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%84%E9%87%87%E6%A0%B7%E6%B5%81%E7%A8%8B"><span class="toc-number">4.2.</span> <span class="toc-text">常规采样流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%97%E9%94%AF%E9%BD%BF%EF%BC%9A%E6%A8%A1%E7%B3%8A%E6%93%8D%E4%BD%9C"><span class="toc-number">4.2.1.</span> <span class="toc-text">抗锯齿：模糊操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%8A%97%E9%94%AF%E9%BD%BF%E6%96%B9%E6%B3%95"><span class="toc-number">4.2.2.</span> <span class="toc-text">其他抗锯齿方法</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Tech/Graphics/games101-6/" title="Games101 - 着色"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Games101 - 着色"/></a><div class="content"><a class="title" href="/Tech/Graphics/games101-6/" title="Games101 - 着色">Games101 - 着色</a><time datetime="2022-06-22T14:32:28.598Z" title="发表于 2022-06-22 22:32:28">2022-06-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Graphics/games101-5/" title="Games101 - 遮挡与深度"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Games101 - 遮挡与深度"/></a><div class="content"><a class="title" href="/Tech/Graphics/games101-5/" title="Games101 - 遮挡与深度">Games101 - 遮挡与深度</a><time datetime="2022-06-22T14:32:28.594Z" title="发表于 2022-06-22 22:32:28">2022-06-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Graphics/games101-4/" title="Games101 - 光栅化"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Games101 - 光栅化"/></a><div class="content"><a class="title" href="/Tech/Graphics/games101-4/" title="Games101 - 光栅化">Games101 - 光栅化</a><time datetime="2022-06-22T14:32:28.591Z" title="发表于 2022-06-22 22:32:28">2022-06-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Graphics/games101-3/" title="Games101 - MVP变换"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Games101 - MVP变换"/></a><div class="content"><a class="title" href="/Tech/Graphics/games101-3/" title="Games101 - MVP变换">Games101 - MVP变换</a><time datetime="2022-06-17T01:51:05.738Z" title="发表于 2022-06-17 09:51:05">2022-06-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Graphics/games101-2/" title="Games101 - 矩阵变换入门"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Games101 - 矩阵变换入门"/></a><div class="content"><a class="title" href="/Tech/Graphics/games101-2/" title="Games101 - 矩阵变换入门">Games101 - 矩阵变换入门</a><time datetime="2022-06-17T01:51:05.735Z" title="发表于 2022-06-17 09:51:05">2022-06-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> CodingCodingK</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/chocolate.js"></script><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/cursor.js"></script><script src="/live2d-widget/autoload.js"></script><script src="/js/mine.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?CodingCodingK";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="CodingCodingK";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><!-- hexo injector body_end end --></body></html>
