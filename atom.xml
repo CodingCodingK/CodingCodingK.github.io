@@ -6,7 +6,7 @@
   <link href="https://codingcodingk.github.io/atom.xml" rel="self"/>
   
   <link href="https://codingcodingk.github.io/"/>
-  <updated>2022-06-22T16:40:04.078Z</updated>
+  <updated>2022-06-26T15:04:29.816Z</updated>
   <id>https://codingcodingk.github.io/</id>
   
   <author>
@@ -17,13 +17,44 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Games101 - 渲染管线、Shader、Texture</title>
+    <link href="https://codingcodingk.github.io/Tech/Graphics/games101-7/"/>
+    <id>https://codingcodingk.github.io/Tech/Graphics/games101-7/</id>
+    <published>2022-06-25T05:13:48.938Z</published>
+    <updated>2022-06-26T15:04:29.816Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="图形渲染管线"><a href="#图形渲染管线" class="headerlink" title="图形渲染管线"></a>图形渲染管线</h1><p>图形渲染管线 Graphics (Real-time Rendering) Pipeline</p><h2 id="Graphics-Pipeline"><a href="#Graphics-Pipeline" class="headerlink" title="Graphics Pipeline"></a>Graphics Pipeline</h2><p>前面学的流程串起来，就是下图。里面还涉及到了 <strong>Shader 和 Texture Mapping</strong> 的时机。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220623160112.png"></p><h1 id="Shader"><a href="#Shader" class="headerlink" title="Shader"></a>Shader</h1><p>一般指 Shader Programs ，是一个程序，会<strong>对一个像素点/片段进行处理、着色</strong>。可以用OpenGL的语言写，也就是<strong>GLSL</strong>。</p><p>在线shader测试：<a href="http://shadertoy.com/view/ld3Gz2">http://shadertoy.com/view/ld3Gz2</a></p><p>shader展示：<a href="https://youtu.be/XuSnLbB1j6E">https://youtu.be/XuSnLbB1j6E</a></p><h1 id="纹理映射-Texture-Mapping"><a href="#纹理映射-Texture-Mapping" class="headerlink" title="纹理映射 Texture Mapping"></a>纹理映射 Texture Mapping</h1><p>前面已经知道，每个像素点的漫反射系数kd乘以光照强度，会得到该像素点最终的颜色。显然，每个像素点的漫反射系数是由物体本身的<strong>颜色属性</strong>来决定的，而这个像素点的颜色属性我们会通过一张<strong>材质图</strong>来确定。这就是贴图。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220623175805.png"></p><h2 id="uv"><a href="#uv" class="headerlink" title="uv"></a>uv</h2><p>uv坐标是指纹理展开后，纹理上的坐标。u和v的范围，都定义在0-1之内。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220623182239.png"></p><h1 id="纹理"><a href="#纹理" class="headerlink" title="纹理"></a>纹理</h1><p>前面已经学了，三角面内进行插值着色，是用重心坐标来计算出任一个点对应的uv贴图坐标的（也就是决定漫反射系数k）。那么会出现什么问题？</p><h2 id="纹理拉伸"><a href="#纹理拉伸" class="headerlink" title="纹理拉伸"></a>纹理拉伸</h2><p>当纹理贴图太小了，多个像素点会映射到一个纹理点上去，看上去就像是拉伸了。纹理拉伸现象，可以通过**双线性插值 ** 来优化处理。</p><p><strong>双线性插值 Bilinear Interpolation</strong>：当一个像素点映射到uv贴图上后，取出相邻的3个uv贴图点，进行2次水平、1次竖直方向上的插值，求出这个点在4个uv贴图点中的插值平滑结果（漫反射系数）。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220626224605.png"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;图形渲染管线&quot;&gt;&lt;a href=&quot;#图形渲染管线&quot; class=&quot;headerlink&quot; title=&quot;图形渲染管线&quot;&gt;&lt;/a&gt;图形渲染管线&lt;/h1&gt;&lt;p&gt;图形渲染管线 Graphics (Real-time Rendering) Pipeline&lt;/p&gt;
+&lt;h2</summary>
+      
+    
+    
+    
+    <category term="Game" scheme="https://codingcodingk.github.io/categories/Game/"/>
+    
+    <category term="Graphics" scheme="https://codingcodingk.github.io/categories/Game/Graphics/"/>
+    
+    
+    <category term="图形学" scheme="https://codingcodingk.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="Graphics" scheme="https://codingcodingk.github.io/tags/Graphics/"/>
+    
+    <category term="games101" scheme="https://codingcodingk.github.io/tags/games101/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Games101 - 着色</title>
     <link href="https://codingcodingk.github.io/Tech/Graphics/games101-6/"/>
     <id>https://codingcodingk.github.io/Tech/Graphics/games101-6/</id>
     <published>2022-06-22T14:32:28.598Z</published>
-    <updated>2022-06-22T16:40:04.078Z</updated>
+    <updated>2022-06-26T14:22:00.553Z</updated>
     
-    <content type="html"><![CDATA[<p><strong>目前为止我们学会了什么？</strong></p><p>相机和物体 -&gt; 变换坐标到原点 -&gt; 拉伸后映射成2D图像 -&gt; 对2D图像进行光栅化：滤波、采样、后处理，最终变成屏幕上的像素点</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622162501.png"></p><p>现在我们引入<strong>着色</strong>。</p><h1 id="着色-Shading"><a href="#着色-Shading" class="headerlink" title="着色 Shading"></a>着色 Shading</h1><h2 id="什么是着色？"><a href="#什么是着色？" class="headerlink" title="什么是着色？"></a>什么是着色？</h2><p>着色在普世意义上，是对明暗、颜色进行绘制。</p><p>而在图形学中，<strong>着色是一个对物体应用材质的过程</strong>，正是材质的不同才导致颜色不同。</p><h2 id="理解一个简单的着色模型"><a href="#理解一个简单的着色模型" class="headerlink" title="理解一个简单的着色模型"></a>理解一个简单的着色模型</h2><p><strong>Blinn-Phong Reflectance Model</strong> 是一个常用参考的光照反射模型，它分为以下：</p><p><strong>高光 Specular highlights</strong>：一根光线打到光滑平面（比如镜面）上，会往镜面反射附近去反射。</p><p><strong>漫反射 Diffuse reflections</strong>：一根光线打到粗糙平面（比如墙面）上，被反射到各个地方的情况。图中茶杯从浅黄到深黄的变化。</p><p><strong>环境光照 Ambient lighting</strong>：是由间接光源组成的光源统称。图中光线并没有直接打到箭头处，而是打到桌面上被反射，反射光再打到了箭头处。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622163914.png"></p><h2 id="开始前先定义一个“着色点”-shading-point"><a href="#开始前先定义一个“着色点”-shading-point" class="headerlink" title="开始前先定义一个“着色点” shading point"></a>开始前先定义一个“着色点” shading point</h2><p>虽然反射到的面有曲面、有直面，但我们只观察一个最小的反射点，那么曲面的极小也可以当作<strong>直面</strong>。这个被观察的点我们叫做 <strong>shading point</strong> ，同时再定义几个其他的属性。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622170625.png"></p><p>单位向量 v：和相机的连线。</p><p>单位向量 n：反射面的法线。</p><p>单位向量 l：光照方向。</p><p>表面参数：颜色 color、反射强度 shininess、…</p><p><strong>着色的局部性 shading is local：我们着色只关注光线照过来这个点该怎么着色。</strong>比如因为遮挡产生的阴影，着色器是不考虑的。</p><p>接下来我们根据定义好的观测点 shading point，来分析上面提到的3种反射情况。</p><h2 id="漫反射-Diffuse-reflections"><a href="#漫反射-Diffuse-reflections" class="headerlink" title="漫反射 Diffuse reflections"></a>漫反射 Diffuse reflections</h2><p>一根光线打到一个点上时，会被均匀反射到四周。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622173813.png"></p><p>通过观察就可以知道，着色点的法线n和光照打来的方向l的夹角θ，会和这个着色点接收到的光照能量成反比。而这个反比有一个推导，叫 <strong>朗伯余弦定理 Lambert’s cosine law</strong>。</p><p>朗伯余弦定理的推导中，将点光源发出的光的轨迹视作一个个圆球体，而根据能量守恒，只要在真空中传播没有发生损耗，这些圆球体上某点的能量和圆球体表面积（也就是半径平方r）成正比。</p><p>最终公式如下：<img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622182248.png"></p><p>从上面也能得知一件事，就是<strong>漫反射与观测方向v无关</strong> =&gt; 通俗点说就是某点被漫反射了，即使你在不同的位置看它，它的着色情况也是不变的。</p><p>公式里还有个系数kd，这是颜色系数，乘以漫反射光的强度（右边的值），得到最终显示的颜色。</p><h2 id="高光-Specular-Term"><a href="#高光-Specular-Term" class="headerlink" title="高光 Specular Term"></a>高光 Specular Term</h2><p><strong>高光与v有关。</strong>当你的观测角度v，和反射光的方向R一致或者接近的时候，你才能看到高光。</p><p>而观测角度v和反射光R的夹角有多大，又可以转化为更简单的计算：求l和v的中间向量，然后和法线n求夹角。 这一个计算转化算是优化了，计算R和v夹角的方式叫做Phong模型，而我们这种优化的方式叫做<strong>Blinn-Phong模型</strong>，推导过程和最终公式如下：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220623001727.png"></p><p>公式里还有一个问题，就是为什么要有一个<strong>P次方</strong>去处理cosα？原因是cos函数的容忍度太大了，导致非常大的夹角仍然能保持高光，这是不合理的，所以需要人为控制一下，一般P会采用256甚至以上，让夹角控制在3°以内。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220623003907.png"></p><h2 id="环境光照-Ambient-Term"><a href="#环境光照-Ambient-Term" class="headerlink" title="环境光照 Ambient Term"></a>环境光照 Ambient Term</h2>]]></content>
+    <content type="html"><![CDATA[<p><strong>目前为止我们学会了什么？</strong></p><p>相机和物体 -&gt; 变换坐标到原点 -&gt; 拉伸后映射成2D图像 -&gt; 对2D图像进行光栅化：滤波、采样、后处理，最终变成屏幕上的像素点</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622162501.png"></p><p>现在我们引入<strong>着色</strong>。</p><h1 id="着色-Shading"><a href="#着色-Shading" class="headerlink" title="着色 Shading"></a>着色 Shading</h1><h2 id="什么是着色？"><a href="#什么是着色？" class="headerlink" title="什么是着色？"></a>什么是着色？</h2><p>着色在普世意义上，是对明暗、颜色进行绘制。</p><p>而在图形学中，<strong>着色是一个对物体应用材质的过程</strong>，正是材质的不同才导致颜色不同。</p><h2 id="理解一个简单的着色模型"><a href="#理解一个简单的着色模型" class="headerlink" title="理解一个简单的着色模型"></a>理解一个简单的着色模型</h2><p><strong>Blinn-Phong Reflectance Model</strong> 是一个常用参考的光照反射模型，它分为以下：</p><p><strong>高光 Specular highlights</strong>：一根光线打到光滑平面（比如镜面）上，会往镜面反射附近去反射。</p><p><strong>漫反射 Diffuse reflections</strong>：一根光线打到粗糙平面（比如墙面）上，被反射到各个地方的情况。图中茶杯从浅黄到深黄的变化。</p><p><strong>环境光照 Ambient lighting</strong>：是由间接光源组成的光源统称。图中光线并没有直接打到箭头处，而是打到桌面上被反射，反射光再打到了箭头处。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622163914.png"></p><h2 id="开始前先定义一个“着色点”-shading-point"><a href="#开始前先定义一个“着色点”-shading-point" class="headerlink" title="开始前先定义一个“着色点” shading point"></a>开始前先定义一个“着色点” shading point</h2><p>虽然反射到的面有曲面、有直面，但我们只观察一个最小的反射点，那么曲面的极小也可以当作<strong>直面</strong>。这个被观察的点我们叫做 <strong>shading point</strong> ，同时再定义几个其他的属性。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622170625.png"></p><p>单位向量 v：和相机的连线。</p><p>单位向量 n：反射面的法线。</p><p>单位向量 l：光照方向。</p><p>表面参数：颜色 color、反射强度 shininess、…</p><p><strong>着色的局部性 shading is local：我们着色只关注光线照过来这个点该怎么着色。</strong>比如因为遮挡产生的阴影，着色器是不考虑的。</p><p>接下来我们根据定义好的观测点 shading point，来分析上面提到的3种反射情况。</p><h2 id="漫反射-Diffuse-reflections"><a href="#漫反射-Diffuse-reflections" class="headerlink" title="漫反射 Diffuse reflections"></a>漫反射 Diffuse reflections</h2><p>一根光线打到一个点上时，会被均匀反射到四周。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622173813.png"></p><p>通过观察就可以知道，着色点的法线n和光照打来的方向l的夹角θ，会和这个着色点接收到的光照能量成反比。而这个反比有一个推导，叫 <strong>朗伯余弦定理 Lambert’s cosine law</strong>。</p><p>朗伯余弦定理的推导中，将点光源发出的光的轨迹视作一个个圆球体，而根据能量守恒，只要在真空中传播没有发生损耗，这些圆球体上某点的能量和圆球体表面积（也就是半径平方r）成正比。</p><p>最终公式如下：<img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622182248.png"></p><p>从上面也能得知一件事，就是<strong>漫反射与观测方向v无关</strong> =&gt; 通俗点说就是某点被漫反射了，即使你在不同的位置看它，它的着色情况也是不变的。</p><p>公式里还有个系数kd，这是颜色系数，乘以漫反射光的强度（右边的值），得到最终显示的颜色。</p><h2 id="高光-Specular-Term"><a href="#高光-Specular-Term" class="headerlink" title="高光 Specular Term"></a>高光 Specular Term</h2><p><strong>高光与v有关。</strong>当你的观测角度v，和反射光的方向R一致或者接近的时候，你才能看到高光。</p><p>而观测角度v和反射光R的夹角有多大，又可以转化为更简单的计算：求l和v的中间向量，然后和法线n求夹角。 这一个计算转化算是优化了，计算R和v夹角的方式叫做Phong模型，而我们这种优化的方式叫做<strong>Blinn-Phong模型</strong>，推导过程和最终公式如下：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220623001727.png"></p><p>公式里还有一个问题，就是为什么要有一个<strong>P次方</strong>去处理cosα？原因是cos函数的容忍度太大了，导致非常大的夹角仍然能保持高光，这是不合理的，所以需要人为控制一下，一般P会采用256甚至以上，让夹角控制在3°以内。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220623003907.png"></p><h2 id="环境光照-Ambient-Term"><a href="#环境光照-Ambient-Term" class="headerlink" title="环境光照 Ambient Term"></a>环境光照 Ambient Term</h2><p>环境光来自四面八方，与光照方向l和观测方向v都没有关系，是一个常数。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220623101513.png"></p><h2 id="最终3种光照"><a href="#最终3种光照" class="headerlink" title="最终3种光照"></a>最终3种光照</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220623102155.png"></p><h1 id="着色频率-Shading-Frequencies"><a href="#着色频率-Shading-Frequencies" class="headerlink" title="着色频率 Shading Frequencies"></a>着色频率 Shading Frequencies</h1><p>下面介绍3种着色方式，对应着不同的着色频率。</p><h2 id="逐三角面着色-flat-shading"><a href="#逐三角面着色-flat-shading" class="headerlink" title="逐三角面着色 flat shading"></a>逐三角面着色 flat shading</h2><p>每个三角面着一次色。</p><h2 id="逐顶点着色-Gouraud-shading"><a href="#逐顶点着色-Gouraud-shading" class="headerlink" title="逐顶点着色 Gouraud shading"></a>逐顶点着色 Gouraud shading</h2><p>每个三角面的3个顶点进行着色，着色完后三角面进行内部<strong>插值</strong>着色。顶点的法线方向，是通过这个顶点周围所有的面的法线平均或者加权平均算出来的。</p><p>插值可以用<strong>重心坐标插值</strong>，但是需要用投影前的重心坐标，而不是投影拉伸到屏幕后的，因为深度不同。取到重心坐标之后可以转换为uv坐标，这样就能取到对应的着色系数了。之后再把系数带入漫反射公式，算出光照下该像素的最终颜色。</p><h2 id="逐像素着色-Phong-shading"><a href="#逐像素着色-Phong-shading" class="headerlink" title="逐像素着色 Phong shading"></a>逐像素着色 Phong shading</h2><p>在顶点插值完之后，对每个像素都进行单独计算着色。</p><h2 id="并不是频率越高越好"><a href="#并不是频率越高越好" class="headerlink" title="并不是频率越高越好"></a>并不是频率越高越好</h2><p>当面数比较多的时候，哪怕是逐三角面着色也会有很好的效果。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220623121534.png"></p>]]></content>
     
     
       
@@ -560,35 +591,6 @@
     <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
     
     <category term="UI" scheme="https://codingcodingk.github.io/tags/UI/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>UGUI学习 - Base篇</title>
-    <link href="https://codingcodingk.github.io/Tech/Game/UI/ugui_1/"/>
-    <id>https://codingcodingk.github.io/Tech/Game/UI/ugui_1/</id>
-    <published>2022-03-18T13:18:05.700Z</published>
-    <updated>2022-03-18T13:18:05.700Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p><a href="https://github.com/Unity-Technologies/uGUI">源码地址</a></p><p><a href="https://blog.csdn.net/qq_28820675/article/details/105619250">学习博客</a></p><p>GF源码看了，UGUI自适应用了，自定义编辑器写了，但是对于UGUI却一直是纯黑盒使用。想体系化学习一遍UGUI。</p><p>学习目的：按照博客阅读源码，理解后整理成自己的笔记，方便回忆。</p><h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h1 id="总览图"><a href="#总览图" class="headerlink" title="总览图"></a>总览图</h1><p>好图，转自大佬<a href="https://blog.csdn.net/qq_28820675/article/details/105619250">博客</a>！</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220316142853.png"></p><h1 id="UIBehaviour"><a href="#UIBehaviour" class="headerlink" title="UIBehaviour"></a>UIBehaviour</h1><blockquote><p>  namespace UnityEngine.EventSystems :</p><p>  public abstract class UIBehaviour : MonoBehaviour</p></blockquote><p>是一个抽象类，里面提供了一系列虚方法：</p><ul><li>  生命周期（Awake,OnEnable,Start,OnDisable,OnDestroy）</li><li>  UnityEditor 辅助方法</li><li>  UGUI 通用方法（IsActive,OnValidate,OnRectTransformDimensionsChange等锚点相关）</li></ul><p>和一个非虚方法 IsDestroyed：</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">IsDestroyed</span>(<span class="params"></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span> == <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;序言&quot;&gt;&lt;a href=&quot;#序言&quot; class=&quot;headerlink&quot; title=&quot;序言&quot;&gt;&lt;/a&gt;序言&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/Unity-Technologies/uGUI&quot;&gt;源码地址&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;</summary>
-      
-    
-    
-    
-    <category term="Game" scheme="https://codingcodingk.github.io/categories/Game/"/>
-    
-    <category term="UI" scheme="https://codingcodingk.github.io/categories/Game/UI/"/>
-    
-    
-    <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
-    
-    <category term="UGUI" scheme="https://codingcodingk.github.io/tags/UGUI/"/>
     
   </entry>
   
