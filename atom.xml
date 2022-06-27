@@ -487,32 +487,6 @@
   </entry>
   
   <entry>
-    <title>Unity生命流程</title>
-    <link href="https://codingcodingk.github.io/Tech/Game/UI/uiboy_3/"/>
-    <id>https://codingcodingk.github.io/Tech/Game/UI/uiboy_3/</id>
-    <published>2022-03-18T13:18:05.701Z</published>
-    <updated>2022-03-18T13:18:05.701Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="生命流程图"><a href="#生命流程图" class="headerlink" title="生命流程图"></a>生命流程图</h1><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220221094846.png"></p><h1 id="FixedUpdate"><a href="#FixedUpdate" class="headerlink" title="FixedUpdate"></a>FixedUpdate</h1><p>1、和Update主帧循环不同，Unity的刚体系统通过固定的时间来驱动也就是FixedUpdate。在刚体系统运算开始前，<strong>Unity会根据上一次刚体运算完成的时间再加上Fixed Timestep的所设置的值来作为这一次刚体运算时间的限定范围</strong>。然后刚体系统会开始计算，直到达到这个时间限制临界点。</p><p>2、FixedUpdate与Update的不同在于，Update在每帧被调用，但是调用时间不确定，所以我们要实现一个物体匀速运动是，是无法通过Update准确实现的，但是我们可以在FixedUpdate中实现，因为它在确定的时间间隔中被调用。FixedUpdate有可能在Update之前调用多次。FixedUpdate除了用来处理物理逻辑之外并不适合处理其他模块的逻辑。</p><p>3、FixedUpdate的频率可以自己设置，如果频率过高，导致一次Update的时间片内执行了多次FixedUpdate进行物理运算，那对CPU就是一种浪费（因为根本不显示出来）；而适当的低频率FixedUpdate，虽然偶尔会造成人物有顿感，但是往往是可以接受的。</p><p>4、FixedUpdate的最高值也是可以设置的。Time Manager中的Maximum Allowed Timestep就是给处理物体运算的FixedUpdate加上一个限制。如果某一帧的物理运算时间超过了这个值，物理引擎就会立即停止运算，以便让主循环Update可以追上,一旦这一帧主循环Update运行完成，物理引擎就会从它暂停的地方恢复计算就像它从来没有停止过一样。</p><h1 id="LateUpdate"><a href="#LateUpdate" class="headerlink" title="LateUpdate"></a>LateUpdate</h1><p>3、LateUpdate它会在所有update被调用后调用，这个函数可以在我们编写ai时被使用，因为我们要当所有物体和怪物移动过后再判断物体的一些策略，比如开枪等，这个时候就可以在LateUpdate中编写，因为LateUpdate基本可以保证所有物体在本帧的移动等操作均已经完成。</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;生命流程图&quot;&gt;&lt;a href=&quot;#生命流程图&quot; class=&quot;headerlink&quot; title=&quot;生命流程图&quot;&gt;&lt;/a&gt;生命流程图&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/CodingCodingK/Coding</summary>
-      
-    
-    
-    
-    <category term="Game" scheme="https://codingcodingk.github.io/categories/Game/"/>
-    
-    <category term="UI" scheme="https://codingcodingk.github.io/categories/Game/UI/"/>
-    
-    
-    <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
-    
-  </entry>
-  
-  <entry>
     <title>UI屏幕自适应</title>
     <link href="https://codingcodingk.github.io/Tech/Game/UI/uiboy_1/"/>
     <id>https://codingcodingk.github.io/Tech/Game/UI/uiboy_1/</id>
@@ -552,6 +526,32 @@
       
     <summary type="html">&lt;p&gt;收集一些常见的UI优化手段和思路。当然，大部分是抄的，希望以后自己有能力总结。&lt;/p&gt;
 &lt;h1 id=&quot;Unity性能优化&quot;&gt;&lt;a href=&quot;#Unity性能优化&quot; class=&quot;headerlink&quot; title=&quot;Unity性能优化&quot;&gt;&lt;/a&gt;Unity性能优化&lt;/h</summary>
+      
+    
+    
+    
+    <category term="Game" scheme="https://codingcodingk.github.io/categories/Game/"/>
+    
+    <category term="UI" scheme="https://codingcodingk.github.io/categories/Game/UI/"/>
+    
+    
+    <category term="Unity" scheme="https://codingcodingk.github.io/tags/Unity/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Unity生命流程</title>
+    <link href="https://codingcodingk.github.io/Tech/Game/UI/uiboy_3/"/>
+    <id>https://codingcodingk.github.io/Tech/Game/UI/uiboy_3/</id>
+    <published>2022-03-18T13:18:05.701Z</published>
+    <updated>2022-03-18T13:18:05.701Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="生命流程图"><a href="#生命流程图" class="headerlink" title="生命流程图"></a>生命流程图</h1><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220221094846.png"></p><h1 id="FixedUpdate"><a href="#FixedUpdate" class="headerlink" title="FixedUpdate"></a>FixedUpdate</h1><p>1、和Update主帧循环不同，Unity的刚体系统通过固定的时间来驱动也就是FixedUpdate。在刚体系统运算开始前，<strong>Unity会根据上一次刚体运算完成的时间再加上Fixed Timestep的所设置的值来作为这一次刚体运算时间的限定范围</strong>。然后刚体系统会开始计算，直到达到这个时间限制临界点。</p><p>2、FixedUpdate与Update的不同在于，Update在每帧被调用，但是调用时间不确定，所以我们要实现一个物体匀速运动是，是无法通过Update准确实现的，但是我们可以在FixedUpdate中实现，因为它在确定的时间间隔中被调用。FixedUpdate有可能在Update之前调用多次。FixedUpdate除了用来处理物理逻辑之外并不适合处理其他模块的逻辑。</p><p>3、FixedUpdate的频率可以自己设置，如果频率过高，导致一次Update的时间片内执行了多次FixedUpdate进行物理运算，那对CPU就是一种浪费（因为根本不显示出来）；而适当的低频率FixedUpdate，虽然偶尔会造成人物有顿感，但是往往是可以接受的。</p><p>4、FixedUpdate的最高值也是可以设置的。Time Manager中的Maximum Allowed Timestep就是给处理物体运算的FixedUpdate加上一个限制。如果某一帧的物理运算时间超过了这个值，物理引擎就会立即停止运算，以便让主循环Update可以追上,一旦这一帧主循环Update运行完成，物理引擎就会从它暂停的地方恢复计算就像它从来没有停止过一样。</p><h1 id="LateUpdate"><a href="#LateUpdate" class="headerlink" title="LateUpdate"></a>LateUpdate</h1><p>3、LateUpdate它会在所有update被调用后调用，这个函数可以在我们编写ai时被使用，因为我们要当所有物体和怪物移动过后再判断物体的一些策略，比如开枪等，这个时候就可以在LateUpdate中编写，因为LateUpdate基本可以保证所有物体在本帧的移动等操作均已经完成。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;生命流程图&quot;&gt;&lt;a href=&quot;#生命流程图&quot; class=&quot;headerlink&quot; title=&quot;生命流程图&quot;&gt;&lt;/a&gt;生命流程图&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/CodingCodingK/Coding</summary>
       
     
     
