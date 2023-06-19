@@ -1,0 +1,337 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>书籍笔记 - 程序是怎样跑起来的（硬件软件交互理解） | CodingCodingK Blog</title><meta name="keywords" content="硬件,软件"><meta name="author" content="CodingCodingK"><meta name="copyright" content="CodingCodingK"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="CPUCPU可直接执行的“机器码”，到底能处理什么？简单来说分为4种， 数据传送指令：用于寄存器、内存、外围设备之间进行数据读写的操作。也就是读写操作。 运算指令：用累加寄存器执行算术运算、逻辑运算、比较运算和位移运算。 跳转指令：实现条件分支、循环、强制跳转等。其实就是个goto。 call&#x2F;return指令：函数的调用 &#x2F; 返回调用前的地址。和c#的函数栈桢展开是类似的。  二进制数如何在硬件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="书籍笔记 - 程序是怎样跑起来的（硬件软件交互理解）">
+<meta property="og:url" content="https://codingcodingk.github.io/Tech/BookNote/bookNote_howProgramRun/index.html">
+<meta property="og:site_name" content="CodingCodingK Blog">
+<meta property="og:description" content="CPUCPU可直接执行的“机器码”，到底能处理什么？简单来说分为4种， 数据传送指令：用于寄存器、内存、外围设备之间进行数据读写的操作。也就是读写操作。 运算指令：用累加寄存器执行算术运算、逻辑运算、比较运算和位移运算。 跳转指令：实现条件分支、循环、强制跳转等。其实就是个goto。 call&#x2F;return指令：函数的调用 &#x2F; 返回调用前的地址。和c#的函数栈桢展开是类似的。  二进制数如何在硬件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg">
+<meta property="article:published_time" content="2023-06-19T16:16:58.410Z">
+<meta property="article:modified_time" content="2023-06-19T16:16:58.410Z">
+<meta property="article:author" content="CodingCodingK">
+<meta property="article:tag" content="硬件">
+<meta property="article:tag" content="软件">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png"><link rel="canonical" href="https://codingcodingk.github.io/Tech/BookNote/bookNote_howProgramRun/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '书籍笔记 - 程序是怎样跑起来的（硬件软件交互理解）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-06-20 00:16:58'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/css/mine.css"><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="CodingCodingK Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">75</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">39</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">CodingCodingK Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">书籍笔记 - 程序是怎样跑起来的（硬件软件交互理解）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-06-19T16:16:58.410Z" title="发表于 2023-06-20 00:16:58">2023-06-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-06-19T16:16:58.410Z" title="更新于 2023-06-20 00:16:58">2023-06-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/%E6%8A%80%E6%9C%AF%E7%B1%BB/">技术类</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="书籍笔记 - 程序是怎样跑起来的（硬件软件交互理解）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h1><h2 id="CPU可直接执行的“机器码”，到底能处理什么？"><a href="#CPU可直接执行的“机器码”，到底能处理什么？" class="headerlink" title="CPU可直接执行的“机器码”，到底能处理什么？"></a>CPU可直接执行的“机器码”，到底能处理什么？</h2><p>简单来说分为4种，</p>
+<p>数据传送指令：用于寄存器、内存、外围设备之间进行数据读写的操作。也就是<strong>读写操作</strong>。</p>
+<p>运算指令：用累加寄存器执行<strong>算术运算、逻辑运算、比较运算和位移运算</strong>。</p>
+<p>跳转指令：实现条件分支、循环、强制跳转等。其实就是个<strong>goto</strong>。</p>
+<p>call/return指令：函数的调用 / 返回调用前的地址。和c#的函数<strong>栈桢</strong>展开是类似的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221026103246.png"></p>
+<h1 id="二进制数"><a href="#二进制数" class="headerlink" title="二进制数"></a>二进制数</h1><h2 id="如何在硬件层面理解二进制、bit、byte？"><a href="#如何在硬件层面理解二进制、bit、byte？" class="headerlink" title="如何在硬件层面理解二进制、bit、byte？"></a>如何在硬件层面理解二进制、bit、byte？</h2><p>像计算机的CPU和内存都是IC的一种，IC就是有很多引脚的集成电路，而每一个引脚的状态只有直流电压0V和5V，这两种。因此计算机的信息只能转化成二进制。</p>
+<p>而**位(bit)**这个数据结构，就刚好对应了这个规律。</p>
+<p>**字节(byte)**则是8个bit，因为内存和磁盘都是用字节为最小单位来存储、读写数据的，所以用位bit不能直接读写数据，所以都会在高位补0实现bit转byte。</p>
+<p>而一个CPU有32位，就意味着它有32个引脚来处理信息的输入和输出，也就是说一次可以处理32位的二进制数信息。</p>
+<h2 id="为什么计算机内用补码来存数？（比如-1是11111111而不是10000001）"><a href="#为什么计算机内用补码来存数？（比如-1是11111111而不是10000001）" class="headerlink" title="为什么计算机内用补码来存数？（比如-1是11111111而不是10000001）"></a>为什么计算机内用补码来存数？（比如-1是11111111而不是10000001）</h2><p>为了实现通过相加来实现减法。</p>
+<p>补码是取反+1的结果，同样的这个结果和无符号位的原码相加结果为0。</p>
+<h1 id="小数"><a href="#小数" class="headerlink" title="小数"></a>小数</h1><h2 id="什么是浮点数？它是怎么表示小数的？"><a href="#什么是浮点数？它是怎么表示小数的？" class="headerlink" title="什么是浮点数？它是怎么表示小数的？"></a>什么是浮点数？它是怎么表示小数的？</h2><p><strong>什么是浮点数？</strong>是使用<strong>符号、尾数、基数、指数</strong>这四个部分来表示小数的，形式为<font color= "red"><code>± m * n的e次方</code></font >。符号就是±，基数n因为计算机二进制所以是2。而至于尾数m和指数n，就是根据具体数字来的，但也并不是毫无参照。</p>
+<p><strong>它是怎么表示小数的？</strong></p>
+<p>首先，分为单、双精度浮点数，它们表示范围不同，根据最为普遍的IEEE标准，单精浮点（32位）有1位符号部分、8位指数部分、23位尾数部分；双精浮点（64位）有1位符号部分、11位指数部分、52位尾数部分。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221018103720.png"></p>
+<p>其次，对于尾数m，就像科学计数法一样，浮点数也有一种表示规则来限制诸如<code>0.75 * 10^0</code>、<code>7.5 * 10^-1</code>这种同一个数字，表示方式却不同的情况。在二进制数中，用的是<strong>“将小数点前面的值固定为1的正则表达式”</strong>。</p>
+<p>比如<code>1011.0011</code> =&gt; <code>0001.0110011</code> =&gt;第一位固定1所以可以去掉，多表示1位 <code>0110011000...(省略0，补齐23/52位)</code></p>
+<p>最后，对于指数e，用的是<strong>EXCESS系统</strong>来表示它的正负。比如单精指数部分只有8位的情况下，最大值<code>11111111</code>=255，用它的一半<code>01111111</code>=127来记作0，比它大的是正数，比它小的是负数。指数e的表示范围从0<del>255变为-127</del>128。</p>
+<h2 id="浮点数会不准确"><a href="#浮点数会不准确" class="headerlink" title="浮点数会不准确"></a>浮点数会不准确</h2><p><strong>为什么浮点数会不准确？</strong>计算机用浮点数无法处理0.1这种转换为二进制会无尽的小数。所以会导致0.1打印输出会变成0.10000002之类的。</p>
+<p><strong>如何解决？</strong>一般可以不解决，因为科学近似精度已经足够高了。但如果是一些严格要求准确的领域，</p>
+<p>方法1.可以把小数倍乘成整数来计算，计算完后再除回去。</p>
+<p>方法2.可以使用BCD(Binary Coded Decimal)表示法，就是用4位来表示0~9的1位数字。</p>
+<h2 id="浮点数c-实践"><a href="#浮点数c-实践" class="headerlink" title="浮点数c#实践"></a>浮点数c#实践</h2><p>在c#中尝试把一个float用二进制输出出来，比如<code>0.75f</code>，输出的值确实是按照1-8-23划分的：<code>0-01111110-10000000000000000000000</code>。但是结果是反过来的，不清楚为什么，书中用的c++是正序的。另外就是，用<code>BitConverter.GetBytes</code>接口转的是byte，也就是8位2进制转成10进制读得的数值，所以还需要再转回8位2进制数。</p>
+<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><h2 id="如何理解内存硬件"><a href="#如何理解内存硬件" class="headerlink" title="如何理解内存硬件"></a>如何理解内存硬件</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221020085834.png"></p>
+<p>比如一个内存，其实就是一堆引脚。VCC、GND引脚是接电源的，DR、WR是控制信号用来操控读、写。</p>
+<p>A0-A9的引脚用来表示地址，所以可以表示1024个地址；D0-D7表示数据，8位2进制，也就是1个字节B。所以这个内存的容量为1KB。</p>
+<p>一个内存内部有大量空间去存储这些8位数据，通过地址引脚指定的地址来读写这些数据。</p>
+<h2 id="内存地址"><a href="#内存地址" class="headerlink" title="内存地址"></a>内存地址</h2><p>1个地址指向1个字节（内存的最小单位）；</p>
+<p>32位系统一次可以读4个字节，等于其最高可表示2^32个地址数。</p>
+<p>所以32位系统，内存上限为4GB。</p>
+<h1 id="内存与磁盘"><a href="#内存与磁盘" class="headerlink" title="内存与磁盘"></a>内存与磁盘</h1><h2 id="CPU、内存、磁盘"><a href="#CPU、内存、磁盘" class="headerlink" title="CPU、内存、磁盘"></a>CPU、内存、磁盘</h2><p>1.程序保存在存储设备中，通过有序地被读出来实现运行。</p>
+<p>2.CPU只能执行已经加载到内存中的程序。</p>
+<h2 id="如何理解磁盘硬件"><a href="#如何理解磁盘硬件" class="headerlink" title="如何理解磁盘硬件"></a>如何理解磁盘硬件</h2><p>磁盘是用扇区作为读写最小物理单位的，一个扇区为512字节。但是Windows在逻辑方面对磁盘进行读写的单位是<strong>簇</strong>，1簇可以设置为扇区整数倍，比如可以1簇=1扇区（512字节）、也可以1簇=2扇区（1KB）等等。</p>
+<p>无论是多么小的文件，都会占用至少1簇。</p>
+<h2 id="磁盘缓存"><a href="#磁盘缓存" class="headerlink" title="磁盘缓存"></a>磁盘缓存</h2><p>磁盘访问速度 &lt; 内存访问速度，所以会用内存映射一段磁盘数据作为缓存，如果下一次还用到的磁盘数据刚好被内存加载过，那就直接去速度更快的内存里拿数据。这叫<strong>缓存</strong>。到win98时代，由于磁盘访问速度越来越快，这种技术的提升就不是很显著了，但是这个思想也用于Web把远端服务器加载下来的数据存入磁盘中。</p>
+<h2 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h2><p>正好与磁盘缓存相对的概念，就是说划分一块磁盘区域作为假想的内存来使用。但CPU只能执行已经加载到内存中的程序，所以实际上是在把内存和磁盘中的内容不停进行置换，保持当前正在运行的程序部分有在物理内存中。而置换就涉及一个最小单位，Windows是用<strong>页</strong>为单位（一般4KB）。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221020142308.png"></p>
+<h1 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h1><p>就只列举一些常见的压缩算法。</p>
+<p>文本文件：RLE压缩（文本 x 次数 的形式）、哈夫曼（权重画树、编码）压缩</p>
+<p>图像文件：可逆压缩、不可逆压缩。</p>
+<h1 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h1><h2 id="虚拟机是什么"><a href="#虚拟机是什么" class="headerlink" title="虚拟机是什么"></a>虚拟机是什么</h2><p>因为应用是针对操作系统OS的，所以Windows应用只能在Windows系统上运行。而虚拟机就是在其他OS上，模拟Windows运行环境，来实现跨平台。</p>
+<h2 id="其他跨平台方式"><a href="#其他跨平台方式" class="headerlink" title="其他跨平台方式"></a>其他跨平台方式</h2><p>除了虚拟机之外，还有两个方式。一个是<strong>Ports机制</strong>，是移植的意思。该机制能够结合当前运行的硬件环境来编译应用的源代码。</p>
+<p>另一个是Java虚拟机，它其实是一种运行环境。Java在编译之后生成的不是机器码而是<strong>字节代码</strong>，然后字节代码在不同平台实现的Java虚拟机上运行，转换成本机代码。和c#一样。</p>
+<h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><h2 id="从程序到机器码-编译器"><a href="#从程序到机器码-编译器" class="headerlink" title="从程序到机器码 - 编译器"></a>从程序到机器码 - 编译器</h2><p><strong>编译器</strong>把源代码转换成本地代码（本机代码），它内部仿佛有一个 源代码-本机码 的对应表，但实际上读入的源代码还需要经过<strong>语法解析、句法解析、语义解析</strong>等，才能生成本地代码。</p>
+<p>编译器本身也是一个程序，所以也需要<strong>运行环境</strong>（比如Windows）。根据<strong>输出的目标CPU类型、输入的高级语言</strong>的不同，编译器也不同（比如Windows可用的x86系CPU的C编译器）。</p>
+<h2 id="生成EXE-链接器"><a href="#生成EXE-链接器" class="headerlink" title="生成EXE - 链接器"></a>生成EXE - 链接器</h2><p>编译后的机器代码是一个obj文件（里面都是2进制数），并不能直接运行。还需要把代码中的引用其他文件的部分、和obj文件结合，生成出一个EXE文件。这就是<strong>链接</strong>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221025144538.png"></p>
+<h2 id="EXE启动-分配内存"><a href="#EXE启动-分配内存" class="headerlink" title="EXE启动 - 分配内存"></a>EXE启动 - 分配内存</h2><p>一个程序经过编译+链接后，生成了可执行文件EXE，但是程序源码里对函数、变量的调用都是指向内存地址的，但一个EXE文件并没有给它分配内存地址，怎么办呢？</p>
+<p>其实，EXE文件中给变量、函数分配了虚拟的内存地址，当EXE运行时会把虚拟的内存地址转换成实际的内存地址。链接器在EXE文件的开头，追加转换内存地址所需的必要信息，这个叫做<strong>再配置信息</strong>。</p>
+<p>当EXE运行时，还会分配额外的2块连续内存，一个是栈、一个是堆。栈用来存储函数内部临时变量，堆用来存储运行时数据以及对象。栈的内存管理代码是编译器自动生成的，而堆的内存管理是需要人为编写的，c++中用new申请、delete来释放。这就是GC。</p>
+<h2 id="常见编译问题"><a href="#常见编译问题" class="headerlink" title="常见编译问题"></a>常见编译问题</h2><h3 id="什么是编译器、什么是解释器？"><a href="#什么是编译器、什么是解释器？" class="headerlink" title="什么是编译器、什么是解释器？"></a>什么是编译器、什么是解释器？</h3><p>两者都是把高级语言转化为机器语言的程序。编译器再运行前把源码转换成二进制可执行文件，而解释器逐条读取源码转换成机器码。</p>
+<h3 id="Build是什么意思？"><a href="#Build是什么意思？" class="headerlink" title="Build是什么意思？"></a>Build是什么意思？</h3><p>编译+链接</p>
+<h3 id="DLL可以不用链接就调用到吗？"><a href="#DLL可以不用链接就调用到吗？" class="headerlink" title="DLL可以不用链接就调用到吗？"></a>DLL可以不用链接就调用到吗？</h3><p>可以，通过<code>LoadLibrary()</code>、<code>GetProcAddress()</code>这些API，即使不链接导入库，也可以在程序运行时调用DLL文件中的函数。</p>
+<h1 id="通过汇编理解程序"><a href="#通过汇编理解程序" class="headerlink" title="通过汇编理解程序"></a>通过汇编理解程序</h1><h2 id="什么是汇编语言？"><a href="#什么是汇编语言？" class="headerlink" title="什么是汇编语言？"></a>什么是汇编语言？</h2><p>汇编语言和本地代码是一一对应的。汇编语言是本地代码（二进制）的助记符。</p>
+<h2 id="汇编语言怎么看？"><a href="#汇编语言怎么看？" class="headerlink" title="汇编语言怎么看？"></a>汇编语言怎么看？</h2><p><strong>伪指令</strong>：负责把程序的构造以及汇编的方法指示给汇编器。伪指令<code>proc</code>和<code>endp</code>围起来的部分，表示的是函数的范围，里面的是函数执行过程。</p>
+<p><strong>语法结构</strong>：操作码+操作数，比如<code>mov</code>+内存地址</p>
+<p>以下是x86的部分操作码、主要寄存器：</p>
+<table>
+<thead>
+<tr>
+<th>操作码</th>
+<th>操作数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mov</td>
+<td>A、B</td>
+<td>把B的值赋给A</td>
+</tr>
+<tr>
+<td>and</td>
+<td>A、B</td>
+<td>把A同B的值相加，并将结果赋给A</td>
+</tr>
+<tr>
+<td>push</td>
+<td>A</td>
+<td>把A的值存储在栈中</td>
+</tr>
+<tr>
+<td>pop</td>
+<td>A</td>
+<td>从栈中读取出值，并将其赋给A</td>
+</tr>
+<tr>
+<td>call</td>
+<td>A</td>
+<td>调用函数A，<font color="red">调用时自动获取栈上对应数量的入参</font></td>
+</tr>
+<tr>
+<td>ret</td>
+<td>无</td>
+<td>将处理返回到函数的调用源</td>
+</tr>
+</tbody></table>
+<p><strong>调用函数流程</strong>：</p>
+<p>1.先把ebp寄存器（数据领域基址寄存器）的值入栈，再把函数的入参push入栈。</p>
+<p>//注意，栈的高位地址在下面，低位地址在上面。</p>
+<p>2.使用<code>call</code>指令 + 函数名（函数指针），调用时自动获取栈上对应数量的入参。</p>
+<p>3.清理栈，把入参销毁掉。具体是把esp的寄存器值（栈顶指针寄存器）add上 4 * 入参数。</p>
+<p>//至于为什么是4字节，因为堆栈进行数值的输入输出时，数值的单位是4字节。</p>
+<p>4.<code>pop</code>读出此时栈顶的数值，也就是1中存储的ebp寄存器值，存入ebp寄存器。执行<code>ret</code>返回。</p>
+<p>//为什么把edp寄存器的值原地倒腾了一遍？因为这是c语言的规定，确保函数调用前后edp不变。</p>
+<p><strong>此外.函数的参数是通过栈来传递，返回值是通过寄存器返回的。</strong></p>
+<h2 id="汇编实现功能"><a href="#汇编实现功能" class="headerlink" title="汇编实现功能"></a>汇编实现功能</h2><h3 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h3><p>使用标记 + goto标记 的 思路去做，具体助记符就不记了（先cmp再jmp）。</p>
+<h3 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h3><p>一样是标记 + go标记去实现的。</p>
+<h3 id="多线程问题"><a href="#多线程问题" class="headerlink" title="多线程问题"></a>多线程问题</h3><p>写2个把全局变量x2的相同的函数，再多线程分别调用1次，可能遇到结果为2倍而不是2x2倍的情况。原因如图。解决方案是用c语言中的锁定方法。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221027090224.png"></p>
+<h1 id="硬件控制"><a href="#硬件控制" class="headerlink" title="硬件控制"></a>硬件控制</h1><h2 id="外围设备硬件和软件是如何实现通信的？"><a href="#外围设备硬件和软件是如何实现通信的？" class="headerlink" title="外围设备硬件和软件是如何实现通信的？"></a>外围设备硬件和软件是如何实现通信的？</h2><p><strong>首先，应用与硬件无关：</strong>Windows系统下的硬件是由系统全权负责的，应用层只能通过API来通过系统调用。</p>
+<p><strong>其次，硬件们是通过I/O控制器来实现和操作系统通信的：</strong>计算机有着USB等和外围设备交互的连接器，因为外围设备的电压不同、用的也是模拟信号，所以无法和硬件直接连接，需要用I/O控制器。</p>
+<p><strong>什么是端口：</strong>I/O控制器中由用于临时保存输入输出数据的内存，这个内存叫端口。端口是内存，也有自己的地址，叫<strong>端口号</strong>或者<strong>I/O地址</strong>。</p>
+<p><strong>汇编语言的IN/OUT指令，是通过端口和寄存器之间数据互换实现的：</strong>汇编中的IN/OUT助记符是实现和硬件交互的，IN指令把端口数据存储在CPU寄存器中，OUT把CPU寄存器数据存储在端口中。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221027100225.png"></p>
+<h2 id="外围设备硬件的中断操作IRQ"><a href="#外围设备硬件的中断操作IRQ" class="headerlink" title="外围设备硬件的中断操作IRQ"></a>外围设备硬件的中断操作IRQ</h2><p>IRQ（Interrupt Request）是<strong>中断请求</strong>的意思，对应的值是0x06。</p>
+<p>它负责把当前正在运行的主程序中断（同时把CPU所有寄存器的数值保存到栈中），然后跳转到外围设备的输入输出运行，等运行完后返回中断程序（同时恢复所有寄存器的值），继续执行。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221027103320.png"></p>
+<p>遇到诸如打印机这种操作比CPU慢很多的设备，就可以等中断请求发生时再输出数据即可；而对于实时性比较高的比如鼠标等，就可以不停轮询。</p>
+<h2 id="外围设备直接和内存通信DMA"><a href="#外围设备直接和内存通信DMA" class="headerlink" title="外围设备直接和内存通信DMA"></a>外围设备直接和内存通信DMA</h2><p>像IRQ的中断，本质上还是要和CPU交互的。但是DMA（Direct Memory Access）可以不通过CPU，外围设备直接和主内存进行数据传送。这样更快。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221027104221.png"></p>
+<h2 id="计算机图形的内存VRAM"><a href="#计算机图形的内存VRAM" class="headerlink" title="计算机图形的内存VRAM"></a>计算机图形的内存VRAM</h2><p>显示器中显示的数据，一直存储在内存总，这个内存叫<strong>VRAM</strong>（Video RAM）。在程序中，只要往VRAM中写入数据，该数据就会在显示其中显示出来，此功能由操作系统或BIOS提供。</p>
+<p>在DOS系统时代，VRAM是主内存的一部分，图形颜色只能用16种是因为这块内存太小了。而如今，显卡配有独立的VRAM内存。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221027104612.png"></p>
+<h1 id="计算机的随机数"><a href="#计算机的随机数" class="headerlink" title="计算机的随机数"></a>计算机的随机数</h1><h2 id="线性同余法实现伪随机"><a href="#线性同余法实现伪随机" class="headerlink" title="线性同余法实现伪随机"></a>线性同余法实现伪随机</h2><p>很多伪随机其实就是用线性同余法的递推公式<img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221027110424.png"></p>
+<p>实现的。</p>
+<p>指定了a、b、c之后，就会生成0 ~ c（不包括c）的随机数。其中Ri、a、b、c就是随机数的种子。</p>
+<p>那这样为什么叫伪随机呢？因为指定好a、b、c之后的数，不停递推生成的结果是有<strong>周期性</strong>的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221027110819.png"></p>
+<h1 id="C入门"><a href="#C入门" class="headerlink" title="C入门"></a>C入门</h1><h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>长度（位长）</th>
+<th>精度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>8</td>
+<td>-128，+127</td>
+</tr>
+<tr>
+<td>short</td>
+<td>16</td>
+<td>-32768，32767</td>
+</tr>
+<tr>
+<td>int（或者long）</td>
+<td>32</td>
+<td>-2147483648，2147483647</td>
+</tr>
+<tr>
+<td>float</td>
+<td>32</td>
+<td>略</td>
+</tr>
+<tr>
+<td>double</td>
+<td>64</td>
+<td>略</td>
+</tr>
+</tbody></table>
+<h2 id="常用关键字"><a href="#常用关键字" class="headerlink" title="常用关键字"></a>常用关键字</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20221028110814.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">CodingCodingK</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://codingcodingk.github.io/Tech/BookNote/bookNote_howProgramRun/">https://codingcodingk.github.io/Tech/BookNote/bookNote_howProgramRun/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://CodingCodingK.github.io" target="_blank">CodingCodingK Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%A1%AC%E4%BB%B6/">硬件</a><a class="post-meta__tags" href="/tags/%E8%BD%AF%E4%BB%B6/">软件</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/Tech/Game/tools/assetbundleInit/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">AB包基础</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CodingCodingK</div><div class="author-info__description">一位喜欢C#的软件开发者</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">75</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">39</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CodingCodingK"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CodingCodingK" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">2022年的目标是：ET框架、烟雨开源Moba项目 + Lua程序设计 + Games101、Shader入门精要（部分）</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CPU"><span class="toc-number">1.</span> <span class="toc-text">CPU</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E5%8F%AF%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8C%E7%9A%84%E2%80%9C%E6%9C%BA%E5%99%A8%E7%A0%81%E2%80%9D%EF%BC%8C%E5%88%B0%E5%BA%95%E8%83%BD%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">CPU可直接执行的“机器码”，到底能处理什么？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">二进制数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8%E7%A1%AC%E4%BB%B6%E5%B1%82%E9%9D%A2%E7%90%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E3%80%81bit%E3%80%81byte%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">如何在硬件层面理解二进制、bit、byte？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%86%85%E7%94%A8%E8%A1%A5%E7%A0%81%E6%9D%A5%E5%AD%98%E6%95%B0%EF%BC%9F%EF%BC%88%E6%AF%94%E5%A6%82-1%E6%98%AF11111111%E8%80%8C%E4%B8%8D%E6%98%AF10000001%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">为什么计算机内用补码来存数？（比如-1是11111111而不是10000001）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%8F%E6%95%B0"><span class="toc-number">3.</span> <span class="toc-text">小数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B5%AE%E7%82%B9%E6%95%B0%EF%BC%9F%E5%AE%83%E6%98%AF%E6%80%8E%E4%B9%88%E8%A1%A8%E7%A4%BA%E5%B0%8F%E6%95%B0%E7%9A%84%EF%BC%9F"><span class="toc-number">3.1.</span> <span class="toc-text">什么是浮点数？它是怎么表示小数的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0%E4%BC%9A%E4%B8%8D%E5%87%86%E7%A1%AE"><span class="toc-number">3.2.</span> <span class="toc-text">浮点数会不准确</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0c-%E5%AE%9E%E8%B7%B5"><span class="toc-number">3.3.</span> <span class="toc-text">浮点数c#实践</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E5%AD%98"><span class="toc-number">4.</span> <span class="toc-text">内存</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E5%86%85%E5%AD%98%E7%A1%AC%E4%BB%B6"><span class="toc-number">4.1.</span> <span class="toc-text">如何理解内存硬件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80"><span class="toc-number">4.2.</span> <span class="toc-text">内存地址</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E4%B8%8E%E7%A3%81%E7%9B%98"><span class="toc-number">5.</span> <span class="toc-text">内存与磁盘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU%E3%80%81%E5%86%85%E5%AD%98%E3%80%81%E7%A3%81%E7%9B%98"><span class="toc-number">5.1.</span> <span class="toc-text">CPU、内存、磁盘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E7%A3%81%E7%9B%98%E7%A1%AC%E4%BB%B6"><span class="toc-number">5.2.</span> <span class="toc-text">如何理解磁盘硬件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E7%BC%93%E5%AD%98"><span class="toc-number">5.3.</span> <span class="toc-text">磁盘缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-number">5.4.</span> <span class="toc-text">虚拟内存</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9"><span class="toc-number">6.</span> <span class="toc-text">压缩</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">7.</span> <span class="toc-text">虚拟机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">7.1.</span> <span class="toc-text">虚拟机是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">7.2.</span> <span class="toc-text">其他跨平台方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91"><span class="toc-number">8.</span> <span class="toc-text">编译</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E7%A8%8B%E5%BA%8F%E5%88%B0%E6%9C%BA%E5%99%A8%E7%A0%81-%E7%BC%96%E8%AF%91%E5%99%A8"><span class="toc-number">8.1.</span> <span class="toc-text">从程序到机器码 - 编译器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90EXE-%E9%93%BE%E6%8E%A5%E5%99%A8"><span class="toc-number">8.2.</span> <span class="toc-text">生成EXE - 链接器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXE%E5%90%AF%E5%8A%A8-%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="toc-number">8.3.</span> <span class="toc-text">EXE启动 - 分配内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%BC%96%E8%AF%91%E9%97%AE%E9%A2%98"><span class="toc-number">8.4.</span> <span class="toc-text">常见编译问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%96%E8%AF%91%E5%99%A8%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E8%A7%A3%E9%87%8A%E5%99%A8%EF%BC%9F"><span class="toc-number">8.4.1.</span> <span class="toc-text">什么是编译器、什么是解释器？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Build%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%EF%BC%9F"><span class="toc-number">8.4.2.</span> <span class="toc-text">Build是什么意思？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DLL%E5%8F%AF%E4%BB%A5%E4%B8%8D%E7%94%A8%E9%93%BE%E6%8E%A5%E5%B0%B1%E8%B0%83%E7%94%A8%E5%88%B0%E5%90%97%EF%BC%9F"><span class="toc-number">8.4.3.</span> <span class="toc-text">DLL可以不用链接就调用到吗？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E6%B1%87%E7%BC%96%E7%90%86%E8%A7%A3%E7%A8%8B%E5%BA%8F"><span class="toc-number">9.</span> <span class="toc-text">通过汇编理解程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%EF%BC%9F"><span class="toc-number">9.1.</span> <span class="toc-text">什么是汇编语言？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E6%80%8E%E4%B9%88%E7%9C%8B%EF%BC%9F"><span class="toc-number">9.2.</span> <span class="toc-text">汇编语言怎么看？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%87%E7%BC%96%E5%AE%9E%E7%8E%B0%E5%8A%9F%E8%83%BD"><span class="toc-number">9.3.</span> <span class="toc-text">汇编实现功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF"><span class="toc-number">9.3.1.</span> <span class="toc-text">循环</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E5%88%86%E6%94%AF"><span class="toc-number">9.3.2.</span> <span class="toc-text">条件分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%97%AE%E9%A2%98"><span class="toc-number">9.3.3.</span> <span class="toc-text">多线程问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E6%8E%A7%E5%88%B6"><span class="toc-number">10.</span> <span class="toc-text">硬件控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E5%9B%B4%E8%AE%BE%E5%A4%87%E7%A1%AC%E4%BB%B6%E5%92%8C%E8%BD%AF%E4%BB%B6%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E9%80%9A%E4%BF%A1%E7%9A%84%EF%BC%9F"><span class="toc-number">10.1.</span> <span class="toc-text">外围设备硬件和软件是如何实现通信的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E5%9B%B4%E8%AE%BE%E5%A4%87%E7%A1%AC%E4%BB%B6%E7%9A%84%E4%B8%AD%E6%96%AD%E6%93%8D%E4%BD%9CIRQ"><span class="toc-number">10.2.</span> <span class="toc-text">外围设备硬件的中断操作IRQ</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%96%E5%9B%B4%E8%AE%BE%E5%A4%87%E7%9B%B4%E6%8E%A5%E5%92%8C%E5%86%85%E5%AD%98%E9%80%9A%E4%BF%A1DMA"><span class="toc-number">10.3.</span> <span class="toc-text">外围设备直接和内存通信DMA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E7%9A%84%E5%86%85%E5%AD%98VRAM"><span class="toc-number">10.4.</span> <span class="toc-text">计算机图形的内存VRAM</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0"><span class="toc-number">11.</span> <span class="toc-text">计算机的随机数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E5%90%8C%E4%BD%99%E6%B3%95%E5%AE%9E%E7%8E%B0%E4%BC%AA%E9%9A%8F%E6%9C%BA"><span class="toc-number">11.1.</span> <span class="toc-text">线性同余法实现伪随机</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#C%E5%85%A5%E9%97%A8"><span class="toc-number">12.</span> <span class="toc-text">C入门</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">12.1.</span> <span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97"><span class="toc-number">12.2.</span> <span class="toc-text">常用关键字</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Tech/BookNote/bookNote_howProgramRun/" title="书籍笔记 - 程序是怎样跑起来的（硬件软件交互理解）"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="书籍笔记 - 程序是怎样跑起来的（硬件软件交互理解）"/></a><div class="content"><a class="title" href="/Tech/BookNote/bookNote_howProgramRun/" title="书籍笔记 - 程序是怎样跑起来的（硬件软件交互理解）">书籍笔记 - 程序是怎样跑起来的（硬件软件交互理解）</a><time datetime="2023-06-19T16:16:58.410Z" title="发表于 2023-06-20 00:16:58">2023-06-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Game/tools/assetbundleInit/" title="AB包基础"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="AB包基础"/></a><div class="content"><a class="title" href="/Tech/Game/tools/assetbundleInit/" title="AB包基础">AB包基础</a><time datetime="2023-04-28T09:40:50.908Z" title="发表于 2023-04-28 17:40:50">2023-04-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/Game/UI/ugui_batch/" title="UGUI学习 - 合批规则"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UGUI学习 - 合批规则"/></a><div class="content"><a class="title" href="/Tech/Game/UI/ugui_batch/" title="UGUI学习 - 合批规则">UGUI学习 - 合批规则</a><time datetime="2023-04-27T09:32:14.928Z" title="发表于 2023-04-27 17:32:14">2023-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Project/Unity/RPG/himegami/spineInit/" title="Spine安装和简单了解、导入unity"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Spine安装和简单了解、导入unity"/></a><div class="content"><a class="title" href="/Project/Unity/RPG/himegami/spineInit/" title="Spine安装和简单了解、导入unity">Spine安装和简单了解、导入unity</a><time datetime="2023-04-25T18:30:21.536Z" title="发表于 2023-04-26 02:30:21">2023-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Project/Unity/RPG/himegami/gf/" title="GameFramework个人手册"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="GameFramework个人手册"/></a><div class="content"><a class="title" href="/Project/Unity/RPG/himegami/gf/" title="GameFramework个人手册">GameFramework个人手册</a><time datetime="2023-04-19T14:27:48.106Z" title="发表于 2023-04-19 22:27:48">2023-04-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023  <i id="heartbeat" class="fa fas fa-heartbeat"></i> CodingCodingK</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/chocolate.js"></script><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/cursor.js"></script><script src="/live2d-widget/autoload.js"></script><script src="/js/mine.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?CodingCodingK";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="CodingCodingK";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><!-- hexo injector body_end end --></body></html>
