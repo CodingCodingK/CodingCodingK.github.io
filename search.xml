@@ -1048,11 +1048,11 @@
     
     
     <entry>
-      <title>C#精要 - 反射篇</title>
-      <link href="/Tech/CSharp/Essence/reflection/"/>
-      <url>/Tech/CSharp/Essence/reflection/</url>
+      <title>C#精要 - Mono篇</title>
+      <link href="/Tech/CSharp/Essence/mono/"/>
+      <url>/Tech/CSharp/Essence/mono/</url>
       
-        <content type="html"><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>反射提供了封装程序集、模块和类型的对象（Type 类型）。可以使用反射动态创建类型的实例，将类型绑定到现有对象，或从现有对象获取类型并调用其方法或访问其字段和属性。如果代码中使用了属性，可以利用反射对它们进行访问。</p><p>Assembly类可以获得正在运行的装配件信息，也可以动态的加载装配件，以及在装配件中查找类型信息，并创建该类型的实例。</p><p>Type类可以获得对象的类型信息，此信息包含对象的所有要素：方法、构造器、属性等等，通过Type类可以得到这些要素的信息，并且调用之。</p><p>MethodInfo包含方法的信息，通过这个类可以得到方法的名称、参数、返回值等，并且可以调用之。</p><p>反射：反射提供了封装程序集，模块和类型对象，可以用反射动态地创建类型的实例，将类型绑定到现有对象，或者从现有对象类型里获取类型，然后调用类型的方法或访问字段和属性。</p><p>序列化：将对象转换为另一种媒介传输的格式过程。如，序列化一个对象，用Http通过internet在客户端和服务器之间传递该对象，在另一端用反序列化从该流中重新得到对象。 </p>]]></content>
+        <content type="html"><![CDATA[<h1 id="IL是什么？"><a href="#IL是什么？" class="headerlink" title="IL是什么？"></a>IL是什么？</h1><p>IL的全称是 Intermediate Language，是一种中间语言。它是一种属于通用语言架构和.NET框架的低阶（lowest-level）的人类可读的编程语言。目标为.NET框架的语言被编译成IL代码，然后汇编成字节码。</p><p>具体过程是：C#或者VB这样遵循CLI规范的高级语言，被先被各自的编译器编译成中间语言IL。等到需要真正执行的时候，这些IL会被加载到运行时库，也就是CLR中，由CLR动态编译（JIT）成汇编代码然后在执行。</p><h1 id="JIT是什么？"><a href="#JIT是什么？" class="headerlink" title="JIT是什么？"></a>JIT是什么？</h1><p>just-in-time compiler，即时编译器。它将IL翻译成汇编语言，它自身会对运行环境做出许多假定，从而进行自己的优化方案。</p><p>比如第一次调用一个方法时，JIT会把遇到的IL代码进行验证+编译，最后放进内存中。方法仅在首次调用时才会有一些性能损失，以后对该方法的所有调用都以本机代码的形式全速运行。</p><h1 id="Mono是什么？"><a href="#Mono是什么？" class="headerlink" title="Mono是什么？"></a>Mono是什么？</h1><p>是支持.net跨平台的一种方式。因为.net本身不支持跨平台只能运行在Windows上，所以需要一个<strong>跨平台的第三方.net库，这就是Mono</strong>。</p><p>mono作为一个中间层将IL代码的处理分出好多个分支，分别对应不同的平台。Mono其实和.net framework 是同一个东西，只不过Mono支持更多的平台，但.net的运行效率更高。<br>Unity打包时会将mono一同打包进来，同时Unity将脚本编译为IL代码打包，这样只要是Mono支持的平台，都可以在Mono中编译成平台本地代码。</p><h1 id="IL2CPP是什么？"><a href="#IL2CPP是什么？" class="headerlink" title="IL2CPP是什么？"></a>IL2CPP是什么？</h1><p>把IL中间语言转换成CPP文件。</p><p>在得到中间语言IL后，使用IL2CPP将他们重新变回C++代码，然后再由各个平台的C++编译器直接编译成能执行的原生汇编代码。</p><p>但是GC还是C#方式来处理。</p><h1 id="为什么有了Mono还需要IL2CPP？"><a href="#为什么有了Mono还需要IL2CPP？" class="headerlink" title="为什么有了Mono还需要IL2CPP？"></a>为什么有了Mono还需要IL2CPP？</h1><p>主要是2点。</p><p>1.Mono VM在各个平台移植，维护非常耗时，有时甚至不可能完成。Mono的跨平台是通过Mono VM实现的，有几个平台，就要实现几个VM，非常耗时耗力。</p><p>2.根据官方的实验数据，Mono换成IL2CPP以后，程序的运行效率有了1.5-2.0倍的提升。</p><h1 id="工作中怎么涉及到Mono呢"><a href="#工作中怎么涉及到Mono呢" class="headerlink" title="工作中怎么涉及到Mono呢"></a>工作中怎么涉及到Mono呢</h1><p>可以在Unity工程打包得选项中，选择是用Mono还是IL2CPP方式输出。</p><p>IL2CPP能把IL中间码转为C++代码，然后交给各平台的C++编译器处理，有自己的代码裁剪规则。是一种目前效率更高的选择。</p>]]></content>
       
       
       <categories>
@@ -1077,11 +1077,11 @@
     
     
     <entry>
-      <title>C#精要 - Mono篇</title>
-      <link href="/Tech/CSharp/Essence/mono/"/>
-      <url>/Tech/CSharp/Essence/mono/</url>
+      <title>C#精要 - 反射篇</title>
+      <link href="/Tech/CSharp/Essence/reflection/"/>
+      <url>/Tech/CSharp/Essence/reflection/</url>
       
-        <content type="html"><![CDATA[<h1 id="IL是什么？"><a href="#IL是什么？" class="headerlink" title="IL是什么？"></a>IL是什么？</h1><p>IL的全称是 Intermediate Language，是一种中间语言。它是一种属于通用语言架构和.NET框架的低阶（lowest-level）的人类可读的编程语言。目标为.NET框架的语言被编译成IL代码，然后汇编成字节码。</p><p>具体过程是：C#或者VB这样遵循CLI规范的高级语言，被先被各自的编译器编译成中间语言IL。等到需要真正执行的时候，这些IL会被加载到运行时库，也就是CLR中，由CLR动态编译（JIT）成汇编代码然后在执行。</p><h1 id="JIT是什么？"><a href="#JIT是什么？" class="headerlink" title="JIT是什么？"></a>JIT是什么？</h1><p>just-in-time compiler，即时编译器。它将IL翻译成汇编语言，它自身会对运行环境做出许多假定，从而进行自己的优化方案。</p><p>比如第一次调用一个方法时，JIT会把遇到的IL代码进行验证+编译，最后放进内存中。方法仅在首次调用时才会有一些性能损失，以后对该方法的所有调用都以本机代码的形式全速运行。</p><h1 id="Mono是什么？"><a href="#Mono是什么？" class="headerlink" title="Mono是什么？"></a>Mono是什么？</h1><p>是支持.net跨平台的一种方式。因为.net本身不支持跨平台只能运行在Windows上，所以需要一个<strong>跨平台的第三方.net库，这就是Mono</strong>。</p><p>mono作为一个中间层将IL代码的处理分出好多个分支，分别对应不同的平台。Mono其实和.net framework 是同一个东西，只不过Mono支持更多的平台，但.net的运行效率更高。<br>Unity打包时会将mono一同打包进来，同时Unity将脚本编译为IL代码打包，这样只要是Mono支持的平台，都可以在Mono中编译成平台本地代码。</p><h1 id="IL2CPP是什么？"><a href="#IL2CPP是什么？" class="headerlink" title="IL2CPP是什么？"></a>IL2CPP是什么？</h1><p>把IL中间语言转换成CPP文件。</p><p>在得到中间语言IL后，使用IL2CPP将他们重新变回C++代码，然后再由各个平台的C++编译器直接编译成能执行的原生汇编代码。</p><p>但是GC还是C#方式来处理。</p><h1 id="为什么有了Mono还需要IL2CPP？"><a href="#为什么有了Mono还需要IL2CPP？" class="headerlink" title="为什么有了Mono还需要IL2CPP？"></a>为什么有了Mono还需要IL2CPP？</h1><p>主要是2点。</p><p>1.Mono VM在各个平台移植，维护非常耗时，有时甚至不可能完成。Mono的跨平台是通过Mono VM实现的，有几个平台，就要实现几个VM，非常耗时耗力。</p><p>2.根据官方的实验数据，Mono换成IL2CPP以后，程序的运行效率有了1.5-2.0倍的提升。</p><h1 id="工作中怎么涉及到Mono呢"><a href="#工作中怎么涉及到Mono呢" class="headerlink" title="工作中怎么涉及到Mono呢"></a>工作中怎么涉及到Mono呢</h1><p>可以在Unity工程打包得选项中，选择是用Mono还是IL2CPP方式输出。</p><p>IL2CPP能把IL中间码转为C++代码，然后交给各平台的C++编译器处理，有自己的代码裁剪规则。是一种目前效率更高的选择。</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><p>反射提供了封装程序集、模块和类型的对象（Type 类型）。可以使用反射动态创建类型的实例，将类型绑定到现有对象，或从现有对象获取类型并调用其方法或访问其字段和属性。如果代码中使用了属性，可以利用反射对它们进行访问。</p><p>Assembly类可以获得正在运行的装配件信息，也可以动态的加载装配件，以及在装配件中查找类型信息，并创建该类型的实例。</p><p>Type类可以获得对象的类型信息，此信息包含对象的所有要素：方法、构造器、属性等等，通过Type类可以得到这些要素的信息，并且调用之。</p><p>MethodInfo包含方法的信息，通过这个类可以得到方法的名称、参数、返回值等，并且可以调用之。</p><p>反射：反射提供了封装程序集，模块和类型对象，可以用反射动态地创建类型的实例，将类型绑定到现有对象，或者从现有对象类型里获取类型，然后调用类型的方法或访问字段和属性。</p><p>序列化：将对象转换为另一种媒介传输的格式过程。如，序列化一个对象，用Http通过internet在客户端和服务器之间传递该对象，在另一端用反序列化从该流中重新得到对象。 </p>]]></content>
       
       
       <categories>
@@ -1976,11 +1976,11 @@
             
             <tag> C# </tag>
             
+            <tag> 虚方法 </tag>
+            
             <tag> 可访问性 </tag>
             
             <tag> 元数据 </tag>
-            
-            <tag> 虚方法 </tag>
             
         </tags>
       
