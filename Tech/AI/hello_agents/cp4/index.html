@@ -1,0 +1,281 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hello Agents - 上下文工程 | CodingCodingK Blog</title><meta name="keywords" content="AI,AI Agent"><meta name="author" content="CodingCodingK"><meta name="copyright" content="CodingCodingK"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="上下文工程是什么？所谓“上下文”，是指在对大语言模型（LLM）进行采样时所包含的那组 tokens。手头的工程问题，是在 LLM 的固有约束之下，优化这些 tokens 的效用，以便稳定地得到预期结果。 上下文工程 vs. 提示工程 提示工程关注如何编写与组织 LLM 的指令以获得更优结果（例如系统提示的写法与结构化策略）；而上下文工程则是在推理阶段，如何策划与维护“最优的信息集合（tokens）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hello Agents - 上下文工程">
+<meta property="og:url" content="https://codingcodingk.github.io/Tech/AI/hello_agents/cp4/index.html">
+<meta property="og:site_name" content="CodingCodingK Blog">
+<meta property="og:description" content="上下文工程是什么？所谓“上下文”，是指在对大语言模型（LLM）进行采样时所包含的那组 tokens。手头的工程问题，是在 LLM 的固有约束之下，优化这些 tokens 的效用，以便稳定地得到预期结果。 上下文工程 vs. 提示工程 提示工程关注如何编写与组织 LLM 的指令以获得更优结果（例如系统提示的写法与结构化策略）；而上下文工程则是在推理阶段，如何策划与维护“最优的信息集合（tokens）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg">
+<meta property="article:published_time" content="2026-03-10T09:16:09.565Z">
+<meta property="article:modified_time" content="2026-03-10T10:51:27.462Z">
+<meta property="article:author" content="CodingCodingK">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="AI Agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png"><link rel="canonical" href="https://codingcodingk.github.io/Tech/AI/hello_agents/cp4/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hello Agents - 上下文工程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-03-10 18:51:27'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/css/mine.css"><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="CodingCodingK Blog" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">41</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">34</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">CodingCodingK Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 专栏</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> CodingCodingK</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Hello Agents - 上下文工程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-03-10T09:16:09.565Z" title="发表于 2026-03-10 17:16:09">2026-03-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-03-10T10:51:27.462Z" title="更新于 2026-03-10 18:51:27">2026-03-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/Hello-Agents/">Hello Agents</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Hello Agents - 上下文工程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="上下文工程是什么？"><a href="#上下文工程是什么？" class="headerlink" title="上下文工程是什么？"></a>上下文工程是什么？</h1><p>所谓“上下文”，是指在对大语言模型（LLM）进行采样时所包含的那组 tokens。手头的工程问题，是在 LLM 的固有约束之下，<strong>优化这些 tokens 的效用</strong>，以便稳定地得到预期结果。</p>
+<p><strong>上下文工程 vs. 提示工程</strong></p>
+<p>提示工程关注如何编写与组织 LLM 的指令以获得更优结果（例如系统提示的写法与结构化策略）；而上下文工程则是<strong>在推理阶段，如何策划与维护“最优的信息集合（tokens）”</strong>，其中不仅包含提示本身，还包含其他会进入上下文窗口的一切信息。</p>
+<p><strong>上下文腐蚀（context rot）</strong></p>
+<p>是指随着上下文窗口中的 tokens 增加，模型从上下文中准确回忆信息的能力反而下降。因此，上下文必须被视作一种有限资源，且具有<strong>边际收益递减</strong>。</p>
+<h1 id="上下文工程的目标与实现"><a href="#上下文工程的目标与实现" class="headerlink" title="上下文工程的目标与实现"></a>上下文工程的目标与实现</h1><p>用尽可能少、但高信号密度的 tokens，最大化获得期望结果的概率。</p>
+<ul>
+<li><strong>系统提示（System Prompt）</strong>：语言清晰、直白，信息层级把握在“刚刚好”的高度。常见两极误区：<ul>
+<li>过度硬编码：在提示中写入复杂、脆弱的 if-else 逻辑，长期维护成本高、易碎。</li>
+<li>过于空泛：只给出宏观目标与泛化指引，缺少对期望输出的<strong>具体信号</strong>或假定了错误的“共享上下文”。</li>
+</ul>
+</li>
+<li><strong>工具（Tools）</strong>：工具定义了智能体与信息/行动空间的契约，必须促进效率：既要返回<strong>token 友好</strong>的信息，又要鼓励高效的智能体行为。工具应当：<ul>
+<li>职责单一、相互低重叠，接口语义清晰；</li>
+<li>对错误鲁棒；</li>
+<li>入参描述明确、无歧义，充分发挥模型擅长的表达与推理能力。</li>
+</ul>
+</li>
+<li><strong>示例（Few-shot）</strong></li>
+</ul>
+<h1 id="长时程任务的上下文工程"><a href="#长时程任务的上下文工程" class="headerlink" title="长时程任务的上下文工程"></a>长时程任务的上下文工程</h1><p>无限增大上下文窗口并不能根治<strong>“上下文污染”与相关性退化</strong>的问题，因此需要直接面向这些约束的工程手段：<strong>压缩整合（Compaction）</strong>、<strong>结构化笔记（Structured note-taking）</strong>与<strong>子代理架构（Sub-agent architectures）</strong>。</p>
+<p><strong>压缩整合（Compaction）</strong></p>
+<ul>
+<li>定义：当对话接近上下文上限时，对其进行高保真总结，并用该摘要重启一个新的上下文窗口，以维持长程连贯性。</li>
+<li>实践：让模型压缩并保留架构性决策、未解决缺陷、实现细节，丢弃重复的工具输出与噪声；新窗口携带压缩摘要 + 最近少量高相关工件（如“最近访问的若干文件”）。</li>
+</ul>
+<p><strong>结构化笔记（Structured note-taking）</strong></p>
+<ul>
+<li>定义：也称“智能体记忆”。智能体以固定频率将关键信息写入<strong>上下文外的持久化存储</strong>，在后续阶段按需拉回。</li>
+<li>实践：上下文保存外部文件的索引+概括，而不是整个文件，需要用了再去读。</li>
+<li>价值：以极低的上下文开销维持持久状态与依赖关系。</li>
+</ul>
+<p><strong>子代理架构（Sub-agent architectures）</strong></p>
+<ul>
+<li>定义：由主代理负责高层规划与综合，多个专长子代理在“干净的上下文窗口”中各自深挖、调用工具并探索，最后仅回传<strong>凝练摘要</strong>（常见 1,000–2,000 tokens）。</li>
+</ul>
+<p><strong>三者评价：</strong></p>
+<ul>
+<li><strong>压缩整合</strong>：适合需要长对话连续性的任务，强调上下文的“接力”。</li>
+<li><strong>结构化笔记</strong>：适合有里程碑/阶段性成果的迭代式开发与研究。</li>
+<li><strong>子代理架构</strong>：适合复杂研究与分析，能从并行探索中获益。</li>
+</ul>
+<h1 id="上下文管理器设计"><a href="#上下文管理器设计" class="headerlink" title="上下文管理器设计"></a>上下文管理器设计</h1><h2 id="候选信息包"><a href="#候选信息包" class="headerlink" title="候选信息包"></a>候选信息包</h2><p><code>ContextPacket</code> 是系统中信息的<strong>基本单元</strong>。每个候选信息都会被封装为一个 ContextPacket，包含内容、时间戳、token 数量和相关性分数等核心属性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Attributes:</span><br><span class="line">       content: 信息内容</span><br><span class="line">       timestamp: 时间戳</span><br><span class="line">       token_count: Token 数量</span><br><span class="line">       relevance_score: 相关性分数(<span class="number">0.0</span>-<span class="number">1.0</span>)</span><br><span class="line">       metadata: 可选的元数据</span><br></pre></td></tr></table></figure>
+
+<h2 id="上下文生成流水线"><a href="#上下文生成流水线" class="headerlink" title="上下文生成流水线"></a>上下文生成流水线</h2><p>这边叫GSSC(Gather-Select-Structure-Compress)流水线，它将上下文构建过程分解为四个清晰的阶段。</p>
+<h3 id="1-Gather：多源信息汇集"><a href="#1-Gather：多源信息汇集" class="headerlink" title="1.Gather：多源信息汇集"></a>1.Gather：多源信息汇集</h3><p>其实就是做出一份<strong>候选上下文列表</strong>，进行评级、裁剪、融合。核心机制是 <strong>优先级+数量限制</strong>。</p>
+<h4 id="流程："><a href="#流程：" class="headerlink" title="流程："></a>流程：</h4><ol>
+<li><strong>系统指令</strong>：有就先放进去（最高优先级），直接给满分相关性 <code>1.0</code>，确保一定保留。</li>
+<li><strong>记忆检索</strong>：调用 <code>memory_tool</code> 按 <code>user_query</code> 搜索（limit 10），把结果解析成 <code>ContextPacket</code> 加入；失败就告警但不中断。</li>
+<li><strong>RAG 检索</strong>：调用 <code>rag_tool</code> 搜索知识（limit 5），解析后加入；失败同样只告警。</li>
+<li><strong>对话历史</strong>：只取最近 5 条，每条包装成 <code>ContextPacket</code>，给一个基础相关性 <code>0.6</code>。</li>
+<li><strong>自定义包</strong>：外部传进来的 <code>custom_packets</code> 直接追加。</li>
+</ol>
+<h3 id="2-Select：智能信息选择"><a href="#2-Select：智能信息选择" class="headerlink" title="2.Select：智能信息选择"></a>2.Select：智能信息选择</h3><p><code>_select()</code> 负责把 <code>_gather()</code> 收集到的候选信息 <strong>打分、排序、过滤</strong>，再在 token 预算内 <strong>挑出最值得放进最终上下文的一组</strong>（系统指令优先保留）。</p>
+<h4 id="流程：-1"><a href="#流程：-1" class="headerlink" title="流程："></a>流程：</h4><pre><code>1. **系统指令单独处理**：先把 `type=system_instruction` 的包分离出来，永远保留且不参与竞争。
+
+2. **算 token 预算**：系统指令先占坑，剩余 token 不够就直接只返回系统指令。
+
+3. **给其他包算综合分**：
+
+- 相关性：若还是默认值 `0.5`，就用 `_calculate_relevance()` 重新算
+
+- 新近性：用 `_calculate_recency()` 算时间越近分越高
+
+- 综合分：`relevance_weight * relevance + recency_weight * recency`
+
+4. **过滤低质量**：相关性低于 `min_relevance` 的直接丢掉。
+
+5. **排序 + 贪心选入**：按综合分从高到低依次加入，直到 token 用满为止。
+</code></pre>
+<h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h4><ul>
+<li><strong>评分机制</strong>：相关性 + 新近性加权（可配置权重）</li>
+<li><strong>贪心选择</strong>：预算有限时，优先塞“单位价值最高”的内容</li>
+<li><strong>过滤机制</strong>：用 <code>min_relevance</code> 把低相关噪声挡掉</li>
+</ul>
+<h3 id="3-Structure：结构化输出"><a href="#3-Structure：结构化输出" class="headerlink" title="3.Structure：结构化输出"></a>3.Structure：结构化输出</h3><p><code>_structure()</code> 把选中的 <code>ContextPacket</code> <strong>按类型分组</strong>，再拼成一个带分区标题的 <strong>结构化上下文模板字符串</strong>，用于最终喂给模型。</p>
+<h4 id="流程：-2"><a href="#流程：-2" class="headerlink" title="流程："></a>流程：</h4><ol>
+<li><strong>分类分组</strong><ul>
+<li><code>system_instruction</code> → 放到 <code>system_instructions</code></li>
+<li><code>rag_result / knowledge</code> → 当作证据放到 <code>evidence</code></li>
+<li>其他 → 放到一般 <code>context</code></li>
+</ul>
+</li>
+<li><strong>按固定模板输出 5 个区块</strong><ul>
+<li><code>[Role &amp; Policies]</code>：系统指令（如果有）</li>
+<li><code>[Task]</code>：用户问题 <code>user_query</code>（始终有）</li>
+<li><code>[Evidence]</code>：检索到的知识/证据（用 <code>---</code> 分隔）</li>
+<li><code>[Context]</code>：对话历史/自定义信息等背景</li>
+<li><code>[Output]</code>：输出要求（提示“基于以上信息回答”）</li>
+</ul>
+</li>
+</ol>
+<p>最后用空行把各区块连接成一个完整 prompt。</p>
+<h3 id="4-Compress：兜底压缩"><a href="#4-Compress：兜底压缩" class="headerlink" title="4.Compress：兜底压缩"></a>4.Compress：兜底压缩</h3><p><code>_compress()</code> 是上下文超出 token 上限时的<strong>兜底压缩</strong>：尽量按分区保留结构，只在必要时截断最后一部分内容，让最终上下文不超过 <code>max_tokens</code>。</p>
+<h4 id="流程：-3"><a href="#流程：-3" class="headerlink" title="流程："></a>流程：</h4><ol>
+<li><strong>先估算 token</strong>：<code>_count_tokens(context)</code>，没超限就直接返回。</li>
+<li><strong>按分区处理</strong>：用空行 <code>\n\n</code> 把上下文切成多个 section（对应你前面的结构化分区）。</li>
+<li><strong>贪心保留</strong>：从前到后逐段加入，只要不超 token 就“整段保留”。</li>
+<li><strong>需要超限时</strong>：<ul>
+<li>计算剩余 token（<code>remaining_tokens</code>）</li>
+<li>如果剩余还够 50 tokens，就对该 section 做<strong>截断</strong>（<code>_truncate_text</code>），并追加提示 <code>&quot;[... 内容已压缩 ...]&quot;</code></li>
+<li>然后停止（后面的分区不再保留）</li>
+</ul>
+</li>
+<li><strong>输出压缩结果</strong>：拼回文本，并打印压缩前后 token 数。</li>
+</ol>
+<h4 id="结论："><a href="#结论：" class="headerlink" title="结论："></a>结论：</h4><p>基本就是先分区压缩，还不够就直接从5个区块从上往下放，token一不够，直接截断，抛弃后面内容。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">CodingCodingK</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://codingcodingk.github.io/Tech/AI/hello_agents/cp4/">https://codingcodingk.github.io/Tech/AI/hello_agents/cp4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://CodingCodingK.github.io" target="_blank">CodingCodingK Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/AI-Agent/">AI Agent</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/Tech/AI/claw/nanobot_memo/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Hello Agents - 记忆与检索&amp;RAG</div></div></a></div><div class="next-post pull-right"><a href="/Tech/AI/hello_agents/cp3/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hello Agents - 记忆与检索&amp;RAG</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/Tech/AI/hello_agents/cp1/" title="Hello Agents - 基础概念"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-02</div><div class="title">Hello Agents - 基础概念</div></div></a></div><div><a href="/Tech/AI/hello_agents/cp3/" title="Hello Agents - 记忆与检索&RAG"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-08</div><div class="title">Hello Agents - 记忆与检索&RAG</div></div></a></div><div><a href="/Tech/AI/hello_agents/cp2/" title="Hello Agents - 构建Agent"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-05</div><div class="title">Hello Agents - 构建Agent</div></div></a></div><div><a href="/Tech/AI/claude_code/claude_memo/" title="Hello Agents - 记忆与检索&RAG"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-05</div><div class="title">Hello Agents - 记忆与检索&RAG</div></div></a></div><div><a href="/Tech/AI/claw/nanobot_memo/" title="Hello Agents - 记忆与检索&RAG"><img class="cover" src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-05</div><div class="title">Hello Agents - 记忆与检索&RAG</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/Seed_profile.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CodingCodingK</div><div class="author-info__description">一位喜欢C#的软件开发者</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">41</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">34</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/CodingCodingK"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/CodingCodingK" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">2022年的目标是：ET框架、烟雨开源Moba项目 + Lua程序设计 + Games101、Shader入门精要（部分）</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">上下文工程是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B%E7%9A%84%E7%9B%AE%E6%A0%87%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">上下文工程的目标与实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%95%BF%E6%97%B6%E7%A8%8B%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">长时程任务的上下文工程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1"><span class="toc-number">4.</span> <span class="toc-text">上下文管理器设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%80%99%E9%80%89%E4%BF%A1%E6%81%AF%E5%8C%85"><span class="toc-number">4.1.</span> <span class="toc-text">候选信息包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E7%94%9F%E6%88%90%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="toc-number">4.2.</span> <span class="toc-text">上下文生成流水线</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Gather%EF%BC%9A%E5%A4%9A%E6%BA%90%E4%BF%A1%E6%81%AF%E6%B1%87%E9%9B%86"><span class="toc-number">4.2.1.</span> <span class="toc-text">1.Gather：多源信息汇集</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="toc-number">4.2.1.1.</span> <span class="toc-text">流程：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Select%EF%BC%9A%E6%99%BA%E8%83%BD%E4%BF%A1%E6%81%AF%E9%80%89%E6%8B%A9"><span class="toc-number">4.2.2.</span> <span class="toc-text">2.Select：智能信息选择</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%EF%BC%9A-1"><span class="toc-number">4.2.2.1.</span> <span class="toc-text">流程：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">4.2.2.2.</span> <span class="toc-text">总结：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Structure%EF%BC%9A%E7%BB%93%E6%9E%84%E5%8C%96%E8%BE%93%E5%87%BA"><span class="toc-number">4.2.3.</span> <span class="toc-text">3.Structure：结构化输出</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%EF%BC%9A-2"><span class="toc-number">4.2.3.1.</span> <span class="toc-text">流程：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Compress%EF%BC%9A%E5%85%9C%E5%BA%95%E5%8E%8B%E7%BC%A9"><span class="toc-number">4.2.4.</span> <span class="toc-text">4.Compress：兜底压缩</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%EF%BC%9A-3"><span class="toc-number">4.2.4.1.</span> <span class="toc-text">流程：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA%EF%BC%9A"><span class="toc-number">4.2.4.2.</span> <span class="toc-text">结论：</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/Tech/AI/claude_code/claude_memo/" title="Hello Agents - 记忆与检索&amp;RAG"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello Agents - 记忆与检索&amp;RAG"/></a><div class="content"><a class="title" href="/Tech/AI/claude_code/claude_memo/" title="Hello Agents - 记忆与检索&amp;RAG">Hello Agents - 记忆与检索&amp;RAG</a><time datetime="2026-04-05T11:17:49.352Z" title="发表于 2026-04-05 19:17:49">2026-04-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/AI/claw/nanobot_memo/" title="Hello Agents - 记忆与检索&amp;RAG"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello Agents - 记忆与检索&amp;RAG"/></a><div class="content"><a class="title" href="/Tech/AI/claw/nanobot_memo/" title="Hello Agents - 记忆与检索&amp;RAG">Hello Agents - 记忆与检索&amp;RAG</a><time datetime="2026-04-05T11:17:42.935Z" title="发表于 2026-04-05 19:17:42">2026-04-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/AI/hello_agents/cp4/" title="Hello Agents - 上下文工程"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello Agents - 上下文工程"/></a><div class="content"><a class="title" href="/Tech/AI/hello_agents/cp4/" title="Hello Agents - 上下文工程">Hello Agents - 上下文工程</a><time datetime="2026-03-10T09:16:09.565Z" title="发表于 2026-03-10 17:16:09">2026-03-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/AI/hello_agents/cp3/" title="Hello Agents - 记忆与检索&amp;RAG"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello Agents - 记忆与检索&amp;RAG"/></a><div class="content"><a class="title" href="/Tech/AI/hello_agents/cp3/" title="Hello Agents - 记忆与检索&amp;RAG">Hello Agents - 记忆与检索&amp;RAG</a><time datetime="2026-03-08T06:15:27.020Z" title="发表于 2026-03-08 14:15:27">2026-03-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/Tech/AI/hello_agents/cp2/" title="Hello Agents - 构建Agent"><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/bg5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello Agents - 构建Agent"/></a><div class="content"><a class="title" href="/Tech/AI/hello_agents/cp2/" title="Hello Agents - 构建Agent">Hello Agents - 构建Agent</a><time datetime="2026-03-05T07:49:16.059Z" title="发表于 2026-03-05 15:49:16">2026-03-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026  <i id="heartbeat" class="fa fas fa-heartbeat"></i> CodingCodingK</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/chocolate.js"></script><script data-pjax defer src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io/js/cursor.js"></script><script src="/live2d-widget/autoload.js"></script><script src="/js/mine.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?CodingCodingK";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="CodingCodingK";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><!-- hexo injector body_end end --></body></html>
