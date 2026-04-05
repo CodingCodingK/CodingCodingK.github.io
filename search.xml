@@ -524,37 +524,6 @@
     
     
     <entry>
-      <title>Games101 - 光栅化</title>
-      <link href="/Tech/Graphics/games101-4/"/>
-      <url>/Tech/Graphics/games101-4/</url>
-      
-        <content type="html"><![CDATA[<h1 id="学之前你必须知道"><a href="#学之前你必须知道" class="headerlink" title="学之前你必须知道"></a>学之前你必须知道</h1><h2 id="视锥"><a href="#视锥" class="headerlink" title="视锥"></a>视锥</h2><p>这是透视相机的概念，用来衡量视距的大小。一般用2种属性来描述一个视锥：</p><ol><li>  near面的宽高比</li><li>  垂直视角 Vertical Field of View</li></ol><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621104507.png"></p><p>有了上面2个确定值，然后再自己定义一个near的值（近平面与相机的距离），就能确定成像了，视锥完成。</p><h2 id="屏幕上的概念"><a href="#屏幕上的概念" class="headerlink" title="屏幕上的概念"></a>屏幕上的概念</h2><p><strong>分辨率</strong>，也就是1080p、2k等，就是像素的多少。</p><p><strong>屏幕 Raster</strong>，德语中的屏幕的意思，而屏幕是一个光栅成像设备。</p><p><strong>光栅化 Rasterize</strong>，把东西画在屏幕上的过程。</p><p><strong>像素 Pixel</strong>，全名picture element，是最小单位的小正方形，它的颜色由Red、Green、Blue三个色(0~255)来混和成。</p><h2 id="屏幕发展过程"><a href="#屏幕发展过程" class="headerlink" title="屏幕发展过程"></a>屏幕发展过程</h2><p><strong>过去方式</strong></p><ol><li>  示波器</li><li>  阴极射线管 Cathode Ray Tube：和示波器原理相同，用很多电子打在屏幕上。通过扫描一样的方式，一条一条画横线，组成图像。</li></ol><p>隔行扫描 Raster Scan：上面的画横线，优化的话还会在一帧只画1、3、5…奇数行，下一帧再只画偶数行。这样省去了一半的工作量，也能一定程度欺骗到肉眼。</p><p><strong>现代方式</strong></p><ol><li>  液晶显示器 LCD（Liquid Crystal Display）：通过液晶扭曲光的方向，让其可以通过对应的光栅。</li><li>  控制发光二极管的显示器 LED（Light Emitting diode array）</li><li>  电墨水：通过电子控制只有黑、白像素的电墨水，实现电纸书的页面刷新。</li></ol><p>帧缓存技术 Frame Buffer（Memory for a Raster Display）：将显卡中的一块内存区域中，存储的内容反映到屏幕上。</p><h1 id="光栅化一个Cube"><a href="#光栅化一个Cube" class="headerlink" title="光栅化一个Cube"></a>光栅化一个Cube</h1><h2 id="视口变换-Viewport"><a href="#视口变换-Viewport" class="headerlink" title="视口变换 Viewport"></a>视口变换 Viewport</h2><p>光栅化之前要做的事。将一个 <code>[-1,1] x [-1,1]</code> 的2维平面，转换成<code>[width,0] x [0,height]</code>的笛卡尔坐标系内来表示。这叫做视口变换，看下：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621115856.png"></p><p>最后算出，变换矩阵如下：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621121741.png"></p><h2 id="光栅化"><a href="#光栅化" class="headerlink" title="光栅化"></a>光栅化</h2><p>我们将原图形分解成很多个三角面，投影到屏幕的像素点上。</p><h3 id="首先，怎么判断一个像素点与三角形的位置关系？"><a href="#首先，怎么判断一个像素点与三角形的位置关系？" class="headerlink" title="首先，怎么判断一个像素点与三角形的位置关系？"></a>首先，怎么判断一个像素点与三角形的位置关系？</h3><p>靠前面的知识，已经可以做到任何一个点都确定性地投影到屏幕上了。</p><p>那么如果想判断一个像素点是否在一个三角面内呢？也就是问，<strong>如何确定这个像素的着色？</strong></p><p>可以通过判断这个像素点的中心点与三角形的位置关系来确定，为了方便，就定义一个判断函数<code>Inside()</code>。而这个函数就是进行3次叉积。</p><h3 id="然后，哪些像素点需要判断呢？"><a href="#然后，哪些像素点需要判断呢？" class="headerlink" title="然后，哪些像素点需要判断呢？"></a>然后，哪些像素点需要判断呢？</h3><p>如果需要把整个屏幕的点都进行一次<code>Inside()</code>判断，实在是没有必要，那么哪些需要、哪些不需要，这就涉及到<strong>包围盒</strong>了。</p><p>简单介绍一个AABB包围盒，它就是取三角面3个顶点的<code>Min(x), Min(y), Max(x), Max(y),</code>作为他的盒子。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621151747.png"></p><h3 id="最后，成像完有锯齿-Jaggies-怎么解决？"><a href="#最后，成像完有锯齿-Jaggies-怎么解决？" class="headerlink" title="最后，成像完有锯齿 (Jaggies) 怎么解决？"></a>最后，成像完有锯齿 (Jaggies) 怎么解决？</h3><p>又叫做反走样（Aliasing ）、抗锯齿。</p><p>在解决之前先理解为什么会有这类问题？取哪些像素点来表示这个三角面，叫做<strong>采样（Sample）</strong>。而采样会有3种<strong>瑕疵（Artifacts）</strong></p><ol><li>  锯齿 Jaggies</li><li>  摩尔纹 Moire</li><li>  运动速度过快 Wagon wheel effect</li></ol><p>产生原因是信号变化的速度太快，而采样速度跟不上了。</p><p><strong>那么怎么抗锯齿？</strong></p><p>可以对三角面做预处理，比如滤波、模糊，之后再进行采样。</p><h1 id="抗锯齿-Anti-Aliasing"><a href="#抗锯齿-Anti-Aliasing" class="headerlink" title="抗锯齿 Anti-Aliasing"></a>抗锯齿 Anti-Aliasing</h1><p>前面了解了为什么会产生锯齿，以及大致的抗锯齿技术（滤波、模糊）。这里细说。</p><p><strong>频域 Frequency Domain</strong>：描述信号在频率方面特性时用到的一种坐标系。想象一下cos2Π的图。</p><p><strong>滤波 Filtering</strong>：把某个时段内，特殊的频率给过滤掉。</p><p><strong>傅里叶变换</strong>：变幻的具体内容不要深究，只要知道，可以通过傅里叶变换把一张图变换为频域图，这样就能知道哪些地方的信号量多、少。中心定义为低频、周围定义为高频。最后，得到的频域图，是可逆的！</p><p>// TODO 下面的都只简单理解，更为深入要去学习 数字图像处理</p><h2 id="先傅里叶变换，再过滤一张图-FFP"><a href="#先傅里叶变换，再过滤一张图-FFP" class="headerlink" title="先傅里叶变换，再过滤一张图 FFP"></a>先傅里叶变换，再过滤一张图 FFP</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621180700.png"></p><p>中心定义为低频、周围定义为高频。当颜色变化差异巨大的时候（比如人物边缘），会产生高频信息。</p><p>为什么会有十字线？没有学过信号学不能看懂这张频谱图，只能理解为傅里叶变换前会把这一张图复制很多份拼起来，来取样。拼起来之后每张图的4个边的边界之间的信息差异巨大，就有巨大的高频信息，而这十字线的高亮就是边界的映射。</p><h3 id="高通率波"><a href="#高通率波" class="headerlink" title="高通率波"></a>高通率波</h3><p>High-pass，就是只有高频能通过，低频直接忽略的滤波方式。可以看到，逆变换回来的图几乎只保留了边界信息（人物描边），这是因为<strong>边界处的信号量差异很大，这就是高频的信息</strong>。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621182236.png"></p><h3 id="低通滤波"><a href="#低通滤波" class="headerlink" title="低通滤波"></a>低通滤波</h3><p>滤掉高频，也就是滤掉边界信息，那么就会像下面这样。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621182524.png"></p><h3 id="高低滤波"><a href="#高低滤波" class="headerlink" title="高低滤波"></a>高低滤波</h3><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622105657.png"></p><h2 id="卷积定理"><a href="#卷积定理" class="headerlink" title="卷积定理"></a>卷积定理</h2><p>只简单概述结论：</p><p>在空间域中，对一张图进行卷积滤波 = 对一张图进行傅里叶变换、再对其乘以卷积核的傅里叶变换、最后逆傅里叶变换回去</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622111008.png"></p><h1 id="采样-Sample"><a href="#采样-Sample" class="headerlink" title="采样 Sample"></a>采样 Sample</h1><p>稀疏采样会产生更多混叠，导致走样；密集采样更少混叠，所以映射结果更好一些。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622114336.png"></p><h2 id="怎么较少走样，也就是如何反走样？"><a href="#怎么较少走样，也就是如何反走样？" class="headerlink" title="怎么较少走样，也就是如何反走样？"></a>怎么较少走样，也就是如何反走样？</h2><p>本质上，就是想办法增大傅里叶副本之间的距离来减少混叠。</p><p><strong>1.增加采样率</strong>（更高分辨率的屏幕）</p><p><strong>2.抗锯齿</strong>，通过对图像模糊预处理（使用傅里叶来低通滤波）再采样</p><h2 id="常规采样流程"><a href="#常规采样流程" class="headerlink" title="常规采样流程"></a>常规采样流程</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622115530.png"></p><p>先用低通滤波器模糊原图，然后再采样。</p><h3 id="抗锯齿：模糊操作"><a href="#抗锯齿：模糊操作" class="headerlink" title="抗锯齿：模糊操作"></a>抗锯齿：模糊操作</h3><p>取像素颜色时，根据三角面的在该像素块中覆盖的面积，来设置灰度。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622120331.png"></p><p>这个理论很简单，但是实现比较困难，于是采用一种类似的方法，对一个像素块再进行划分、进行更多的采样，也就是**多重采样抗锯齿 MSAA (MultiSampling Anti-Aliasing) **来实现。</p><p>下图就是一个MSAA的例子：把一个像素格分成了2x2，来确定0%、25%、50%、75%、100%。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622121659.png"></p><p>工业界会优化，想要2x2的效果不会这么单纯的分割成4个正方形，而是一些其他不规则图形，甚至可能多个像素块复用一个点，这么做都是为了减少需要检测的点数量。</p><h3 id="其他抗锯齿方法"><a href="#其他抗锯齿方法" class="headerlink" title="其他抗锯齿方法"></a>其他抗锯齿方法</h3><p>FXAA（Fast Approximate AA）：快速近似抗锯齿，是一种后处理，会对有锯齿的地方进行修正。</p><p>TAA（Temporal AA）：利用时间而不是空间采样，对于静止的连续帧，上一帧有效的采样点才继续采样。</p><p>DLSS（DeepLearning SuperSimple）：当低分辨率拉伸成高分辨率时，会有很多锯齿，此时用深度学习来猜测描绘。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Game </category>
-          
-          <category> Graphics </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 图形学 </tag>
-            
-            <tag> Graphics </tag>
-            
-            <tag> games101 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Games101 - 遮挡与深度</title>
       <link href="/Tech/Graphics/games101-5/"/>
       <url>/Tech/Graphics/games101-5/</url>
@@ -586,11 +555,11 @@
     
     
     <entry>
-      <title>Games101 - MVP变换</title>
-      <link href="/Tech/Graphics/games101-3/"/>
-      <url>/Tech/Graphics/games101-3/</url>
+      <title>Games101 - 光栅化</title>
+      <link href="/Tech/Graphics/games101-4/"/>
+      <url>/Tech/Graphics/games101-4/</url>
       
-        <content type="html"><![CDATA[<h1 id="从三维旋转到欧拉角"><a href="#从三维旋转到欧拉角" class="headerlink" title="从三维旋转到欧拉角"></a>从三维旋转到欧拉角</h1><p>首先三维旋转绕某个轴旋转，已经知道是这样的了。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620115509.png"></p><p>那么就可以通过对3个轴的旋转分别描述，来实现复杂的旋转角。这3个旋转角就叫做欧拉角。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620123437.png"></p><h1 id="罗德里格斯旋转公式"><a href="#罗德里格斯旋转公式" class="headerlink" title="罗德里格斯旋转公式"></a>罗德里格斯旋转公式</h1><p>一个公式，来实现绕轴n旋转α角度。轴n的定义为起点为原点，方向为n。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620141702.png"></p><h2 id="推导"><a href="#推导" class="headerlink" title="推导"></a>推导</h2><p>// TODO</p><h1 id="四元数的引入"><a href="#四元数的引入" class="headerlink" title="四元数的引入"></a>四元数的引入</h1><p>由于用旋转矩阵来做<strong>平滑插值</strong>并不合理（旋转20°矩阵 和 旋转50°矩阵 的平均值并不是旋转35°），并且存在<strong>万向锁</strong>问题，所以引入四元数。games101不展开。</p><h1 id="MVP变换"><a href="#MVP变换" class="headerlink" title="MVP变换"></a>MVP变换</h1><p>Model-View-Projection 模型-视图-投影变换：将3D的模型（Model）投影到2D的屏幕（View）上。</p><p>先定义相机的 <strong>位置 Position、朝向 Look-at、向上方向 Up direction</strong>（与朝向垂直，用于确定相机本身的旋转角）。</p><p>视图结果是相对不变的，当物体和相机的移动方式完全一致、没有相对运动时，成像不变。</p><h2 id="标准相机"><a href="#标准相机" class="headerlink" title="标准相机"></a>标准相机</h2><p>我们定义一个Position在 原点，Look-at在 -Z，Up direction在 Y的相机作为默认相机。</p><p>以后就可以将其他相机移成标准相机、然后再做变换、最后移回就实现了相机旋转。</p><h2 id="投影-Projection"><a href="#投影-Projection" class="headerlink" title="投影 Projection"></a>投影 Projection</h2><p>投影是说3D转到2D屏幕的过程。首先分2种，<strong>正交投影</strong>和<strong>透视投影 Perspective</strong>。</p><p>正交不会有近大远小、每个平行边也不会有交点，但透视都会有。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620161157.png"></p><h2 id="正交投影-Orthographic"><a href="#正交投影-Orthographic" class="headerlink" title="正交投影 Orthographic"></a>正交投影 Orthographic</h2><p>定义6个点，就可以描述一个3维的长方体：</p><p>x轴：left =&gt; right ；y轴：buttom =&gt; top ；<font color="red">z轴：fear =&gt; near</font> 。</p><p>注意z轴，因为上面所有的<code>=&gt;</code>指的都是右手坐标系的负=&gt;正，near离我们更近、被定义为正值。</p><p>OpenGL用的是左手坐标系，全部相反。</p><h3 id="标准化"><a href="#标准化" class="headerlink" title="标准化"></a>标准化</h3><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620182401.png"></p><p>上图的过程就是标准化，也就是将一个长方体变成一个中心点为原点，6个点为-1、1的正方体。标准化的好处是能够更好做正交相机的投影。</p><p>标准化的变换矩阵如下，将长度定为2是为了满足(-1,1)。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620184611.png"></p><h2 id="透视投影-Perspective"><a href="#透视投影-Perspective" class="headerlink" title="透视投影 Perspective"></a>透视投影 Perspective</h2><p>近大远小、平行线会相交。这是因为不同平面内的线投影到一个平面，会有交点。</p><h3 id="齐次坐标性质"><a href="#齐次坐标性质" class="headerlink" title="齐次坐标性质"></a>齐次坐标性质</h3><p>(x,y,z,1) 和 (kx,ky,kz,k) 表示的是同一个点。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620190109.png"></p><h3 id="透视投影拆分⭐"><a href="#透视投影拆分⭐" class="headerlink" title="透视投影拆分⭐"></a>透视投影拆分⭐</h3><p>要实现一个透视投影变换，拆成2步：1.将透视投影相机视锥，挤成一个长方体（正交相机视锥）；2.将得到的长方体进行正交投影。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620225451.png"></p><p>第二步的做法已经在正交投影里写了，那么关键就是第一步怎么做，其实就是乘以一个 <strong>透视=&gt;正交 的拉伸矩阵M</strong>。</p><p>这个矩阵M（4x4）的推导如下：</p><p>1.近似三角形可推导出除了第三行以外的所有矩阵</p><p>2.性质：近平面点挤压后，点坐标的x,y,z都不变（相机的近平面，就是最终2d屏幕的大小）</p><p>3.性质：远平面点挤压后，点坐标的z不变（z轴是深度，想象一下拉伸后，远平面的深度不会变）</p><p>4.根据性质2、3可以推导出矩阵的第三行</p><p>具体推导看第四章的PPT p29-36吧，这里把主要的近似三角形概念图放下来，结合上面的拉伸概念图可以自己推导了：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620235549.png"></p><p>最后4x4的透视=&gt;正交 的拉伸矩阵M：</p><p>n    0    0    0<br>0    n    0    0<br>0    0    n+f    -nf<br>0    0    1    0</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="学之前你必须知道"><a href="#学之前你必须知道" class="headerlink" title="学之前你必须知道"></a>学之前你必须知道</h1><h2 id="视锥"><a href="#视锥" class="headerlink" title="视锥"></a>视锥</h2><p>这是透视相机的概念，用来衡量视距的大小。一般用2种属性来描述一个视锥：</p><ol><li>  near面的宽高比</li><li>  垂直视角 Vertical Field of View</li></ol><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621104507.png"></p><p>有了上面2个确定值，然后再自己定义一个near的值（近平面与相机的距离），就能确定成像了，视锥完成。</p><h2 id="屏幕上的概念"><a href="#屏幕上的概念" class="headerlink" title="屏幕上的概念"></a>屏幕上的概念</h2><p><strong>分辨率</strong>，也就是1080p、2k等，就是像素的多少。</p><p><strong>屏幕 Raster</strong>，德语中的屏幕的意思，而屏幕是一个光栅成像设备。</p><p><strong>光栅化 Rasterize</strong>，把东西画在屏幕上的过程。</p><p><strong>像素 Pixel</strong>，全名picture element，是最小单位的小正方形，它的颜色由Red、Green、Blue三个色(0~255)来混和成。</p><h2 id="屏幕发展过程"><a href="#屏幕发展过程" class="headerlink" title="屏幕发展过程"></a>屏幕发展过程</h2><p><strong>过去方式</strong></p><ol><li>  示波器</li><li>  阴极射线管 Cathode Ray Tube：和示波器原理相同，用很多电子打在屏幕上。通过扫描一样的方式，一条一条画横线，组成图像。</li></ol><p>隔行扫描 Raster Scan：上面的画横线，优化的话还会在一帧只画1、3、5…奇数行，下一帧再只画偶数行。这样省去了一半的工作量，也能一定程度欺骗到肉眼。</p><p><strong>现代方式</strong></p><ol><li>  液晶显示器 LCD（Liquid Crystal Display）：通过液晶扭曲光的方向，让其可以通过对应的光栅。</li><li>  控制发光二极管的显示器 LED（Light Emitting diode array）</li><li>  电墨水：通过电子控制只有黑、白像素的电墨水，实现电纸书的页面刷新。</li></ol><p>帧缓存技术 Frame Buffer（Memory for a Raster Display）：将显卡中的一块内存区域中，存储的内容反映到屏幕上。</p><h1 id="光栅化一个Cube"><a href="#光栅化一个Cube" class="headerlink" title="光栅化一个Cube"></a>光栅化一个Cube</h1><h2 id="视口变换-Viewport"><a href="#视口变换-Viewport" class="headerlink" title="视口变换 Viewport"></a>视口变换 Viewport</h2><p>光栅化之前要做的事。将一个 <code>[-1,1] x [-1,1]</code> 的2维平面，转换成<code>[width,0] x [0,height]</code>的笛卡尔坐标系内来表示。这叫做视口变换，看下：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621115856.png"></p><p>最后算出，变换矩阵如下：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621121741.png"></p><h2 id="光栅化"><a href="#光栅化" class="headerlink" title="光栅化"></a>光栅化</h2><p>我们将原图形分解成很多个三角面，投影到屏幕的像素点上。</p><h3 id="首先，怎么判断一个像素点与三角形的位置关系？"><a href="#首先，怎么判断一个像素点与三角形的位置关系？" class="headerlink" title="首先，怎么判断一个像素点与三角形的位置关系？"></a>首先，怎么判断一个像素点与三角形的位置关系？</h3><p>靠前面的知识，已经可以做到任何一个点都确定性地投影到屏幕上了。</p><p>那么如果想判断一个像素点是否在一个三角面内呢？也就是问，<strong>如何确定这个像素的着色？</strong></p><p>可以通过判断这个像素点的中心点与三角形的位置关系来确定，为了方便，就定义一个判断函数<code>Inside()</code>。而这个函数就是进行3次叉积。</p><h3 id="然后，哪些像素点需要判断呢？"><a href="#然后，哪些像素点需要判断呢？" class="headerlink" title="然后，哪些像素点需要判断呢？"></a>然后，哪些像素点需要判断呢？</h3><p>如果需要把整个屏幕的点都进行一次<code>Inside()</code>判断，实在是没有必要，那么哪些需要、哪些不需要，这就涉及到<strong>包围盒</strong>了。</p><p>简单介绍一个AABB包围盒，它就是取三角面3个顶点的<code>Min(x), Min(y), Max(x), Max(y),</code>作为他的盒子。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621151747.png"></p><h3 id="最后，成像完有锯齿-Jaggies-怎么解决？"><a href="#最后，成像完有锯齿-Jaggies-怎么解决？" class="headerlink" title="最后，成像完有锯齿 (Jaggies) 怎么解决？"></a>最后，成像完有锯齿 (Jaggies) 怎么解决？</h3><p>又叫做反走样（Aliasing ）、抗锯齿。</p><p>在解决之前先理解为什么会有这类问题？取哪些像素点来表示这个三角面，叫做<strong>采样（Sample）</strong>。而采样会有3种<strong>瑕疵（Artifacts）</strong></p><ol><li>  锯齿 Jaggies</li><li>  摩尔纹 Moire</li><li>  运动速度过快 Wagon wheel effect</li></ol><p>产生原因是信号变化的速度太快，而采样速度跟不上了。</p><p><strong>那么怎么抗锯齿？</strong></p><p>可以对三角面做预处理，比如滤波、模糊，之后再进行采样。</p><h1 id="抗锯齿-Anti-Aliasing"><a href="#抗锯齿-Anti-Aliasing" class="headerlink" title="抗锯齿 Anti-Aliasing"></a>抗锯齿 Anti-Aliasing</h1><p>前面了解了为什么会产生锯齿，以及大致的抗锯齿技术（滤波、模糊）。这里细说。</p><p><strong>频域 Frequency Domain</strong>：描述信号在频率方面特性时用到的一种坐标系。想象一下cos2Π的图。</p><p><strong>滤波 Filtering</strong>：把某个时段内，特殊的频率给过滤掉。</p><p><strong>傅里叶变换</strong>：变幻的具体内容不要深究，只要知道，可以通过傅里叶变换把一张图变换为频域图，这样就能知道哪些地方的信号量多、少。中心定义为低频、周围定义为高频。最后，得到的频域图，是可逆的！</p><p>// TODO 下面的都只简单理解，更为深入要去学习 数字图像处理</p><h2 id="先傅里叶变换，再过滤一张图-FFP"><a href="#先傅里叶变换，再过滤一张图-FFP" class="headerlink" title="先傅里叶变换，再过滤一张图 FFP"></a>先傅里叶变换，再过滤一张图 FFP</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621180700.png"></p><p>中心定义为低频、周围定义为高频。当颜色变化差异巨大的时候（比如人物边缘），会产生高频信息。</p><p>为什么会有十字线？没有学过信号学不能看懂这张频谱图，只能理解为傅里叶变换前会把这一张图复制很多份拼起来，来取样。拼起来之后每张图的4个边的边界之间的信息差异巨大，就有巨大的高频信息，而这十字线的高亮就是边界的映射。</p><h3 id="高通率波"><a href="#高通率波" class="headerlink" title="高通率波"></a>高通率波</h3><p>High-pass，就是只有高频能通过，低频直接忽略的滤波方式。可以看到，逆变换回来的图几乎只保留了边界信息（人物描边），这是因为<strong>边界处的信号量差异很大，这就是高频的信息</strong>。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621182236.png"></p><h3 id="低通滤波"><a href="#低通滤波" class="headerlink" title="低通滤波"></a>低通滤波</h3><p>滤掉高频，也就是滤掉边界信息，那么就会像下面这样。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220621182524.png"></p><h3 id="高低滤波"><a href="#高低滤波" class="headerlink" title="高低滤波"></a>高低滤波</h3><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622105657.png"></p><h2 id="卷积定理"><a href="#卷积定理" class="headerlink" title="卷积定理"></a>卷积定理</h2><p>只简单概述结论：</p><p>在空间域中，对一张图进行卷积滤波 = 对一张图进行傅里叶变换、再对其乘以卷积核的傅里叶变换、最后逆傅里叶变换回去</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622111008.png"></p><h1 id="采样-Sample"><a href="#采样-Sample" class="headerlink" title="采样 Sample"></a>采样 Sample</h1><p>稀疏采样会产生更多混叠，导致走样；密集采样更少混叠，所以映射结果更好一些。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622114336.png"></p><h2 id="怎么较少走样，也就是如何反走样？"><a href="#怎么较少走样，也就是如何反走样？" class="headerlink" title="怎么较少走样，也就是如何反走样？"></a>怎么较少走样，也就是如何反走样？</h2><p>本质上，就是想办法增大傅里叶副本之间的距离来减少混叠。</p><p><strong>1.增加采样率</strong>（更高分辨率的屏幕）</p><p><strong>2.抗锯齿</strong>，通过对图像模糊预处理（使用傅里叶来低通滤波）再采样</p><h2 id="常规采样流程"><a href="#常规采样流程" class="headerlink" title="常规采样流程"></a>常规采样流程</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622115530.png"></p><p>先用低通滤波器模糊原图，然后再采样。</p><h3 id="抗锯齿：模糊操作"><a href="#抗锯齿：模糊操作" class="headerlink" title="抗锯齿：模糊操作"></a>抗锯齿：模糊操作</h3><p>取像素颜色时，根据三角面的在该像素块中覆盖的面积，来设置灰度。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622120331.png"></p><p>这个理论很简单，但是实现比较困难，于是采用一种类似的方法，对一个像素块再进行划分、进行更多的采样，也就是**多重采样抗锯齿 MSAA (MultiSampling Anti-Aliasing) **来实现。</p><p>下图就是一个MSAA的例子：把一个像素格分成了2x2，来确定0%、25%、50%、75%、100%。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220622121659.png"></p><p>工业界会优化，想要2x2的效果不会这么单纯的分割成4个正方形，而是一些其他不规则图形，甚至可能多个像素块复用一个点，这么做都是为了减少需要检测的点数量。</p><h3 id="其他抗锯齿方法"><a href="#其他抗锯齿方法" class="headerlink" title="其他抗锯齿方法"></a>其他抗锯齿方法</h3><p>FXAA（Fast Approximate AA）：快速近似抗锯齿，是一种后处理，会对有锯齿的地方进行修正。</p><p>TAA（Temporal AA）：利用时间而不是空间采样，对于静止的连续帧，上一帧有效的采样点才继续采样。</p><p>DLSS（DeepLearning SuperSimple）：当低分辨率拉伸成高分辨率时，会有很多锯齿，此时用深度学习来猜测描绘。</p>]]></content>
       
       
       <categories>
@@ -622,6 +591,37 @@
       <url>/Tech/Graphics/games101-2/</url>
       
         <content type="html"><![CDATA[<h1 id="向量-Vector"><a href="#向量-Vector" class="headerlink" title="向量 Vector"></a>向量 Vector</h1><h2 id="小概念"><a href="#小概念" class="headerlink" title="小概念"></a>小概念</h2><p>数学上叫做向量，物理上喜欢称作矢量。</p><p>向量的模 Magnitude。</p><p>向量的归一化，意味着求单位向量 unit Vector。</p><h2 id="向量矩阵"><a href="#向量矩阵" class="headerlink" title="向量矩阵"></a>向量矩阵</h2><p>下面是在表示笛卡尔坐标系x-y下的某个向量，可以用矩阵来表示向量。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220615180557.png"></p><h2 id="点乘-Dot"><a href="#点乘-Dot" class="headerlink" title="点乘 Dot"></a>点乘 Dot</h2><p>满足交换律、结合律、分配律。</p><p>结果是一个数值，可以用来检测2个向量的夹角，&lt;90度为正，90度为0，90~180度为负。</p><h2 id="叉乘-Cross"><a href="#叉乘-Cross" class="headerlink" title="叉乘 Cross"></a>叉乘 Cross</h2><p>不满足交换律！向量A x 向量B = -向量B x 向量A</p><p>结果是一个向量，这个向量是与A、B向量所组成平面的垂直向量，也就是说A、B、C向量构成一个右手直角坐标系。<strong>而法线的方向，满足右手螺旋。注意a在前所以a是食指</strong>。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620122459.png"></p><p><strong>图形学上，</strong>用来检测某个点是否在一个多边形（比如三角形）内。</p><p>//因为 向量AB x 向量AP 的结果大于0则说明P在AB左侧，小于0则说明P在AB右侧。</p><p>更新=&gt; 首先确定是左手还是右手坐标系。在【右手坐标系】下，如果两个向量的叉乘结果为正值，表示向量AB经过不大于180°的【逆时针】旋转可以与向量AP的方向一致；如果为负，那么就需要转180°到360°（右手法则）。</p><p>至于为什么，思考一下<code>a X b = |a|*|b|*sinθ</code>，其中sin的值范围是0°-180°为正，180°-360°为负，就可以知道了。点乘几何意义也是同理，靠cos的值判断的。</p><p>所以一个三角面ABC和一个点P，只要通过3次叉乘的结果（都大于0或者都小于0），就能判断出点P在三角面ABC中。这是光栅化的基础，用于着色判断。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616105243.png"></p><h1 id="矩阵变换：线性变换"><a href="#矩阵变换：线性变换" class="headerlink" title="矩阵变换：线性变换"></a>矩阵变换：线性变换</h1><p>关键是，要找出变换前后每一个点之间的变化关系式。矩阵的乘法是不满足交换律的。</p><h2 id="缩放-Sacle"><a href="#缩放-Sacle" class="headerlink" title="缩放 Sacle"></a>缩放 Sacle</h2><p>可以使用对角阵*向量来进行缩放，这个对角阵叫缩放矩阵。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616114924.png"></p><h2 id="反射-Reflection"><a href="#反射-Reflection" class="headerlink" title="反射 Reflection"></a>反射 Reflection</h2><p>用于翻折的单位矩阵。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616115506.png"></p><h2 id="切变-Shear"><a href="#切变-Shear" class="headerlink" title="切变 Shear"></a>切变 Shear</h2><p>要找出每一个点之间的变化关系式。</p><p>比如下图情况，只是水平方向的点发生了变化，竖直方向的不变。水平方向上的每个点发生了a / 1 * y的平移。那么久可以很容易写出切变矩阵。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616120005.png"></p><h2 id="旋转-Rotate"><a href="#旋转-Rotate" class="headerlink" title="旋转 Rotate"></a>旋转 Rotate</h2><p>二维情况下，逆时针旋转θ角：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616151759.png"></p><p>推导过程（只展示A、C。B、D的话由点0,1可以推出）如下，其实只是展开了点(1,0)的偏移等式。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616151646.png"></p><p>再进一步探究可知，<strong>逆旋转矩阵 = 将原旋转矩阵转置</strong>。这意味着想要旋转一个负角度，只要求出正角度的旋转矩阵再转置就可以得到旋转矩阵了。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620113534.png"></p><h2 id="统称：线性变换"><a href="#统称：线性变换" class="headerlink" title="统称：线性变换"></a>统称：线性变换</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616165650.png"></p><h1 id="矩阵变换：非线性变换"><a href="#矩阵变换：非线性变换" class="headerlink" title="矩阵变换：非线性变换"></a>矩阵变换：非线性变换</h1><h2 id="平移-Translation"><a href="#平移-Translation" class="headerlink" title="平移 Translation"></a>平移 Translation</h2><p>平移比较特殊，它不能通过2阶矩阵<strong>线性变换</strong>（矩阵乘法）得出。因为矩阵乘法你只能得到ax+by的结果，没法出现常数c，所以只能靠加法。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616170433.png"></p><h2 id="平移解决方案：更高1阶的矩阵"><a href="#平移解决方案：更高1阶的矩阵" class="headerlink" title="平移解决方案：更高1阶的矩阵"></a>平移解决方案：更高1阶的矩阵</h2><p>平移必须涉及到同阶矩阵的加法，没法直接用线性变换了。为了在这种情况下也能只使用矩阵乘法就达到变换的目的，可以使用2+1阶的矩阵。多出来的矩阵值，点是1、向量是0。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616175212.png"></p><p><strong>将二维的点，最后一个矩阵值写为1。</strong>如果不是1，那么就看作x =&gt; x/w、y =&gt; y/w。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616184017.png"></p><p>那么最后，给出2维 向量、点 的变化矩阵：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616185009.png"></p><h2 id="逆变换-Inverse"><a href="#逆变换-Inverse" class="headerlink" title="逆变换 Inverse"></a>逆变换 Inverse</h2><p>通过使用逆矩阵，可以撤回变换。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220616190117.png"></p><h1 id="组合的矩阵变换"><a href="#组合的矩阵变换" class="headerlink" title="组合的矩阵变换"></a>组合的矩阵变换</h1><p>先旋转，后平移。否则会出错，因为矩阵乘法没有交换律！</p><p>那么通过矩阵乘法表示线性变换、矩阵平移的时候，就是从右到左一个个乘。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620101520.png"></p><p><strong>虽然没有交换律，但是有结合律</strong>，可以让前面的变换矩阵合成为一个：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620102212.png"></p><h1 id="分解复杂的矩阵变换"><a href="#分解复杂的矩阵变换" class="headerlink" title="分解复杂的矩阵变换"></a>分解复杂的矩阵变换</h1><p>对于一个复杂的矩阵变换（线性变换+平移变换），需要分解为几步，才能通过矩阵乘法来实现。</p><h2 id="绕某点旋转"><a href="#绕某点旋转" class="headerlink" title="绕某点旋转"></a>绕某点旋转</h2><p>将c移到原点 =&gt; 绕原点旋转 =&gt; 移回原来</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620102642.png"></p><h1 id="由二维引申到三维"><a href="#由二维引申到三维" class="headerlink" title="由二维引申到三维"></a>由二维引申到三维</h1><p>上面讨论的都是二维，转到三维空间，其实也是一样的。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620103459.png"></p><h2 id="三维缩放、平移"><a href="#三维缩放、平移" class="headerlink" title="三维缩放、平移"></a>三维缩放、平移</h2><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620115450.png"></p><h2 id="三维旋转"><a href="#三维旋转" class="headerlink" title="三维旋转"></a>三维旋转</h2><p>绕某个轴旋转，该轴上的点位置不变。</p><p>至于为什么y和x、z轴旋转不一样，详细参考叉乘的<strong>右手螺旋定则</strong>。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620115509.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Game </category>
+          
+          <category> Graphics </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 图形学 </tag>
+            
+            <tag> Graphics </tag>
+            
+            <tag> games101 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Games101 - MVP变换</title>
+      <link href="/Tech/Graphics/games101-3/"/>
+      <url>/Tech/Graphics/games101-3/</url>
+      
+        <content type="html"><![CDATA[<h1 id="从三维旋转到欧拉角"><a href="#从三维旋转到欧拉角" class="headerlink" title="从三维旋转到欧拉角"></a>从三维旋转到欧拉角</h1><p>首先三维旋转绕某个轴旋转，已经知道是这样的了。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620115509.png"></p><p>那么就可以通过对3个轴的旋转分别描述，来实现复杂的旋转角。这3个旋转角就叫做欧拉角。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620123437.png"></p><h1 id="罗德里格斯旋转公式"><a href="#罗德里格斯旋转公式" class="headerlink" title="罗德里格斯旋转公式"></a>罗德里格斯旋转公式</h1><p>一个公式，来实现绕轴n旋转α角度。轴n的定义为起点为原点，方向为n。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620141702.png"></p><h2 id="推导"><a href="#推导" class="headerlink" title="推导"></a>推导</h2><p>// TODO</p><h1 id="四元数的引入"><a href="#四元数的引入" class="headerlink" title="四元数的引入"></a>四元数的引入</h1><p>由于用旋转矩阵来做<strong>平滑插值</strong>并不合理（旋转20°矩阵 和 旋转50°矩阵 的平均值并不是旋转35°），并且存在<strong>万向锁</strong>问题，所以引入四元数。games101不展开。</p><h1 id="MVP变换"><a href="#MVP变换" class="headerlink" title="MVP变换"></a>MVP变换</h1><p>Model-View-Projection 模型-视图-投影变换：将3D的模型（Model）投影到2D的屏幕（View）上。</p><p>先定义相机的 <strong>位置 Position、朝向 Look-at、向上方向 Up direction</strong>（与朝向垂直，用于确定相机本身的旋转角）。</p><p>视图结果是相对不变的，当物体和相机的移动方式完全一致、没有相对运动时，成像不变。</p><h2 id="标准相机"><a href="#标准相机" class="headerlink" title="标准相机"></a>标准相机</h2><p>我们定义一个Position在 原点，Look-at在 -Z，Up direction在 Y的相机作为默认相机。</p><p>以后就可以将其他相机移成标准相机、然后再做变换、最后移回就实现了相机旋转。</p><h2 id="投影-Projection"><a href="#投影-Projection" class="headerlink" title="投影 Projection"></a>投影 Projection</h2><p>投影是说3D转到2D屏幕的过程。首先分2种，<strong>正交投影</strong>和<strong>透视投影 Perspective</strong>。</p><p>正交不会有近大远小、每个平行边也不会有交点，但透视都会有。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620161157.png"></p><h2 id="正交投影-Orthographic"><a href="#正交投影-Orthographic" class="headerlink" title="正交投影 Orthographic"></a>正交投影 Orthographic</h2><p>定义6个点，就可以描述一个3维的长方体：</p><p>x轴：left =&gt; right ；y轴：buttom =&gt; top ；<font color="red">z轴：fear =&gt; near</font> 。</p><p>注意z轴，因为上面所有的<code>=&gt;</code>指的都是右手坐标系的负=&gt;正，near离我们更近、被定义为正值。</p><p>OpenGL用的是左手坐标系，全部相反。</p><h3 id="标准化"><a href="#标准化" class="headerlink" title="标准化"></a>标准化</h3><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620182401.png"></p><p>上图的过程就是标准化，也就是将一个长方体变成一个中心点为原点，6个点为-1、1的正方体。标准化的好处是能够更好做正交相机的投影。</p><p>标准化的变换矩阵如下，将长度定为2是为了满足(-1,1)。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620184611.png"></p><h2 id="透视投影-Perspective"><a href="#透视投影-Perspective" class="headerlink" title="透视投影 Perspective"></a>透视投影 Perspective</h2><p>近大远小、平行线会相交。这是因为不同平面内的线投影到一个平面，会有交点。</p><h3 id="齐次坐标性质"><a href="#齐次坐标性质" class="headerlink" title="齐次坐标性质"></a>齐次坐标性质</h3><p>(x,y,z,1) 和 (kx,ky,kz,k) 表示的是同一个点。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620190109.png"></p><h3 id="透视投影拆分⭐"><a href="#透视投影拆分⭐" class="headerlink" title="透视投影拆分⭐"></a>透视投影拆分⭐</h3><p>要实现一个透视投影变换，拆成2步：1.将透视投影相机视锥，挤成一个长方体（正交相机视锥）；2.将得到的长方体进行正交投影。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620225451.png"></p><p>第二步的做法已经在正交投影里写了，那么关键就是第一步怎么做，其实就是乘以一个 <strong>透视=&gt;正交 的拉伸矩阵M</strong>。</p><p>这个矩阵M（4x4）的推导如下：</p><p>1.近似三角形可推导出除了第三行以外的所有矩阵</p><p>2.性质：近平面点挤压后，点坐标的x,y,z都不变（相机的近平面，就是最终2d屏幕的大小）</p><p>3.性质：远平面点挤压后，点坐标的z不变（z轴是深度，想象一下拉伸后，远平面的深度不会变）</p><p>4.根据性质2、3可以推导出矩阵的第三行</p><p>具体推导看第四章的PPT p29-36吧，这里把主要的近似三角形概念图放下来，结合上面的拉伸概念图可以自己推导了：</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220620235549.png"></p><p>最后4x4的透视=&gt;正交 的拉伸矩阵M：</p><p>n    0    0    0<br>0    n    0    0<br>0    0    n+f    -nf<br>0    0    1    0</p>]]></content>
       
       
       <categories>
@@ -737,35 +737,6 @@
     
     
     <entry>
-      <title>算法：查找与搜索</title>
-      <link href="/Tech/Algorithm/search/"/>
-      <url>/Tech/Algorithm/search/</url>
-      
-        <content type="html"><![CDATA[<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><h1 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h1><p><strong>1.顺序查找</strong><br>        顺序遍历。</p><p><strong>2.二分查找</strong><br>        折半查找、二分查找，一个东西。对数据有要求，必须是按照关键字进行排序的。</p><p><strong>3.插值查找</strong><br>        在二分查找上做的优化。其实就是计算mid值不再是除以2，而是根据线性插值求出一个接近的数。对数据更高要求，不但得是顺序，还必须满足数值分布均匀。</p><p><strong>4.斐波那契查找</strong><br>        想在非均匀分布的数据中优化二分查找，就需要用到了。原理与黄金分割有关，从没见过暂时不看。</p><p><strong>5.分块查找</strong><br>        这个就是类似桶排序的行为，把数据分成多个区间块来查找。</p><p><strong>6.哈希查找</strong><br>        其实就是散列表。选一种哈希函数f，把数据的存储位置x和关键字y形成一种映射，然后查找关键字y时求出下标x即可（当然会有哈希碰撞问题要解决）。</p><h1 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h1><h2 id="深度优先-DFS"><a href="#深度优先-DFS" class="headerlink" title="深度优先 DFS"></a>深度优先 DFS</h2><p>属于图算法一种，是一个针对图和树的遍历算法。是盲目搜索算法。一般用堆+栈数据结构来辅助进行遍历，堆是要遍历的对象、栈内是路径结果。</p><p>搜索前先定义是先找左下子结点还是右下子结点。探索时会不停往下找，直到下方结点没有了，就开始往上一级。遍历期间，将遇到的结点入栈，如果遇到往上一级的情况，就把栈顶结点进行出栈。最后栈内会得到一条路径。</p><p>但注意，DFS终究是一种盲目搜索算法，并不是真正用来寻路的。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220629121222.png"></p><h2 id="广度优先-BFS"><a href="#广度优先-BFS" class="headerlink" title="广度优先 BFS"></a>广度优先 BFS</h2><p>连通图的一种遍历算法。是盲目搜索算法。</p><p>一般用队列来实现。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220629144906.png"></p><h2 id="爬山法-Hill-Climbing"><a href="#爬山法-Hill-Climbing" class="headerlink" title="爬山法 Hill Climbing"></a>爬山法 Hill Climbing</h2><p><a href="https://blog.csdn.net/qq_43285351/article/details/90926784">https://blog.csdn.net/qq_43285351/article/details/90926784</a></p>]]></content>
-      
-      
-      <categories>
-          
-          <category> 算法 </category>
-          
-          <category> 排序 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 算法 </tag>
-            
-            <tag> 排序算法 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>算法基础：图论</title>
       <link href="/Tech/Algorithm/graph-1/"/>
       <url>/Tech/Algorithm/graph-1/</url>
@@ -787,6 +758,35 @@
             <tag> 算法基础 </tag>
             
             <tag> 图论 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>算法：查找与搜索</title>
+      <link href="/Tech/Algorithm/search/"/>
+      <url>/Tech/Algorithm/search/</url>
+      
+        <content type="html"><![CDATA[<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><h1 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h1><p><strong>1.顺序查找</strong><br>        顺序遍历。</p><p><strong>2.二分查找</strong><br>        折半查找、二分查找，一个东西。对数据有要求，必须是按照关键字进行排序的。</p><p><strong>3.插值查找</strong><br>        在二分查找上做的优化。其实就是计算mid值不再是除以2，而是根据线性插值求出一个接近的数。对数据更高要求，不但得是顺序，还必须满足数值分布均匀。</p><p><strong>4.斐波那契查找</strong><br>        想在非均匀分布的数据中优化二分查找，就需要用到了。原理与黄金分割有关，从没见过暂时不看。</p><p><strong>5.分块查找</strong><br>        这个就是类似桶排序的行为，把数据分成多个区间块来查找。</p><p><strong>6.哈希查找</strong><br>        其实就是散列表。选一种哈希函数f，把数据的存储位置x和关键字y形成一种映射，然后查找关键字y时求出下标x即可（当然会有哈希碰撞问题要解决）。</p><h1 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h1><h2 id="深度优先-DFS"><a href="#深度优先-DFS" class="headerlink" title="深度优先 DFS"></a>深度优先 DFS</h2><p>属于图算法一种，是一个针对图和树的遍历算法。是盲目搜索算法。一般用堆+栈数据结构来辅助进行遍历，堆是要遍历的对象、栈内是路径结果。</p><p>搜索前先定义是先找左下子结点还是右下子结点。探索时会不停往下找，直到下方结点没有了，就开始往上一级。遍历期间，将遇到的结点入栈，如果遇到往上一级的情况，就把栈顶结点进行出栈。最后栈内会得到一条路径。</p><p>但注意，DFS终究是一种盲目搜索算法，并不是真正用来寻路的。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220629121222.png"></p><h2 id="广度优先-BFS"><a href="#广度优先-BFS" class="headerlink" title="广度优先 BFS"></a>广度优先 BFS</h2><p>连通图的一种遍历算法。是盲目搜索算法。</p><p>一般用队列来实现。</p><p><img src="https://cdn.jsdelivr.net/gh/CodingCodingK/CodingCodingK.github.io.ImageHost/img/20220629144906.png"></p><h2 id="爬山法-Hill-Climbing"><a href="#爬山法-Hill-Climbing" class="headerlink" title="爬山法 Hill Climbing"></a>爬山法 Hill Climbing</h2><p><a href="https://blog.csdn.net/qq_43285351/article/details/90926784">https://blog.csdn.net/qq_43285351/article/details/90926784</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+          <category> 排序 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 算法 </tag>
+            
+            <tag> 排序算法 </tag>
             
         </tags>
       
@@ -1888,9 +1888,9 @@
       
         <tags>
             
-            <tag> 技术 </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> 技术 </tag>
             
             <tag> 01背包 </tag>
             
@@ -1983,9 +1983,9 @@
       
         <tags>
             
-            <tag> 技术 </tag>
-            
             <tag> 算法 </tag>
+            
+            <tag> 技术 </tag>
             
             <tag> A* </tag>
             
